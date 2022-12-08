@@ -1,0 +1,30 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+{% include 'urec_app/navbar.html' %}
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Task</title>
+
+    <script src="{% url 'js-catalog' %}"></script>
+    <script src="{% static '/admin/js/core.js' %}"></script>
+    <!---<link rel="stylesheet" href="{% static 'admin/css/base.css' %}">--->
+    <link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}">
+</head>
+<body>
+    <div class="container">
+        <form method="POST">
+            <fieldset>
+                <legend>Add Task</legend>
+                {% csrf_token %}
+                {{ task_obj.media }}
+                {{ task_obj.as_p }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+{% include 'urec_app/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Accident Ticket</title>
+</head>
+<body>
+    <div class="container">
+        <form method="POST">
+            <fieldset>
+                <legend>Create Accident Ticket</legend>
+                {% csrf_token %}
+                {{ accident_ticket.as_p }}
+                <br><h3>Injury Type</h3>
+                {{ injury_type.as_p }}
+                <input type="button" class="btn btn-lg btn-block" id="addrow1" value="Add Injury (not implemented)" />
+                <br><h3>Contact Information</h3>
+                {{ contact_info.as_p }}
+                <input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+</body>
