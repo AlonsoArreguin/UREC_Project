@@ -7,6 +7,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Accident Ticket</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -17,7 +21,43 @@
                 {{ accident_ticket.as_p }}
                 <br><h3>Injury Type</h3>
                 {{ injury_type.as_p }}
-                <input type="button" class="btn btn-lg btn-block" id="addrow1" value="Add Injury (not implemented)" />
+                <button type="button" class="btn btn-lg btn-block" id="addrow1">Add Injury</button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Modal Header</h4>
+                        </div>
+                        <div class="modal-body">
+                          {{ injury_type.as_p }}
+
+                        </div>
+                        <div class="modal-footer">
+                            <button id="save" onclick="save()" type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+
+                <script>
+                $(document).ready(function(){
+                  $("#addrow1").click(function(){
+                    $("#myModal").modal();
+                  });
+                });
+
+                $('#save').click(function() {
+                  $('#myModal').modal('hide');
+                });
+                </script>
+
                 <br><h3>Contact Information</h3>
                 {{ contact_info.as_p }}
                 <input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />
