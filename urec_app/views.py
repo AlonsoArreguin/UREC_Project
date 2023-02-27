@@ -36,7 +36,7 @@ def create_accident_ticket(request):
         accident_ticket = Accident_Ticket_Form()
         injury_type = Accident_Ticket_Injury_Form()
         contact_info = Accident_Ticket_Contact_Info_Form()
-    context = { 'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': contact_info}
+    context = { 'accident_ticket': accident_ticket, 'injury_type': injury_type.Meta.fields, 'contact_info': contact_info}
     return render(request, 'urec_app/create_accident_ticket.html', context)
 
 # View all Accident Tickets
