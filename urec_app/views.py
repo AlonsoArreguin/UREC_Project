@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse, Http404
 from .forms import *
+from django.views.generic import ListView, TemplateView
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -13,31 +15,68 @@ def accident(request):
     return render(request, 'urec_app/accident.html')
 
 # Create Accident Ticket
-def create_accident_ticket(request):
-    if request.method == "POST":
-        accident_ticket = Accident_Ticket_Form(request.POST)
-        injury_type = Accident_Ticket_Injury_Form(request.POST)
-        contact_info = Accident_Ticket_Contact_Info_Form(request.POST)
+# def create_accident_ticket(request):
+#     if request.method == "POST":
+#         accident_ticket = Accident_Ticket_Form(request.POST)
+#         injury_type = Accident_Ticket_Injury_Form(request.POST)
+#         contact_info = Accident_Ticket_Contact_Info_Form(request.POST)
+#         if accident_ticket.is_valid() and injury_type.is_valid() and contact_info.is_valid():
+#             accident_instance = accident_ticket.save(commit=False)
+#             injury_instance = injury_type.save(commit=False)
+#             contact_instance = contact_info.save(commit=False)
+#             accident_instance.save()
+#             injury_instance.accident_ticket = accident_instance
+#             injury_instance.save()
+#             contact_instance.accident_ticket = accident_instance
+#             contact_instance.save()
+#
+#             return redirect('accident')
+#             # accident_ticket = Accident_Ticket_Form()
+#             # injury_type = Accident_Ticket_Injury_Form()
+#             # contact_info = Accident_Ticket_Contact_Info_Form()
+#     else:
+#         accident_ticket = Accident_Ticket_Form()
+#         injury_type = Accident_Ticket_Injury_Form()
+#         contact_info = Accident_Ticket_Contact_Info_Form()
+#     context = { 'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': contact_info}
+#     return render(request, 'urec_app/create_accident_ticket.html', context)
+
+
+class CreateAccidentTicket(TemplateView):
+    template_name = "urec_app/create_accident_ticket.html"
+
+    def get(self, *args, **kwargs):
+        formset = AccidentTicketInjury(queryset=Accident_Ticket_Injury.objects.none())
+        accident_ticket = Accident_Ticket_Form()
+        contact_info = Accident_Ticket_Contact_Info_Form()
+        context = {
+            'accident_ticket': accident_ticket,
+            'accident_ticket_injury_formset': formset,
+            'contact_info': contact_info,
+        }
+        return self.render_to_response(context)
+
+    def post(self, *args, **kwargs):
+        accident_ticket = Accident_Ticket_Form(data=self.request.POST)
+        injury_type = AccidentTicketInjury(data=self.request.POST)
+        contact_info = Accident_Ticket_Contact_Info_Form(data=self.request.POST)
+
         if accident_ticket.is_valid() and injury_type.is_valid() and contact_info.is_valid():
             accident_instance = accident_ticket.save(commit=False)
             injury_instance = injury_type.save(commit=False)
             contact_instance = contact_info.save(commit=False)
             accident_instance.save()
-            injury_instance.accident_ticket = accident_instance
-            injury_instance.save()
+            for i in injury_instance:
+                i.accident_ticket = accident_instance
+                i.save()
+
             contact_instance.accident_ticket = accident_instance
             contact_instance.save()
 
-            return redirect('accident')
-            # accident_ticket = Accident_Ticket_Form()
-            # injury_type = Accident_Ticket_Injury_Form()
-            # contact_info = Accident_Ticket_Contact_Info_Form()
-    else:
-        accident_ticket = Accident_Ticket_Form()
-        injury_type = Accident_Ticket_Injury_Form()
-        contact_info = Accident_Ticket_Contact_Info_Form()
-    context = { 'accident_ticket': accident_ticket, 'injury_type': injury_type.Meta.fields, 'contact_info': contact_info}
-    return render(request, 'urec_app/create_accident_ticket.html', context)
+            return redirect('home')
+
+        return self.render_to_response({'accident-ticket-injury-formset': injury_type})
+
 
 # View all Accident Tickets
 def view_accident_tickets(request):

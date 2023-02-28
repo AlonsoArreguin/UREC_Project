@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
 from .models import *
+from django.forms import modelformset_factory
 
 class FormAccident(forms.ModelForm):
     class Meta:
@@ -26,10 +27,16 @@ class Accident_Ticket_Form(forms.ModelForm):
         model = Accident_Ticket
         fields = ["urec_facility", "location_in_facility", "activity_causing_injury"]
 
-class Accident_Ticket_Injury_Form(forms.ModelForm):
-    class Meta:
-        model = Accident_Ticket_Injury
-        fields = ["injury_type", "injury_description", "care_provided"]
+# Accident Ticket Injury Form
+# class Accident_Ticket_Injury_Form(forms.ModelForm):
+#     class Meta:
+#         model = Accident_Ticket_Injury
+#         fields = ["injury_type", "injury_description", "care_provided"]
+
+
+AccidentTicketInjury = modelformset_factory(
+    Accident_Ticket_Injury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
+)
 
 class Accident_Ticket_Contact_Info_Form(forms.ModelForm):
     class Meta:
