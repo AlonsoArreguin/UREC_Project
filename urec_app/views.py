@@ -107,7 +107,6 @@ def count_update(request):
 # View All Count History
 def count_view_history(request):
     count_item = Count.objects.all()
-
     context = {'count_item': count_item}
     return render(request, 'urec_app/count_view_history.html', context)
 
@@ -140,31 +139,69 @@ def incident(request):
     return render(request, 'urec_app/incident.html')
 
 # Create Incident Ticket
-def create_incident_ticket(request):
-    if request.method == "POST":
-        incident_ticket = Incident_Ticket_Form(request.POST)
-        incident_type = Incident_Ticket_Incident_Form(request.POST)
-        contact_info = Incident_Ticket_Contact_Info_Form(request.POST)
+# def create_incident_ticket(request):
+#     if request.method == "POST":
+#         incident_ticket = Incident_Ticket_Form(request.POST)
+#         incident_type = Incident_Ticket_Incident_Form(request.POST)
+#         contact_info = Incident_Ticket_Contact_Info_Form(request.POST)
+#         if incident_ticket.is_valid() and incident_type.is_valid() and contact_info.is_valid():
+#             incident_instance = incident_ticket.save(commit=False)
+#             incident_type_instance = incident_type.save(commit=False)
+#             contact_instance = contact_info.save(commit=False)
+#             incident_instance.save()
+#             incident_type_instance.incident_ticket = incident_instance
+#             incident_type_instance.save()
+#             contact_instance.incident_ticket = incident_instance
+#             contact_instance.save()
+#
+#             return redirect('incident')
+#             # incident_ticket = Incident_Ticket_Form()
+#             # incident_type = Incident_Ticket_Incident_Form()
+#             # contact_info = Incident_Ticket_Contact_Info_Form()
+#     else:
+#         incident_ticket = Incident_Ticket_Form()
+#         incident_type = Incident_Ticket_Incident_Form()
+#         contact_info = Incident_Ticket_Contact_Info_Form()
+#     context = { 'incident_ticket': incident_ticket, 'incident_type': incident_type, 'contact_info': contact_info}
+#     return render(request, 'urec_app/create_incident_ticket.html', context)
+
+
+class CreateIncidentTicket(TemplateView):
+    template_name = "urec_app/create_incident_ticket.html"
+
+    def get(self, *args, **kwargs):
+        formset = IncidentTicketIncidentForm(queryset=Incident_Ticket_Incident.objects.none())
+        incident_ticket = Incident_Ticket_Form()
+        contact_info = Incident_Ticket_Contact_Info_Form()
+
+        context = {
+            'incident_ticket': incident_ticket,
+            'incident_type_formset': formset,
+            'contact_info': contact_info
+        }
+        return self.render_to_response(context)
+
+    def post(self, *args, **kwargs):
+        incident_ticket = Incident_Ticket_Form(data=self.request.POST)
+        incident_type = IncidentTicketIncidentForm(data=self.request.POST)
+        contact_info = Incident_Ticket_Contact_Info_Form(data=self.request.POST)
+
         if incident_ticket.is_valid() and incident_type.is_valid() and contact_info.is_valid():
-            incident_instance = incident_ticket.save(commit=False)
-            incident_type_instance = incident_type.save(commit=False)
+            ticket_instance = incident_ticket.save(commit=False)
+            type_instance = incident_type.save(commit=False)
             contact_instance = contact_info.save(commit=False)
-            incident_instance.save()
-            incident_type_instance.incident_ticket = incident_instance
-            incident_type_instance.save()
-            contact_instance.incident_ticket = incident_instance
+            ticket_instance.save()
+            for i in type_instance:
+                i.incident_ticket = ticket_instance
+                i.save()
+
+            contact_instance.incident_ticket = ticket_instance
             contact_instance.save()
 
-            return redirect('incident')
-            # incident_ticket = Incident_Ticket_Form()
-            # incident_type = Incident_Ticket_Incident_Form()
-            # contact_info = Incident_Ticket_Contact_Info_Form()
-    else:
-        incident_ticket = Incident_Ticket_Form()
-        incident_type = Incident_Ticket_Incident_Form()
-        contact_info = Incident_Ticket_Contact_Info_Form()
-    context = { 'incident_ticket': incident_ticket, 'incident_type': incident_type, 'contact_info': contact_info}
-    return render(request, 'urec_app/create_incident_ticket.html', context)
+            return redirect('home')
+
+        return self.render_to_response({'incident_type_formset': incident_type})
+
 
 # View all Incident Tickets
 def view_incident_tickets(request):

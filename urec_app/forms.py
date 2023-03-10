@@ -49,10 +49,16 @@ class Incident_Ticket_Form(forms.ModelForm):
         model = Incident_Ticket
         fields = ["urec_facility", "location_in_facility", "activity_during_incident"]
 
-class Incident_Ticket_Incident_Form(forms.ModelForm):
-    class Meta:
-        model = Incident_Ticket_Incident
-        fields = ["incident_nature", "incident_description", "action_taken"]
+# class Incident_Ticket_Incident_Form(forms.ModelForm):
+#     class Meta:
+#         model = Incident_Ticket_Incident
+#         fields = ["incident_nature", "incident_description", "action_taken"]
+#
+
+
+IncidentTicketIncidentForm = modelformset_factory(
+    Incident_Ticket_Incident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1
+)
 
 class Incident_Ticket_Contact_Info_Form(forms.ModelForm):
     class Meta:
