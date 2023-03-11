@@ -22,8 +22,10 @@
             </div>
             {% endfor %}
             <button class="btn btn-lg btn-block" id="addrow1">Add Incident</button>
-            <br><h3>Contact Information</h3>
-            {{ contact_info.as_p }}
+            <br><h3>Patient Contact Information</h3>
+            {{ patient_contact.as_p }}
+            <br><h3>Witness Contact Information</h3>
+            {{ witness_contact.as_p }}
             <input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

@@ -172,31 +172,40 @@ class CreateIncidentTicket(TemplateView):
     def get(self, *args, **kwargs):
         formset = IncidentTicketIncidentForm(queryset=Incident_Ticket_Incident.objects.none())
         incident_ticket = Incident_Ticket_Form()
-        contact_info = Incident_Ticket_Contact_Info_Form()
+        patient_contact = Incident_Ticket_Contact_Patient_Form()
+        witness_contact = Incident_Ticket_Contact_Witness_Form()
 
         context = {
             'incident_ticket': incident_ticket,
             'incident_type_formset': formset,
-            'contact_info': contact_info
+            'patient_contact': patient_contact,
+            'witness_contact': witness_contact,
         }
         return self.render_to_response(context)
 
     def post(self, *args, **kwargs):
         incident_ticket = Incident_Ticket_Form(data=self.request.POST)
         incident_type = IncidentTicketIncidentForm(data=self.request.POST)
-        contact_info = Incident_Ticket_Contact_Info_Form(data=self.request.POST)
+        patient_contact = Incident_Ticket_Contact_Patient_Form(data=self.request.POST)
+        witness_contact = Incident_Ticket_Contact_Witness_Form(data=self.request.POST)
 
-        if incident_ticket.is_valid() and incident_type.is_valid() and contact_info.is_valid():
+        if incident_ticket.is_valid() and incident_type.is_valid() \
+                and patient_contact.is_valid() and witness_contact.is_valid():
+
             ticket_instance = incident_ticket.save(commit=False)
             type_instance = incident_type.save(commit=False)
-            contact_instance = contact_info.save(commit=False)
+            patient_instance = patient_contact.save(commit=False)
+            witness_instance = witness_contact.save(commit=False)
             ticket_instance.save()
             for i in type_instance:
                 i.incident_ticket = ticket_instance
                 i.save()
 
-            contact_instance.incident_ticket = ticket_instance
-            contact_instance.save()
+            patient_instance.incident_ticket = ticket_instance
+            patient_instance.save()
+            witness_instance.incident_ticket = ticket_instance
+            witness_instance.patient = patient_instance
+            witness_instance.save()
 
             return redirect('home')
 

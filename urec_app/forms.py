@@ -60,11 +60,19 @@ IncidentTicketIncidentForm = modelformset_factory(
     Incident_Ticket_Incident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1
 )
 
-class Incident_Ticket_Contact_Info_Form(forms.ModelForm):
+class Incident_Ticket_Contact_Patient_Form(forms.ModelForm):
     class Meta:
-        model = Incident_Ticket_Contact_Info
+        model = Incident_Ticket_Contact_Patient
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+
+
+class Incident_Ticket_Contact_Witness_Form(forms.ModelForm):
+    class Meta:
+        model = Incident_Ticket_Contact_Witness
+        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
+                  "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+
 
 class Task_Form(forms.ModelForm):
     date_time_due = forms.SplitDateTimeField(widget=AdminSplitDateTime())
