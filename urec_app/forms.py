@@ -38,9 +38,16 @@ AccidentTicketInjury = modelformset_factory(
     Accident_Ticket_Injury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
 )
 
-class Accident_Ticket_Contact_Info_Form(forms.ModelForm):
+class Accident_Ticket_Contact_Patient_Form(forms.ModelForm):
     class Meta:
-        model = Accident_Ticket_Contact_Info
+        model = Accident_Ticket_Contact_Patient
+        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
+                  "home_phone_number", "street_address", "city", "state", "zip"]
+
+
+class Accident_Ticket_Contact_Witness_Form(forms.ModelForm):
+    class Meta:
+        model = Accident_Ticket_Contact_Witness
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip"]
 

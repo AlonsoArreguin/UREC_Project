@@ -48,30 +48,37 @@ class CreateAccidentTicket(TemplateView):
     def get(self, *args, **kwargs):
         formset = AccidentTicketInjury(queryset=Accident_Ticket_Injury.objects.none())
         accident_ticket = Accident_Ticket_Form()
-        contact_info = Accident_Ticket_Contact_Info_Form()
+        patient = Accident_Ticket_Contact_Patient_Form()
+        witness = Accident_Ticket_Contact_Witness_Form()
         context = {
             'accident_ticket': accident_ticket,
             'accident_ticket_injury_formset': formset,
-            'contact_info': contact_info,
+            'patient': patient,
+            'witness': witness,
         }
         return self.render_to_response(context)
 
     def post(self, *args, **kwargs):
         accident_ticket = Accident_Ticket_Form(data=self.request.POST)
         injury_type = AccidentTicketInjury(data=self.request.POST)
-        contact_info = Accident_Ticket_Contact_Info_Form(data=self.request.POST)
+        patient = Accident_Ticket_Contact_Patient_Form(data=self.request.POST)
+        witness = Accident_Ticket_Contact_Witness_Form(data=self.request.POST)
 
-        if accident_ticket.is_valid() and injury_type.is_valid() and contact_info.is_valid():
+        if accident_ticket.is_valid() and injury_type.is_valid() and patient.is_valid() and witness.is_valid():
             accident_instance = accident_ticket.save(commit=False)
             injury_instance = injury_type.save(commit=False)
-            contact_instance = contact_info.save(commit=False)
+            patient_instance = patient.save(commit=False)
+            witness_instance = witness.save(commit=False)
             accident_instance.save()
             for i in injury_instance:
                 i.accident_ticket = accident_instance
                 i.save()
 
-            contact_instance.accident_ticket = accident_instance
-            contact_instance.save()
+            patient_instance.accident_ticket = accident_instance
+            patient_instance.save()
+            witness_instance.patient = patient_instance
+            witness_instance.accident_ticket = accident_instance
+            witness_instance.save()
 
             return redirect('home')
 
@@ -82,9 +89,9 @@ class CreateAccidentTicket(TemplateView):
 def view_accident_tickets(request):
     accident_ticket = Accident_Ticket.objects.all()
     injury_type = Accident_Ticket_Injury.objects.all()
-    contact_info = Accident_Ticket_Contact_Info.objects.all()
+    patient = Accident_Ticket_Contact_Patient.objects.all()
 
-    context = {'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': contact_info}
+    context = {'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': patient}
     return render(request, 'urec_app/view_accident_tickets.html', context)
 
 # Counts Page
@@ -216,9 +223,9 @@ class CreateIncidentTicket(TemplateView):
 def view_incident_tickets(request):
     incident_ticket = Incident_Ticket.objects.all()
     incident_type = Incident_Ticket_Incident.objects.all()
-    contact_info = Incident_Ticket_Contact_Info.objects.all()
+    patient_contact = Incident_Ticket_Contact_Patient.objects.all()
 
-    context = {'incident_ticket': incident_ticket, 'incident_type': incident_type, 'contact_info': contact_info}
+    context = {'incident_ticket': incident_ticket, 'incident_type': incident_type, 'patient_contact': patient_contact}
     return render(request, 'urec_app/view_incident_tickets.html', context)
 
 def sop(request):
