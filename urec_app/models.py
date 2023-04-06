@@ -77,9 +77,27 @@ class Accident_Ticket_Injury(models.Model):
 
     objects = models.Manager()
 
-class Accident_Ticket_Contact_Info(models.Model):
+class Accident_Ticket_Contact_Patient(models.Model):
     accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
     accident_relation = models.CharField(max_length=255, default='wip')  # Acidentee or Witness
+    first_name = models.CharField(max_length=255)
+    middle_name = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, blank=True)
+    email_address = models.EmailField(max_length=255, blank=True)
+    personal_phone_number = models.CharField(max_length=255, blank=True)
+    home_phone_number = models.CharField(max_length=255, blank=True)
+    street_address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    state = models.CharField(max_length=255, blank=True)
+    zip = models.CharField(max_length=255, blank=True)
+
+    objects = models.Manager()
+
+
+class Accident_Ticket_Contact_Witness(models.Model):
+    accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
+    accident_relation = models.CharField(max_length=255, default='wip')  # Acidentee or Witness
+    patient = models.ForeignKey(Accident_Ticket_Contact_Patient, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     middle_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
@@ -111,7 +129,7 @@ class Incident_Ticket_Incident(models.Model):
 
     objects = models.Manager()
 
-class Incident_Ticket_Contact_Info(models.Model):
+class Incident_Ticket_Contact_Patient(models.Model):
     incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
     first_name = models.CharField(max_length=255)
     middle_name = models.CharField(max_length=255, blank=True)
@@ -126,6 +144,25 @@ class Incident_Ticket_Contact_Info(models.Model):
     minor_status = models.CharField(max_length=255)
 
     objects = models.Manager()
+
+
+class Incident_Ticket_Contact_Witness(models.Model):
+    incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
+    patient = models.ForeignKey(Incident_Ticket_Contact_Patient, on_delete=models.CASCADE)  # foreign key
+    first_name = models.CharField(max_length=255)
+    middle_name = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, blank=True)
+    email_address = models.EmailField(max_length=255, blank=True)
+    personal_phone_number = models.CharField(max_length=255, blank=True)
+    home_phone_number = models.CharField(max_length=255, blank=True)
+    street_address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    state = models.CharField(max_length=255, blank=True)
+    zip = models.CharField(max_length=255, blank=True)
+    minor_status = models.CharField(max_length=255)
+
+    objects = models.Manager()
+
 
 class Task(models.Model):
     task_id = models.AutoField(primary_key=True)

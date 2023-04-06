@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
 from .models import *
+from django.forms import modelformset_factory
 
 class FormAccident(forms.ModelForm):
     class Meta:
@@ -26,14 +27,27 @@ class Accident_Ticket_Form(forms.ModelForm):
         model = Accident_Ticket
         fields = ["urec_facility", "location_in_facility", "activity_causing_injury"]
 
-class Accident_Ticket_Injury_Form(forms.ModelForm):
-    class Meta:
-        model = Accident_Ticket_Injury
-        fields = ["injury_type", "injury_description", "care_provided"]
+# Accident Ticket Injury Form
+# class Accident_Ticket_Injury_Form(forms.ModelForm):
+#     class Meta:
+#         model = Accident_Ticket_Injury
+#         fields = ["injury_type", "injury_description", "care_provided"]
 
-class Accident_Ticket_Contact_Info_Form(forms.ModelForm):
+
+AccidentTicketInjury = modelformset_factory(
+    Accident_Ticket_Injury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
+)
+
+class Accident_Ticket_Contact_Patient_Form(forms.ModelForm):
     class Meta:
-        model = Accident_Ticket_Contact_Info
+        model = Accident_Ticket_Contact_Patient
+        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
+                  "home_phone_number", "street_address", "city", "state", "zip"]
+
+
+class Accident_Ticket_Contact_Witness_Form(forms.ModelForm):
+    class Meta:
+        model = Accident_Ticket_Contact_Witness
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip"]
 
@@ -42,16 +56,30 @@ class Incident_Ticket_Form(forms.ModelForm):
         model = Incident_Ticket
         fields = ["urec_facility", "location_in_facility", "activity_during_incident"]
 
-class Incident_Ticket_Incident_Form(forms.ModelForm):
-    class Meta:
-        model = Incident_Ticket_Incident
-        fields = ["incident_nature", "incident_description", "action_taken"]
+# class Incident_Ticket_Incident_Form(forms.ModelForm):
+#     class Meta:
+#         model = Incident_Ticket_Incident
+#         fields = ["incident_nature", "incident_description", "action_taken"]
+#
 
-class Incident_Ticket_Contact_Info_Form(forms.ModelForm):
+
+IncidentTicketIncidentForm = modelformset_factory(
+    Incident_Ticket_Incident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1
+)
+
+class Incident_Ticket_Contact_Patient_Form(forms.ModelForm):
     class Meta:
-        model = Incident_Ticket_Contact_Info
+        model = Incident_Ticket_Contact_Patient
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+
+
+class Incident_Ticket_Contact_Witness_Form(forms.ModelForm):
+    class Meta:
+        model = Incident_Ticket_Contact_Witness
+        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
+                  "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+
 
 class Task_Form(forms.ModelForm):
     date_time_due = forms.SplitDateTimeField(widget=AdminSplitDateTime())

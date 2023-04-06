@@ -6,7 +6,7 @@ urlpatterns = [
     path('', views.home, name='home'),
 
     path('accident/', views.accident, name='accident'),
-    path('accident/create_accident_ticket/', views.create_accident_ticket, name='create_accident_ticket'),
+    path('accident/create_accident_ticket/', views.CreateAccidentTicket.as_view(), name='create_accident_ticket'),
     path('accident/view_accident_tickets/', views.view_accident_tickets, name='view_accident_tickets'),
 
     # path('accident/test/', views.showform5, name='form'),
@@ -20,7 +20,7 @@ urlpatterns = [
     path('form/', views.form, name='form'),
 
     path('incident/', views.incident, name='incident'),
-    path('incident/create_incident_ticket/', views.create_incident_ticket, name='create_incident_ticket'),
+    path('incident/create_incident_ticket/', views.CreateIncidentTicket.as_view(), name='create_incident_ticket'),
     path('incident/view_incident_tickets/', views.view_incident_tickets, name='view_incident_tickets'),
 
     path('sop/', views.sop, name='sop'),
