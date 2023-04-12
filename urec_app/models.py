@@ -188,5 +188,18 @@ class Count(models.Model):
 
     objects = models.Manager()
 
+class Erp(models.Model):
+    erp_id = models.AutoField(primary_key = True)
+    title = models.CharField(max_length=255)
+    filename = models.CharField(max_length=255)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
+
+
+class Erp_Upload(models.Model):
+    file = models.FileField()
+
+
     # def __str__(self):
     #     return self.location_in_facility

@@ -1,0 +1,32 @@
+<link
+  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+
+{% include 'urec_app/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ERP Page</title>
+  </head>
+  <body>
+    <h1>Emergency Response Protocols</h1>
+    <a href="{% url 'erp' %}"><button>ERP Home</button></a>
+    <ul>
+      {% load static %}
+      <li>
+        <a href="{% static 'erp/accidentreport.pdf' %}" target="_new"
+          ><button>Accident Report</button></a
+        >
+      </li>
+      <li>
+        <a href="{% static 'erp/Example PDF 1.pdf' %}" target="_new"
+          ><button>Example PDF</button></a
+        >
+      </li>
+    </ul>
+  </body>
+</html>

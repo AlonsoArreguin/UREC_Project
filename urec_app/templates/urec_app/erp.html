@@ -1,17 +1,20 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link
+  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
 
 {% include 'urec_app/navbar.html' %}
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>ERP Page</title>
-</head>
-<body>
-    <h1>Emergency Response Protocol Page</h1>
-    {% load static %}
-    <a href="{% static 'erp/accidentreport.pdf' %}" target="_new"><button>Accident Report</button></a>
-    <a href="{% static 'erp/Example PDF 1.pdf' %}" target="_new"><button>Example PDF</button></a>
-</body>
+  </head>
+  <body>
+    <h1>Emergency Response Protocols</h1>
+    <a href="{% url 'create_erp' %}"><button>Create ERP</button></a>
+    <a href="{% url 'view_erps' %}"><button>View ERPs</button></a>
+  </body>
 </html>

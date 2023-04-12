@@ -16,6 +16,8 @@ urlpatterns = [
     path('count/view_history', views.count_view_history, name='count_view_history'),
 
     path('erp/', views.erp, name='erp'),
+    path('erp/create_erp', views.create_erp, name='create_erp'),
+    path('erp/view_erps', views.view_erps, name='view_erps'),
 
     path('form/', views.form, name='form'),
 

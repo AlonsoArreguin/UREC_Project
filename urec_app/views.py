@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse, Http404
+from django.conf import settings
 from .forms import *
 from django.views.generic import ListView, TemplateView
 from django.urls import reverse_lazy
+from .storage_backends import *
+
+import boto3
 
 # Create your views here.
 
@@ -120,6 +124,37 @@ def count_view_history(request):
 # ERP Page
 def erp(request):
     return render(request, 'urec_app/erp.html')
+
+def create_erp(request):
+    if request.method == "POST":
+        # get form data from requests
+        erp_file = ERP_Upload_Form(request.POST, request.FILES)
+        erp_obj = ERP_Form(request.POST)
+
+        # extract file information
+        uploadfile = request.FILES['file']  # entire file
+        filelocation = uploadfile.name  # file name from entire file
+        if erp_file.is_valid() and erp_obj.is_valid():
+            # make instance of model with files information, then save to database
+            erp = Erp(title = request.POST['title'], filename = filelocation)
+            erp.save()
+
+            # make instance of media storage, then save the file
+            mediastorage = PublicMediaStorage()
+            mediastorage.save(filelocation, uploadfile)
+            
+            # return user to erp home
+            return redirect('erp')
+    else:
+        # give blank forms if not POST request
+        erp_file = ERP_Upload_Form()
+        erp_obj = ERP_Form()
+    context = {'erp_obj': erp_obj, 'erp_file': erp_file}
+    return render(request, 'urec_app/create_erp.html', context)
+
+def view_erps(request):
+    # s3_resource = boto3.resource('s3')
+    return render(request, 'urec_app/view_erps.html')
     # return erp_pdf('Example PDF 1')
     # return erp_pdf('accidentreport')
 
