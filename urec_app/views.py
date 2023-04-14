@@ -136,7 +136,7 @@ def create_erp(request):
         filelocation = uploadfile.name  # file name from entire file
         if erp_file.is_valid() and erp_obj.is_valid():
             # make instance of model with files information, then save to database
-            erp = Erp(title = request.POST['title'], filename = filelocation)
+            erp = Erp(title = request.POST['title'], filename = filelocation, description = request.POST['description'])
             erp.save()
 
             # make instance of media storage, then save the file
@@ -152,9 +152,28 @@ def create_erp(request):
     context = {'erp_obj': erp_obj, 'erp_file': erp_file}
     return render(request, 'urec_app/create_erp.html', context)
 
+def delete_erp(request, filename):
+    erp = Erp.objects.get(filename=filename)
+    if request.method == "POST":
+        # delete from database
+        erp.delete()
+        #delete file from S3
+        AWS_REGION = settings.AWS_DEFAULT_REGION
+        S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
+        ACCESS_ID = settings.AWS_ACCESS_KEY_ID
+        ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+        s3_resource = boto3.resource("s3", aws_access_key_id=ACCESS_ID,
+         aws_secret_access_key= ACCESS_KEY, region_name=AWS_REGION)
+        s3_object = s3_resource.Object(S3_BUCKET_NAME, 'erpfiles/' + str(filename))
+    
+        s3_object.delete()
+
+    return redirect('erp')
+
 def view_erps(request):
-    # s3_resource = boto3.resource('s3')
-    return render(request, 'urec_app/view_erps.html')
+    Erps = Erp.objects.all()
+    context = {"Erps": Erps}
+    return render(request, 'urec_app/view_erps.html', context)
     # return erp_pdf('Example PDF 1')
     # return erp_pdf('accidentreport')
 

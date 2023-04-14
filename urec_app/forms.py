@@ -102,7 +102,7 @@ CountFormSet = forms.modelformset_factory(
 class ERP_Form(forms.ModelForm):
     class Meta:
         model = Erp
-        fields = ["title"]
+        fields = ["title", "description"]
 
 class ERP_Upload_Form(forms.ModelForm):
     class Meta:

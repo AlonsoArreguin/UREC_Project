@@ -15,6 +15,35 @@
   <body>
     <h1>Emergency Response Protocols</h1>
     <a href="{% url 'erp' %}"><button>ERP Home</button></a>
+
+    <h3>All Erps</h3>
+    <table class="table table-striped">
+      <tr>
+        <th>Title</th>
+        <th>File Name</th>
+        <th>Description</th>
+        <th>Upload Time</th>
+      </tr>
+      {% for erp in Erps %}
+      <tr>
+        <td><a>{{ erp.title }}</a></td>
+        <td>{{ erp.filename }}</td>
+        <td>{{ erp.description }}</td>
+        <td>{{ erp.uploaded_at }}</td>
+        <td>
+          <form
+            action="{% url 'delete_erp' filename=erp.filename %}"
+            method="post"
+          >
+            {% csrf_token %}
+            <input type="submit" value="Delete" />
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <!--
     <ul>
       {% load static %}
       <li>
@@ -28,5 +57,6 @@
         >
       </li>
     </ul>
+    -->
   </body>
 </html>
