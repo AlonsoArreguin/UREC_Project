@@ -26,7 +26,16 @@
       </tr>
       {% for erp in Erps %}
       <tr>
-        <td><a>{{ erp.title }}</a></td>
+        <td>
+          <p>{{ erp.title }}</p>
+          <form
+            action="{% url 'download_erp' filename=erp.filename %}"
+            method="post"
+          >
+            {% csrf_token %}
+            <input type="submit" value="Download" />
+          </form>
+        </td>
         <td>{{ erp.filename }}</td>
         <td>{{ erp.description }}</td>
         <td>{{ erp.uploaded_at }}</td>

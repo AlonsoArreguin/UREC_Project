@@ -157,18 +157,39 @@ def delete_erp(request, filename):
     if request.method == "POST":
         # delete from database
         erp.delete()
-        #delete file from S3
+        # set variables necessary for S3 connection
         AWS_REGION = settings.AWS_DEFAULT_REGION
         S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
         ACCESS_ID = settings.AWS_ACCESS_KEY_ID
         ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+        # initialize S3 connections
         s3_resource = boto3.resource("s3", aws_access_key_id=ACCESS_ID,
          aws_secret_access_key= ACCESS_KEY, region_name=AWS_REGION)
+        # get instance of S3 object based on filename
         s3_object = s3_resource.Object(S3_BUCKET_NAME, 'erpfiles/' + str(filename))
-    
+        # delete S3 object
         s3_object.delete()
 
-    return redirect('erp')
+    return redirect('view_erps')
+
+def download_erp(request, filename):
+    # set variables necessary for S3 connection
+    AWS_REGION = settings.AWS_DEFAULT_REGION
+    S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
+    ACCESS_ID = settings.AWS_ACCESS_KEY_ID
+    ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+    # initialize S3 connection
+    s3_client = boto3.client("s3", aws_access_key_id=ACCESS_ID,
+         aws_secret_access_key= ACCESS_KEY, region_name=AWS_REGION)
+    # download object in user's browser
+    # s3_client.download_file(S3_BUCKET_NAME, str(filename), 'erpfiles/' + str(filename))
+    erp_url = s3_client.generate_presigned_url('get_object',
+        Params={'Bucket': S3_BUCKET_NAME, 'Key': 'erpfiles/' + str(filename)},
+        ExpiresIn=300)
+        
+    context = {"erp_url": erp_url , "filename": filename}
+    return render(request, 'urec_app/download_erp.html', context)
+
 
 def view_erps(request):
     Erps = Erp.objects.all()
