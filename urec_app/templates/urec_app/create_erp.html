@@ -1,0 +1,28 @@
+<link
+  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+
+{% include 'urec_app/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ERP Page</title>
+  </head>
+  <body>
+    <h1>Emergency Response Protocols</h1>
+    <a href="{% url 'erp' %}"><button>ERP Home</button></a>
+    <a href="{% url 'view_erps' %}"><button>View ERPs</button></a>
+    <hr />
+
+    <div class="container">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {{ erp_obj.as_p }} {{ erp_file.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>

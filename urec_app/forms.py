@@ -98,3 +98,13 @@ class Task_Form(forms.ModelForm):
 CountFormSet = forms.modelformset_factory(
     Count, fields=("location_in_facility", "location_count"), extra=4
 )
+
+class ERP_Form(forms.ModelForm):
+    class Meta:
+        model = Erp
+        fields = ["title", "description"]
+
+class ERP_Upload_Form(forms.ModelForm):
+    class Meta:
+        model = Erp_Upload
+        fields = ["file"]

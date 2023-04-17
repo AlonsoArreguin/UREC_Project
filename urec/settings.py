@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -153,6 +154,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+USE_S3 = os.environ['USE_S3'] == 'TRUE'
+
+if USE_S3:
+    # aws settings
+    AWS_ACCESS_KEY_ID = os.environ['S3_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['S3_SECRET_KEY_ID']
+    AWS_STORAGE_BUCKET_NAME = os.environ['S3_STORAGE_BUCKET_NAME']
+    AWS_DEFAULT_ACL = None
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = 'erpfiles'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    AWS_DEFAULT_REGION='us-east-1'
+
+    
+DEFAULT_FILE_STORAGE = 'urec_app.storage_backends.PublicMediaStorage'
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'urec_app/static'),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

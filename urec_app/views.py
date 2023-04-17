@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse, Http404
+from django.conf import settings
 from .forms import *
 from django.views.generic import ListView, TemplateView
 from django.urls import reverse_lazy
+from .storage_backends import *
+
+import boto3
 
 # Create your views here.
 
@@ -120,6 +124,77 @@ def count_view_history(request):
 # ERP Page
 def erp(request):
     return render(request, 'urec_app/erp.html')
+
+def create_erp(request):
+    if request.method == "POST":
+        # get form data from requests
+        erp_file = ERP_Upload_Form(request.POST, request.FILES)
+        erp_obj = ERP_Form(request.POST)
+
+        # extract file information
+        uploadfile = request.FILES['file']  # entire file
+        filelocation = uploadfile.name  # file name from entire file
+        if erp_file.is_valid() and erp_obj.is_valid():
+            # make instance of model with files information, then save to database
+            erp = Erp(title = request.POST['title'], filename = filelocation, description = request.POST['description'])
+            erp.save()
+
+            # make instance of media storage, then save the file
+            mediastorage = PublicMediaStorage()
+            mediastorage.save(filelocation, uploadfile)
+            
+            # return user to erp home
+            return redirect('erp')
+    else:
+        # give blank forms if not POST request
+        erp_file = ERP_Upload_Form()
+        erp_obj = ERP_Form()
+    context = {'erp_obj': erp_obj, 'erp_file': erp_file}
+    return render(request, 'urec_app/create_erp.html', context)
+
+def delete_erp(request, filename):
+    erp = Erp.objects.get(filename=filename)
+    if request.method == "POST":
+        # delete from database
+        erp.delete()
+        # set variables necessary for S3 connection
+        AWS_REGION = settings.AWS_DEFAULT_REGION
+        S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
+        ACCESS_ID = settings.AWS_ACCESS_KEY_ID
+        ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+        # initialize S3 connections
+        s3_resource = boto3.resource("s3", aws_access_key_id=ACCESS_ID,
+         aws_secret_access_key= ACCESS_KEY, region_name=AWS_REGION)
+        # get instance of S3 object based on filename
+        s3_object = s3_resource.Object(S3_BUCKET_NAME, 'erpfiles/' + str(filename))
+        # delete S3 object
+        s3_object.delete()
+
+    return redirect('view_erps')
+
+def download_erp(request, filename):
+    # set variables necessary for S3 connection
+    AWS_REGION = settings.AWS_DEFAULT_REGION
+    S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
+    ACCESS_ID = settings.AWS_ACCESS_KEY_ID
+    ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+    # initialize S3 connection
+    s3_client = boto3.client("s3", aws_access_key_id=ACCESS_ID,
+         aws_secret_access_key= ACCESS_KEY, region_name=AWS_REGION)
+    # download object in user's browser
+    # s3_client.download_file(S3_BUCKET_NAME, str(filename), 'erpfiles/' + str(filename))
+    erp_url = s3_client.generate_presigned_url('get_object',
+        Params={'Bucket': S3_BUCKET_NAME, 'Key': 'erpfiles/' + str(filename)},
+        ExpiresIn=300)
+        
+    context = {"erp_url": erp_url , "filename": filename}
+    return render(request, 'urec_app/download_erp.html', context)
+
+
+def view_erps(request):
+    Erps = Erp.objects.all()
+    context = {"Erps": Erps}
+    return render(request, 'urec_app/view_erps.html', context)
     # return erp_pdf('Example PDF 1')
     # return erp_pdf('accidentreport')
 

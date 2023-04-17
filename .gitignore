@@ -3,5 +3,6 @@ __pycache__/
 
 # Environments
 /.env
+/.vscode
 /urec_app/__pycache__
 /urec_app/migrations

@@ -1,4 +1,6 @@
+from datetime import datetime
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
 UREC_FACILITIES = (
         ('Facility 1', (
@@ -187,6 +189,20 @@ class Count(models.Model):
     staff_netid = models.CharField(max_length=255, default='tst123')
 
     objects = models.Manager()
+
+class Erp(models.Model):
+    # erp_id = models.AudtoField()
+    filename = models.CharField(primary_key = True, max_length=255)
+    title = models.CharField(max_length=255)
+    description = models.TextField(max_length=1023)
+    uploaded_at = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()
+
+
+class Erp_Upload(models.Model):
+    file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
+
 
     # def __str__(self):
     #     return self.location_in_facility
