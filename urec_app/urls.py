@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from django.views.i18n import JavaScriptCatalog
 
 urlpatterns = [
     path('', views.home, name='home'),
+
+    path('accounts/', include('django.contrib.auth.urls')),
 
     path('accident/', views.accident, name='accident'),
     path('accident/create_accident_ticket/', views.CreateAccidentTicket.as_view(), name='create_accident_ticket'),
