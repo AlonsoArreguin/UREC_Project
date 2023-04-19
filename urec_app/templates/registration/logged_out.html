@@ -1,4 +1,21 @@
-{% block content %}
-<p>Logged out!</p>
-<a href="{% url 'login'%}">Click here to login again.</a>
-{% endblock %}
+<link
+  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+
+{% include 'urec_app/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Logout Page</title>
+  </head>
+  <body>
+    {% block content %}
+    <p>You have been logged out!</p>
+    <a href="{% url 'login'%}">Click here to login again.</a>
+    {% endblock %}
+  </body>
+</html>
