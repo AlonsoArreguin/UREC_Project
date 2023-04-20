@@ -39,6 +39,7 @@
         <td>{{ erp.filename }}</td>
         <td>{{ erp.description }}</td>
         <td>{{ erp.uploaded_at }}</td>
+        {% if user.is_staff %}
         <td>
           <form
             action="{% url 'delete_erp' filename=erp.filename %}"
@@ -48,6 +49,7 @@
             <input type="submit" value="Delete" />
           </form>
         </td>
+        {% endif %}
       </tr>
       {% endfor %}
     </table>

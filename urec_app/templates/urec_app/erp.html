@@ -14,7 +14,9 @@
   </head>
   <body>
     <h1>Emergency Response Protocols</h1>
+    {% if user.is_staff %}
     <a href="{% url 'create_erp' %}"><button>Create ERP</button></a>
+    {% endif %}
     <a href="{% url 'view_erps' %}"><button>View ERPs</button></a>
   </body>
 </html>

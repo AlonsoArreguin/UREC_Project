@@ -17,6 +17,8 @@
     <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
 
+
+    <h3>Please login to access UREC Risk Management System.</h3>
     <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
       <table>

@@ -11,5 +11,7 @@
 <body>
     <h1>Incident Page</h1>
     <a href="{% url 'create_incident_ticket' %}"><button>Create New Incident Report</button></a>
+    {% if user.is_staff %}
     <a href="{% url 'view_incident_tickets' %}"><button>View Incident Reports</button></a>
+    {% endif %}
 </body>

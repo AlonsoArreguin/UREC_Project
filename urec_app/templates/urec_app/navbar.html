@@ -18,7 +18,7 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
       {% if user.is_authenticated %}
-        <li><a href="{% url 'admin:index' %}">Account (TODO)</a></li>
+        <li><a href="{% url 'admin:index' %}">My Account (TODO)</a></li>
 
         {% if user.is_staff %}
           <li><a href="{% url 'admin:index' %}">Admin</a></li>
