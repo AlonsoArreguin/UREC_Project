@@ -210,23 +210,6 @@ def view_erps(request):
     Erps = Erp.objects.all()
     context = {"Erps": Erps}
     return render(request, 'urec_app/view_erps.html', context)
-    # return erp_pdf('Example PDF 1')
-    # return erp_pdf('accidentreport')
-
-    # try:
-    #     return FileResponse(open('urec_app/documents/Example PDF 1.pdf', 'rb'), content_type='application/pdf')
-    #     #return FileResponse(open('urec_app/documents/accidentreport.pdf', 'rb'), content_type='application/pdf')
-    # except FileNotFoundError:
-    #     raise Http404()
-
-# def erp_pdf(pdf_name):
-#     file_name = 'urec_app/documents/' + pdf_name + '.pdf'
-#     open_file = open(file_name, 'rb')
-#     try:
-#         return FileResponse(open_file, content_type='application/pdf')
-#         # return FileResponse(open('urec_app/documents/accidentreport.pdf', 'rb'), content_type='application/pdf')
-#     except FileNotFoundError:
-#         raise Http404()
 
 @login_required
 def form(request):
