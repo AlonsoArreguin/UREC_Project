@@ -202,7 +202,3 @@ class Erp(models.Model):
 
 class Erp_Upload(models.Model):
     file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
-
-
-    # def __str__(self):
-    #     return self.location_in_facility

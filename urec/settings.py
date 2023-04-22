@@ -15,8 +15,6 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 load_dotenv()
-# Access mysql database
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,7 +33,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'urec_app.apps.UrecAppConfig',
     'django.contrib.admin',
@@ -80,7 +77,7 @@ WSGI_APPLICATION = 'urec.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
+# Default configuration for local storage using SQLite
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -99,6 +96,7 @@ WSGI_APPLICATION = 'urec.wsgi.application'
 #     }
 # }
 
+# Database connection using remote MySQL instance in RDS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -121,7 +119,6 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -136,30 +133,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+# Sets page after login
 LOGIN_REDIRECT_URL = '/'
-
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
+# Toggle if S3 is later removed from environment
 USE_S3 = os.environ['USE_S3'] == 'TRUE'
-
+# Set variables for S3 connections
 if USE_S3:
     # aws settings
     AWS_ACCESS_KEY_ID = os.environ['S3_ACCESS_KEY_ID']
@@ -173,12 +161,26 @@ if USE_S3:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     AWS_DEFAULT_REGION='us-east-1'
 
-    
+# Sets file storage to S3 using Boto3 as configured in storage_backends.py
 DEFAULT_FILE_STORAGE = 'urec_app.storage_backends.PublicMediaStorage'
 
+
+# OLD; Sets directory for static files
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.1/howto/static-files/
+STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'urec_app/static'),)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Email backend for password reset
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = os.environ['GMAIL_EMAIL']
+EMAIL_HOST_PASSWORD = os.environ['GMAIL_PASSWORD']

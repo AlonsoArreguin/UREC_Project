@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse, Http404
+from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordResetForm
 from .forms import *
 from django.views.generic import ListView, TemplateView
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from .storage_backends import *
 
 import boto3
@@ -15,6 +20,20 @@ import boto3
 @login_required
 def home(request):
     return render(request, 'urec_app/home.html')
+
+# Edit User Account
+@login_required
+def edit_account(request):
+    if request.method == 'POST':
+        form = EditAccountForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = EditAccountForm(instance=request.user)
+        args = {'form': form}
+        return render(request, 'urec_app/edit_account.html', args)
 
 # Accident Ticket Page
 @login_required

@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
 from .models import *
 from django.forms import modelformset_factory
 
@@ -108,3 +110,16 @@ class ERP_Upload_Form(forms.ModelForm):
     class Meta:
         model = Erp_Upload
         fields = ["file"]
+
+class EditAccountForm(UserChangeForm):
+    # template_name='/something/else'
+    password = None
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'username',
+            'first_name',
+            'last_name'\
+        )
