@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db import models
 from django.core.validators import FileExtensionValidator
 
+# List of possible locations within facilities template
 UREC_LOCATIONS = (
         ('Facility 1', (
             ('Location 1', 'Location 1'),
@@ -20,6 +21,7 @@ UREC_LOCATIONS = (
         )),
     )
 
+# List of possible Facilities
 UREC_FACILITIES = (
         ('Facility 1', 'Facility 1'),
         ('Facility 2', 'Facility 2'),
@@ -66,7 +68,7 @@ class AccidentTicketContactInfo(models.Model):
     zip = models.CharField(max_length=255, blank=True)
 # ----------------------------------------------------------------------------------------------------------------------
 
-
+# Primary Accident Ticket Model
 class Accident_Ticket(models.Model):
     ticket_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
@@ -77,6 +79,7 @@ class Accident_Ticket(models.Model):
 
     objects = models.Manager()
 
+# Injury Model for Accident Ticket
 class Accident_Ticket_Injury(models.Model):
     accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
     injury_type = models.CharField(max_length=255)
@@ -85,6 +88,7 @@ class Accident_Ticket_Injury(models.Model):
 
     objects = models.Manager()
 
+# Patient Contact Information Model for Accident Ticket
 class Accident_Ticket_Contact_Patient(models.Model):
     accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
     accident_relation = models.CharField(max_length=255, default='wip')  # Acidentee or Witness
@@ -101,7 +105,7 @@ class Accident_Ticket_Contact_Patient(models.Model):
 
     objects = models.Manager()
 
-
+# Witness Contact Information Model for Accident Ticket
 class Accident_Ticket_Contact_Witness(models.Model):
     accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
     accident_relation = models.CharField(max_length=255, default='wip')  # Acidentee or Witness
@@ -119,6 +123,7 @@ class Accident_Ticket_Contact_Witness(models.Model):
 
     objects = models.Manager()
 
+# Primary Incident Ticket Model
 class Incident_Ticket(models.Model):
     ticket_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
@@ -129,6 +134,7 @@ class Incident_Ticket(models.Model):
 
     objects = models.Manager()
 
+# Incident Sub-Model for Incident Specifics
 class Incident_Ticket_Incident(models.Model):
     incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
     incident_nature = models.CharField(max_length=255)
@@ -137,6 +143,7 @@ class Incident_Ticket_Incident(models.Model):
 
     objects = models.Manager()
 
+# Patient Contact Information Model for Incident Ticket
 class Incident_Ticket_Contact_Patient(models.Model):
     incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
     first_name = models.CharField(max_length=255)
@@ -153,7 +160,7 @@ class Incident_Ticket_Contact_Patient(models.Model):
 
     objects = models.Manager()
 
-
+# Witness Contact Information Model for Incident Ticket
 class Incident_Ticket_Contact_Witness(models.Model):
     incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
     patient = models.ForeignKey(Incident_Ticket_Contact_Patient, on_delete=models.CASCADE)  # foreign key
@@ -171,7 +178,7 @@ class Incident_Ticket_Contact_Witness(models.Model):
 
     objects = models.Manager()
 
-
+# Task Model
 class Task(models.Model):
     task_id = models.AutoField(primary_key=True)
     task_name = models.CharField(max_length=255)
@@ -185,6 +192,7 @@ class Task(models.Model):
 
     objects = models.Manager()
 
+# Count Model
 class Count(models.Model):
     count_id = models.AutoField(primary_key = True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
@@ -194,6 +202,7 @@ class Count(models.Model):
 
     objects = models.Manager()
 
+# Erp Model for Database
 class Erp(models.Model):
     # erp_id = models.AudtoField()
     filename = models.CharField(primary_key = True, max_length=255)
@@ -203,6 +212,6 @@ class Erp(models.Model):
 
     objects = models.Manager()
 
-
+# Erp Model for FileUpload ONLY
 class Erp_Upload(models.Model):
     file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=["pdf"])])

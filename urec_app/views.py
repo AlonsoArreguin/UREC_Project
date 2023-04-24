@@ -16,8 +16,6 @@ from .storage_backends import *
 
 import boto3
 
-# Create your views here.
-
 # Home Page
 @login_required
 def home(request):
@@ -69,6 +67,7 @@ def accident(request):
 #     context = { 'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': contact_info}
 #     return render(request, 'urec_app/create_accident_ticket.html', context)
 
+# Create Accident View
 class CreateAccidentTicket(TemplateView):
     template_name = "urec_app/create_accident_ticket.html"
 
@@ -100,6 +99,7 @@ class CreateAccidentTicket(TemplateView):
             injury_instance = injury_type.save(commit=False)
             patient_instance = patient.save(commit=False)
             witness_instance = witness.save(commit=False)
+            accident_ticket.instance.staff_netid = self.request.user
             accident_instance.save()
             for i in injury_instance:
                 i.accident_ticket = accident_instance
@@ -159,6 +159,7 @@ def count_view_history(request):
 def erp(request):
     return render(request, 'urec_app/erp.html')
 
+# Create ERP Page
 @login_required
 @staff_member_required
 def create_erp(request):
@@ -188,6 +189,7 @@ def create_erp(request):
     context = {'erp_obj': erp_obj, 'erp_file': erp_file}
     return render(request, 'urec_app/create_erp.html', context)
 
+# Delete ERP Process
 @login_required
 @staff_member_required
 def delete_erp(request, filename):
@@ -210,6 +212,7 @@ def delete_erp(request, filename):
 
     return redirect('view_erps')
 
+# Download ERP Page/Process
 @login_required
 def download_erp(request, filename):
     # set variables necessary for S3 connection
@@ -229,13 +232,14 @@ def download_erp(request, filename):
     context = {"erp_url": erp_url , "filename": filename}
     return render(request, 'urec_app/download_erp.html', context)
 
-
+# View all ERPs
 @login_required
 def view_erps(request):
     Erps = Erp.objects.all()
     context = {"Erps": Erps}
     return render(request, 'urec_app/view_erps.html', context)
 
+# Form Page (NOT YET IMPLEMENTED)
 @login_required
 def form(request):
     return render(request, 'urec_app/form.html')
@@ -272,7 +276,7 @@ def incident(request):
 #     context = { 'incident_ticket': incident_ticket, 'incident_type': incident_type, 'contact_info': contact_info}
 #     return render(request, 'urec_app/create_incident_ticket.html', context)
 
-
+# Create Incident View
 class CreateIncidentTicket(TemplateView):
     template_name = "urec_app/create_incident_ticket.html"
     def get(self, *args, **kwargs):
@@ -306,6 +310,7 @@ class CreateIncidentTicket(TemplateView):
             type_instance = incident_type.save(commit=False)
             patient_instance = patient_contact.save(commit=False)
             witness_instance = witness_contact.save(commit=False)
+            incident_ticket.instance.staff_netid = self.request.user
             ticket_instance.save()
             for i in type_instance:
                 i.incident_ticket = ticket_instance
@@ -333,6 +338,7 @@ def view_incident_tickets(request):
     context = {'incident_ticket': incident_ticket, 'incident_type': incident_type, 'patient_contact': patient_contact}
     return render(request, 'urec_app/view_incident_tickets.html', context)
 
+# SOP Page (NOT YET IMPLEMENTED)
 @login_required
 def sop(request):
     return render(request, 'urec_app/sop.html')
@@ -376,6 +382,7 @@ def my_tasks(request):
     context = {'task_item': task_item}
     return render(request, 'urec_app/my_tasks.html', context)
 
+# Survey View (NOT YET IMPLEMENTED)
 @login_required
 def survey(request):
     return render(request, 'urec_app/survey.html')

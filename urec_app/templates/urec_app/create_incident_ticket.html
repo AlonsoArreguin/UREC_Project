@@ -14,7 +14,7 @@
             <h2>Create Incident Ticket</h2>
             {% csrf_token %}
             {{ incident_ticket.as_p }}
-            <br><h3>Injury Type</h3>
+            <br><h3>Incident Type</h3>
             {{ incident_type_formset.management_form }}
             {% for form in incident_type_formset %}
             <div class="incident-type-form">
