@@ -343,14 +343,6 @@ def create_task(request):
         if task_obj.is_valid():
             task_obj.pk = None
             task_obj.save()
-        # task_obj = Task_Form(request.POST)
-        # if task_obj.is_valid():
-        #     task_obj.pk = None
-        #     task_obj.save()
-        # task_obj = Task_Form(request.POST)
-        # if task_obj.is_valid():
-        #     task_obj.pk = None
-        #     task_obj.save()
 
             return redirect('task')
     else:
@@ -358,13 +350,22 @@ def create_task(request):
     context = {'task_obj': task_obj}
     return render(request, 'urec_app/create_task.html', context)
 
-# View All Created Tasks reguardless of completion
+# View All Tasks
 @login_required
 def all_tasks(request):
     task_item = Task.objects.all()
 
     context = {'task_item': task_item}
     return render(request, 'urec_app/all_tasks.html', context)
+
+# View My Tasks
+@login_required
+def my_tasks(request):
+    username = request.user.username
+    task_item = Task.objects.filter(staff_netid=username)
+
+    context = {'task_item': task_item}
+    return render(request, 'urec_app/my_tasks.html', context)
 
 @login_required
 def survey(request):

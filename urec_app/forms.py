@@ -85,10 +85,10 @@ class Incident_Ticket_Contact_Witness_Form(forms.ModelForm):
 
 class Task_Form(forms.ModelForm):
     date_time_due = forms.SplitDateTimeField(widget=AdminSplitDateTime())
-
+    staff_netid = forms.ModelChoiceField(queryset=User.objects.all())
     class Meta:
         model = Task
-        fields = ["task_name", "task_description", "date_time_due", "text_input_required"]
+        fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required"]
         widgets = {
             "date": AdminDateWidget(),
             "time": AdminTimeWidget()

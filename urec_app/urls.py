@@ -38,7 +38,7 @@ urlpatterns = [
 
     path('task/', views.task, name='task'),
     path('task/create_task', views.create_task, name='create_task'),
-    # path('task/task_list', views.task, name='task'),
+    path('task/my_tasks', views.my_tasks, name='my_tasks'),
     path('task/all_tasks', views.all_tasks, name='all_tasks'),
 
     path('jsi18n', JavaScriptCatalog.as_view(), name='js-catalog'),
