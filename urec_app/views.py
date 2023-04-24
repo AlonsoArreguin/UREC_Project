@@ -3,13 +3,15 @@ from django.http import HttpResponse, FileResponse, Http404
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.forms import PasswordResetForm
-from .forms import *
 from django.views.generic import ListView, TemplateView
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+
+from .forms import *
 from .storage_backends import *
 
 import boto3
@@ -116,6 +118,7 @@ class CreateAccidentTicket(TemplateView):
 
 # View all Accident Tickets
 @login_required
+@staff_member_required
 def view_accident_tickets(request):
     accident_ticket = Accident_Ticket.objects.all()
     injury_type = Accident_Ticket_Injury.objects.all()
@@ -145,6 +148,7 @@ def count_update(request):
 
 # View All Count History
 @login_required
+@staff_member_required
 def count_view_history(request):
     count_item = Count.objects.all()
     context = {'count_item': count_item}
@@ -156,6 +160,7 @@ def erp(request):
     return render(request, 'urec_app/erp.html')
 
 @login_required
+@staff_member_required
 def create_erp(request):
     if request.method == "POST":
         # get form data from requests
@@ -184,6 +189,7 @@ def create_erp(request):
     return render(request, 'urec_app/create_erp.html', context)
 
 @login_required
+@staff_member_required
 def delete_erp(request, filename):
     erp = Erp.objects.get(filename=filename)
     if request.method == "POST":
@@ -318,6 +324,7 @@ class CreateIncidentTicket(TemplateView):
 
 # View all Incident Tickets
 @login_required
+@staff_member_required
 def view_incident_tickets(request):
     incident_ticket = Incident_Ticket.objects.all()
     incident_type = Incident_Ticket_Incident.objects.all()
@@ -337,6 +344,7 @@ def task(request):
 
 # Create New Task
 @login_required
+@staff_member_required
 def create_task(request):
     if request.method == "POST":
         task_obj = Task_Form(request.POST)
@@ -352,6 +360,7 @@ def create_task(request):
 
 # View All Tasks
 @login_required
+@staff_member_required
 def all_tasks(request):
     task_item = Task.objects.all()
 
