@@ -10,6 +10,7 @@
 </head>
 <body>
     <h1>Welcome to the UREC Risk Management System, {{ user.username }}.</h1>
+    <h4>Select an option below to get started.</h4>
     <a href="{% url 'accident' %}"><button>Accident</button></a>
     <a href="{% url 'incident' %}"><button>Incident</button></a>
     <a href="{% url 'count' %}"><button>Counts</button></a>

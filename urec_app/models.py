@@ -2,7 +2,7 @@ from datetime import datetime
 from django.db import models
 from django.core.validators import FileExtensionValidator
 
-UREC_FACILITIES = (
+UREC_LOCATIONS = (
         ('Facility 1', (
             ('Location 1', 'Location 1'),
             ('Location 2', 'Location 2'),
@@ -18,6 +18,12 @@ UREC_FACILITIES = (
             ('Location 8', 'Location 8'),
             ('Location 9', 'Location 9'),
         )),
+    )
+
+UREC_FACILITIES = (
+        ('Facility 1', 'Facility 1'),
+        ('Facility 2', 'Facility 2'),
+        ('Facility 3', 'Facility 3'),
     )
 
 # Create your models here.
@@ -64,8 +70,8 @@ class AccidentTicketContactInfo(models.Model):
 class Accident_Ticket(models.Model):
     ticket_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
-    urec_facility = models.CharField(max_length=255)
-    location_in_facility = models.CharField(max_length=255)
+    urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
+    location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
     activity_causing_injury = models.CharField(max_length=255)
     staff_netid = models.CharField(max_length=255, default='tst123')
 
@@ -116,8 +122,8 @@ class Accident_Ticket_Contact_Witness(models.Model):
 class Incident_Ticket(models.Model):
     ticket_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
-    urec_facility = models.CharField(max_length=255)
-    location_in_facility = models.CharField(max_length=255)
+    urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
+    location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
     activity_during_incident = models.CharField(max_length=255)
     staff_netid = models.CharField(max_length=255, default='tst123')
 
@@ -182,7 +188,7 @@ class Task(models.Model):
 class Count(models.Model):
     count_id = models.AutoField(primary_key = True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
-    location_in_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
+    location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
     location_count = models.SmallIntegerField()
     staff_netid = models.CharField(max_length=255, default='tst123')
 
