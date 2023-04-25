@@ -1,15 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse, Http404
-from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.forms import PasswordResetForm
 from django.views.generic import ListView, TemplateView
-from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 
 from .forms import *
 from .storage_backends import *
