@@ -1,0 +1,26 @@
+<link
+  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+
+{% include 'urec_app/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Account Page</title>
+  </head>
+  <body>
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit Changes</button>
+        </form>
+        <br>
+    </div>
+    <p><a href="{% url 'password_reset' %}">Change Password (TODO)</a></p>
+  </body>
+</html>

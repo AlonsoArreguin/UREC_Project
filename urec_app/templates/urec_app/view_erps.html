@@ -10,7 +10,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>ERP Page</title>
+    <title>View ERP Page</title>
   </head>
   <body>
     <h1>Emergency Response Protocols</h1>
@@ -39,6 +39,7 @@
         <td>{{ erp.filename }}</td>
         <td>{{ erp.description }}</td>
         <td>{{ erp.uploaded_at }}</td>
+        {% if user.is_staff %}
         <td>
           <form
             action="{% url 'delete_erp' filename=erp.filename %}"
@@ -48,6 +49,7 @@
             <input type="submit" value="Delete" />
           </form>
         </td>
+        {% endif %}
       </tr>
       {% endfor %}
     </table>
