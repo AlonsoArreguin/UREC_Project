@@ -14,6 +14,7 @@ urlpatterns = [
     path('accident/', views.accident, name='accident'),
     path('accident/create_accident_ticket/', views.CreateAccidentTicket.as_view(), name='create_accident_ticket'),
     path('accident/view_accident_tickets/', views.view_accident_tickets, name='view_accident_tickets'),
+    path('accident/edit_accident_id/', views.edit_accident_id, name='edit_accident_id'),
 
 
     path('count/', views.count, name='count'),
@@ -34,12 +35,14 @@ urlpatterns = [
     path('incident/', views.incident, name='incident'),
     path('incident/create_incident_ticket/', views.CreateIncidentTicket.as_view(), name='create_incident_ticket'),
     path('incident/view_incident_tickets/', views.view_incident_tickets, name='view_incident_tickets'),
+    path('incident/view_incident_id/', views.view_incident_id, name='view_incident_id'),
 
 
     path('task/', views.task, name='task'),
     path('task/create_task', views.create_task, name='create_task'),
     path('task/my_tasks', views.my_tasks, name='my_tasks'),
     path('task/all_tasks', views.all_tasks, name='all_tasks'),
+    path('task/view_task_id', views.view_task_id, name='view_task_id'),
 
 
     path('sop/', views.sop, name='sop'),
