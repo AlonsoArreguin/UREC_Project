@@ -175,6 +175,17 @@ def count_view_history(request):
     context = {'count_item': count_item}
     return render(request, 'urec_app/count_view_history.html', context)
 
+# Delete Task
+@login_required
+@staff_member_required
+def delete_count(request, countid):
+    count = Count.objects.get(count_id=countid)
+    if request.method == "POST":
+        # delete from database
+        count.delete()
+
+    return redirect('count_view_history')
+
 # ERP Page
 @login_required
 def erp(request):

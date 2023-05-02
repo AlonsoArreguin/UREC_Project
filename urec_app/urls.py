@@ -21,6 +21,7 @@ urlpatterns = [
     path('count/', views.count, name='count'),
     path('count/update', views.count_update, name='count_update'),
     path('count/view_history', views.count_view_history, name='count_view_history'),
+    path('count/delete/<str:countid>', views.delete_count, name='delete_count'),
 
 
     path('erp/', views.erp, name='erp'),
