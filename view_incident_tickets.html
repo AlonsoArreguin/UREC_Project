@@ -1,0 +1,87 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+{% include 'urec_app/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Incident Tickets</title>
+</head>
+<body>
+    <h3>View Incident Tickets</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Ticket ID</th>
+            <th>Date/Time</th>
+            <th>Facility</th>
+            <th>Location in Facility</th>
+            <th>Activity during Incident</th>
+            <th>Staff</th>
+        </tr>
+        {% for item in incident_ticket %}
+        <tr>
+            <form action="{% url 'view_incident_id' %}" method="POST">
+                {% csrf_token %}
+                <td>{{ item.ticket_id }}<input type="hidden" name="id" value="{{ item.ticket_id }}"></td>
+                <td>{{ item.date_time_submission }}</td>
+                <td>{{ item.urec_facility }}</td>
+                <td>{{ item.location_in_facility }}</td>
+                <td>{{ item.activity_during_incident }}</td>
+                <td>{{ item.staff_netid }}</td>
+            <td><button type="submit">Expand Report</button></td>
+            </form>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Incident</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Ticket ID</th>
+            <th>Incident Nature</th>
+            <th>Incident Description</th>
+            <th>Action Taken</th>
+        </tr>
+        {% for item in incident_type %}
+        <tr>
+            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.incident_nature }}</td>
+            <td>{{ item.incident_description }}</td>
+            <td>{{ item.action_taken }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Contact Info</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Ticket ID</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email Address</th>
+            <th>Personal Phone Number</th>
+            <th>Home Phone Number</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+            <th>Minor Status</th>
+        </tr>
+        {% for item in contact_info %}
+        <tr>
+            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.first_name }}</td>
+            <td>{{ item.middle_name }}</td>
+            <td>{{ item.last_name }}</td>
+            <td>{{ item.email_address }}</td>
+            <td>{{ item.personal_phone_number }}</td>
+            <td>{{ item.home_phone_number }}</td>
+            <td>{{ item.street_address }}</td>
+            <td>{{ item.city }}</td>
+            <td>{{ item.state }}</td>
+            <td>{{ item.zip }}</td>
+            <td>{{ item.minor_status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
