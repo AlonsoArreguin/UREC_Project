@@ -122,6 +122,20 @@ def view_accident_tickets(request):
     context = {'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': patient}
     return render(request, 'urec_app/view_accident_tickets.html', context)
 
+
+# View/Edit an individual accident
+@login_required
+@staff_member_required
+def edit_accident_id(request):
+    if request.method == 'POST':
+        var = request.POST['id']
+        acc_id = Accident_Ticket.objects.filter(ticket_id=var)
+        injury_type = Accident_Ticket_Injury.objects.filter(accident_ticket=acc_id[0])
+        patient = Accident_Ticket_Contact_Patient.objects.filter(accident_ticket=acc_id[0])
+        context = {'var': var, 'acc_id': acc_id, 'injury_type': injury_type,'contact_info': patient}
+    return render(request,'urec_app/edit_accident_id.html', context)
+
+
 # Counts Page
 @login_required
 def count(request):
@@ -333,6 +347,19 @@ def view_incident_tickets(request):
     context = {'incident_ticket': incident_ticket, 'incident_type': incident_type, 'patient_contact': patient_contact}
     return render(request, 'urec_app/view_incident_tickets.html', context)
 
+
+# View/Edit an individual Incident Tickets
+@login_required
+@staff_member_required
+def view_incident_id(request):
+    if request.method == 'POST':
+        var = request.POST['id']
+        inc_id = Incident_Ticket.objects.filter(ticket_id=var)
+        incident_type = Incident_Ticket_Incident.objects.filter(incident_ticket=inc_id[0])
+        patient_contact = Incident_Ticket_Contact_Patient.objects.filter(incident_ticket=inc_id[0])
+        context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient_contact': patient_contact}
+    return render(request, 'urec_app/view_incident_id.html', context)
+
 # SOP Page (NOT YET IMPLEMENTED)
 @login_required
 def sop(request):
@@ -376,6 +403,17 @@ def my_tasks(request):
 
     context = {'task_item': task_item}
     return render(request, 'urec_app/my_tasks.html', context)
+
+
+# View an Individual Task
+@login_required
+@staff_member_required
+def view_task_id(request):
+    if request.method == 'POST':
+        var = request.POST['id']
+        task_id = Task.objects.filter(task_id=var)
+        context = {'var': var, 'task_id': task_id}
+    return render(request,'urec_app/task_id.html', context)
 
 # Survey View (NOT YET IMPLEMENTED)
 @login_required
