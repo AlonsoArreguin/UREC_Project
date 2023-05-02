@@ -12,12 +12,12 @@
     <h3>View Accident Tickets</h3>
     <table class="table table-striped">
         <tr>
-            <th>Ticket ID</th>
-            <th>Date/Time</th>
+            <th>Accident Ticket ID</th>
+            <th>Date/Time Submitted</th>
             <th>Facility</th>
             <th>Location in Facility</th>
             <th>Activity during Accident</th>
-            <th>Staff</th>
+            <th>Staff ID</th>
         </tr>
         {% for item in accident_ticket %}
         <tr>
@@ -31,9 +31,14 @@
                  <td>{{ item.staff_netid }}</td>
                  <td><button type="submit">Expand Report</button></td>
             </form>
+            <form action="{% url 'delete_accident' accidentid=item.ticket_id %}" method="post">
+                {% csrf_token %}
+                <td><input type="submit" value="Delete" /></td>
+            </form>
         </tr>
         {% endfor %}
     </table>
+    <!--  TABLES FOR ASSOCIATED ACCIDENT DB TABLES
     <h3>Injury</h3>
     <table class="table table-striped">
         <tr>
@@ -81,5 +86,5 @@
             <td>{{ item.zip }}</td>
         </tr>
         {% endfor %}
-    </table>
+    </table> -->
 </body>

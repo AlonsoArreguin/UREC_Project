@@ -12,6 +12,7 @@
     <h3>All Task History</h3>
     <table class="table table-striped">
         <tr>
+            <form action="{% url 'edit_accident_id' %}" method="POST"></form>
             <th>Task ID</th>
             <th>Task Name</th>
             <th>Task Description</th>
@@ -24,15 +25,23 @@
         </tr>
         {% for item in task_item %}
         <tr>
-            <td>{{ item.task_id }}</td>
-            <td>{{ item.task_name }}</td>
-            <td>{{ item.task_description }}</td>
-            <td>{{ item.staff_netid }}</td>
-            <td>{{ item.text_input_required }}</td>
-            <td>{{ item.optional_text }}</td>
-            <td>{{ item.task_completion }}</td>
-            <td>{{ item.date_time_due }}</td>
-            <td>{{ item.date_time_completion }}</td>
+            <form action="{% url 'view_task_id' %}" method="POST">
+                {% csrf_token %}
+                <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
+                <td>{{ item.task_name }}</td>
+                <td>{{ item.task_description }}</td>
+                <td>{{ item.staff_netid }}</td>
+                <td>{{ item.text_input_required }}</td>
+                <td>{{ item.optional_text }}</td>
+                <td>{{ item.task_completion }}</td>
+                <td>{{ item.date_time_due }}</td>
+                <td>{{ item.date_time_completion }}</td>
+                <td><button type="submit">Expand Task</button></td>
+            </form>
+            <form action="{% url 'delete_task' taskid=item.task_id %}" method="post">
+                {% csrf_token %}
+                <td><input type="submit" value="Delete" /></td>
+            </form>
         </tr>
         {% endfor %}
     </table>

@@ -31,9 +31,14 @@
                 <td>{{ item.staff_netid }}</td>
             <td><button type="submit">Expand Report</button></td>
             </form>
+            <form action="{% url 'delete_incident' incidentid=item.ticket_id %}" method="post">
+                {% csrf_token %}
+                <td><input type="submit" value="Delete" /></td>
+            </form>
         </tr>
         {% endfor %}
     </table>
+    <!-- OTHER RELATED TABLES
     <h3>Incident</h3>
     <table class="table table-striped">
         <tr>
@@ -83,5 +88,5 @@
             <td>{{ item.minor_status }}</td>
         </tr>
         {% endfor %}
-    </table>
+    </table>  -->
 </body>

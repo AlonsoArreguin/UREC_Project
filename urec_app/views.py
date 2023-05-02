@@ -30,7 +30,7 @@ def edit_account(request):
         args = {'form': form}
         return render(request, 'urec_app/edit_account.html', args)
 
-# Accident Ticket Page
+# Accident Home Page
 @login_required
 def accident(request):
     return render(request, 'urec_app/accident.html')
@@ -115,11 +115,12 @@ class CreateAccidentTicket(TemplateView):
 @login_required
 @staff_member_required
 def view_accident_tickets(request):
-    accident_ticket = Accident_Ticket.objects.all()
-    injury_type = Accident_Ticket_Injury.objects.all()
-    patient = Accident_Ticket_Contact_Patient.objects.all()
+    accident_ticket = Accident_Ticket.objects.all().order_by('-ticket_id').values()
+    # injury_type = Accident_Ticket_Injury.objects.all()
+    # patient = Accident_Ticket_Contact_Patient.objects.all()
+    # witness = Accident_Ticket_Contact_Witness.objects.all()
 
-    context = {'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': patient}
+    context = {'accident_ticket': accident_ticket}# , 'injury_type': injury_type, 'contact_info': patient}
     return render(request, 'urec_app/view_accident_tickets.html', context)
 
 
@@ -135,6 +136,17 @@ def edit_accident_id(request):
         context = {'var': var, 'acc_id': acc_id, 'injury_type': injury_type,'contact_info': patient}
     return render(request,'urec_app/edit_accident_id.html', context)
 
+
+# Delete Accident Report
+@login_required
+@staff_member_required
+def delete_accident(request, accidentid):
+    accident = Accident_Ticket.objects.get(ticket_id=accidentid)
+    if request.method == "POST":
+        # delete from database
+        accident.delete()
+
+    return redirect('view_accident_tickets')
 
 # Counts Page
 @login_required
@@ -159,7 +171,7 @@ def count_update(request):
 @login_required
 @staff_member_required
 def count_view_history(request):
-    count_item = Count.objects.all()
+    count_item = Count.objects.all().order_by('-count_id').values()
     context = {'count_item': count_item}
     return render(request, 'urec_app/count_view_history.html', context)
 
@@ -244,7 +256,7 @@ def download_erp(request, filename):
 # View all ERPs
 @login_required
 def view_erps(request):
-    Erps = Erp.objects.all()
+    Erps = Erp.objects.all().order_by('filename').values()
     context = {"Erps": Erps}
     return render(request, 'urec_app/view_erps.html', context)
 
@@ -340,11 +352,12 @@ class CreateIncidentTicket(TemplateView):
 @login_required
 @staff_member_required
 def view_incident_tickets(request):
-    incident_ticket = Incident_Ticket.objects.all()
-    incident_type = Incident_Ticket_Incident.objects.all()
-    patient_contact = Incident_Ticket_Contact_Patient.objects.all()
+    incident_ticket = Incident_Ticket.objects.all().order_by('-ticket_id').values()
+    # incident_type = Incident_Ticket_Incident.objects.all()
+    # patient = Incident_Ticket_Contact_Patient.objects.all()
+    # witness = Incident_Ticket_Contact_Witness.objects.all()
 
-    context = {'incident_ticket': incident_ticket, 'incident_type': incident_type, 'patient_contact': patient_contact}
+    context = {'incident_ticket': incident_ticket}# , 'incident_type': incident_type, 'patient': patient}
     return render(request, 'urec_app/view_incident_tickets.html', context)
 
 
@@ -359,6 +372,19 @@ def view_incident_id(request):
         patient_contact = Incident_Ticket_Contact_Patient.objects.filter(incident_ticket=inc_id[0])
         context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient_contact': patient_contact}
     return render(request, 'urec_app/view_incident_id.html', context)
+
+
+# Delete Incident Report
+@login_required
+@staff_member_required
+def delete_incident(request, incidentid):
+    incident = Incident_Ticket.objects.get(ticket_id=incidentid)
+    if request.method == "POST":
+        # delete from database
+        incident.delete()
+
+    return redirect('view_incident_tickets')
+
 
 # SOP Page (NOT YET IMPLEMENTED)
 @login_required
@@ -390,7 +416,7 @@ def create_task(request):
 @login_required
 @staff_member_required
 def all_tasks(request):
-    task_item = Task.objects.all()
+    task_item = Task.objects.all().order_by('-task_id').values()
 
     context = {'task_item': task_item}
     return render(request, 'urec_app/all_tasks.html', context)
@@ -414,6 +440,19 @@ def view_task_id(request):
         task_id = Task.objects.filter(task_id=var)
         context = {'var': var, 'task_id': task_id}
     return render(request,'urec_app/task_id.html', context)
+
+
+# Delete Task
+@login_required
+@staff_member_required
+def delete_task(request, taskid):
+    task = Task.objects.get(task_id=taskid)
+    if request.method == "POST":
+        # delete from database
+        task.delete()
+
+    return redirect('all_tasks')
+
 
 # Survey View (NOT YET IMPLEMENTED)
 @login_required
