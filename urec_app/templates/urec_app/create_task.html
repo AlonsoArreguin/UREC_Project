@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Task</title>
+    <title>Create New Task</title>
 
     <script src="{% url 'js-catalog' %}"></script>
     <script src="{% static '/admin/js/core.js' %}"></script>
@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}">
 </head>
 <body>
+    <a href="{% url 'task' %}">Return to Task Home</a>
+
     <div class="container">
         <form method="POST">
             <fieldset>

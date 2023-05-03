@@ -9,9 +9,11 @@
     <title>Create Incident Ticket</title>
 </head>
 <body>
+    <a href="{% url 'incident' %}">Return to Incident Home</a>
+
     <div class="container">
         <form method="POST" id="form-container">
-            <h2>Create Incident Ticket</h2>
+            <h2>Create New Incident Report</h2>
             {% csrf_token %}
             {{ incident_ticket.as_p }}
             <br><h3>Incident Type</h3>

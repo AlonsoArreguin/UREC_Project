@@ -89,8 +89,8 @@ class Task_Form(forms.ModelForm):
         }
 
 
-CountFormSet = forms.modelformset_factory(
-    Count, fields=("location_in_facility", "location_count"), extra=4
+CountFormSet = modelformset_factory(
+    Count, fields=("location_in_facility", "location_count"), extra=1
 )
 
 

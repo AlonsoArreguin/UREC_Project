@@ -16,6 +16,11 @@ import boto3
 def home(request):
     return render(request, 'urec_app/home.html')
 
+
+
+
+
+
 # Edit User Account
 @login_required
 def edit_account(request):
@@ -30,37 +35,15 @@ def edit_account(request):
         args = {'form': form}
         return render(request, 'urec_app/edit_account.html', args)
 
+
+
+
+
+
 # Accident Home Page
 @login_required
 def accident(request):
     return render(request, 'urec_app/accident.html')
-
-# Create Accident Ticket
-# def create_accident_ticket(request):
-#     if request.method == "POST":
-#         accident_ticket = Accident_Ticket_Form(request.POST)
-#         injury_type = Accident_Ticket_Injury_Form(request.POST)
-#         contact_info = Accident_Ticket_Contact_Info_Form(request.POST)
-#         if accident_ticket.is_valid() and injury_type.is_valid() and contact_info.is_valid():
-#             accident_instance = accident_ticket.save(commit=False)
-#             injury_instance = injury_type.save(commit=False)
-#             contact_instance = contact_info.save(commit=False)
-#             accident_instance.save()
-#             injury_instance.accident_ticket = accident_instance
-#             injury_instance.save()
-#             contact_instance.accident_ticket = accident_instance
-#             contact_instance.save()
-#
-#             return redirect('accident')
-#             # accident_ticket = Accident_Ticket_Form()
-#             # injury_type = Accident_Ticket_Injury_Form()
-#             # contact_info = Accident_Ticket_Contact_Info_Form()
-#     else:
-#         accident_ticket = Accident_Ticket_Form()
-#         injury_type = Accident_Ticket_Injury_Form()
-#         contact_info = Accident_Ticket_Contact_Info_Form()
-#     context = { 'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': contact_info}
-#     return render(request, 'urec_app/create_accident_ticket.html', context)
 
 # Create Accident View
 class CreateAccidentTicket(TemplateView):
@@ -106,10 +89,9 @@ class CreateAccidentTicket(TemplateView):
             witness_instance.accident_ticket = accident_instance
             witness_instance.save()
 
-            return redirect('home')
+            return redirect('accident')
 
         return self.render_to_response({'accident-ticket-injury-formset': injury_type})
-
 
 # View all Accident Tickets
 @login_required
@@ -123,7 +105,6 @@ def view_accident_tickets(request):
     context = {'accident_ticket': accident_ticket}# , 'injury_type': injury_type, 'contact_info': patient}
     return render(request, 'urec_app/view_accident_tickets.html', context)
 
-
 # View/Edit an individual accident
 @login_required
 @staff_member_required
@@ -136,7 +117,6 @@ def edit_accident_id(request):
         context = {'var': var, 'acc_id': acc_id, 'injury_type': injury_type,'contact_info': patient}
     return render(request,'urec_app/edit_accident_id.html', context)
 
-
 # Delete Accident Report
 @login_required
 @staff_member_required
@@ -148,6 +128,105 @@ def delete_accident(request, accidentid):
 
     return redirect('view_accident_tickets')
 
+
+
+
+
+
+# Incident Ticket Page
+@login_required
+def incident(request):
+    return render(request, 'urec_app/incident.html')
+
+# Create Incident View
+class CreateIncidentTicket(TemplateView):
+    template_name = "urec_app/create_incident_ticket.html"
+    def get(self, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('http://127.0.0.1:8000/accounts/login')
+        formset = IncidentTicketIncidentForm(queryset=Incident_Ticket_Incident.objects.none())
+        incident_ticket = Incident_Ticket_Form()
+        patient_contact = Incident_Ticket_Contact_Patient_Form()
+        witness_contact = Incident_Ticket_Contact_Witness_Form()
+
+        context = {
+            'incident_ticket': incident_ticket,
+            'incident_type_formset': formset,
+            'patient_contact': patient_contact,
+            'witness_contact': witness_contact,
+        }
+        return self.render_to_response(context)
+
+    def post(self, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('http://127.0.0.1:8000/accounts/login')
+        incident_ticket = Incident_Ticket_Form(data=self.request.POST)
+        incident_type = IncidentTicketIncidentForm(data=self.request.POST)
+        patient_contact = Incident_Ticket_Contact_Patient_Form(data=self.request.POST)
+        witness_contact = Incident_Ticket_Contact_Witness_Form(data=self.request.POST)
+
+        if incident_ticket.is_valid() and incident_type.is_valid() \
+                and patient_contact.is_valid() and witness_contact.is_valid():
+
+            ticket_instance = incident_ticket.save(commit=False)
+            type_instance = incident_type.save(commit=False)
+            patient_instance = patient_contact.save(commit=False)
+            witness_instance = witness_contact.save(commit=False)
+            incident_ticket.instance.staff_netid = self.request.user
+            ticket_instance.save()
+            for i in type_instance:
+                i.incident_ticket = ticket_instance
+                i.save()
+
+            patient_instance.incident_ticket = ticket_instance
+            patient_instance.save()
+            witness_instance.incident_ticket = ticket_instance
+            witness_instance.patient = patient_instance
+            witness_instance.save()
+
+            return redirect('incident')
+
+        return self.render_to_response({'incident_type_formset': incident_type})
+
+# View all Incident Tickets
+@login_required
+@staff_member_required
+def view_incident_tickets(request):
+    incident_ticket = Incident_Ticket.objects.all().order_by('-ticket_id').values()
+    # incident_type = Incident_Ticket_Incident.objects.all()
+    # patient = Incident_Ticket_Contact_Patient.objects.all()
+    # witness = Incident_Ticket_Contact_Witness.objects.all()
+
+    context = {'incident_ticket': incident_ticket}# , 'incident_type': incident_type, 'patient': patient}
+    return render(request, 'urec_app/view_incident_tickets.html', context)
+
+# View/Edit an individual Incident Tickets
+@login_required
+@staff_member_required
+def view_incident_id(request):
+    if request.method == 'POST':
+        var = request.POST['id']
+        inc_id = Incident_Ticket.objects.filter(ticket_id=var)
+        incident_type = Incident_Ticket_Incident.objects.filter(incident_ticket=inc_id[0])
+        patient_contact = Incident_Ticket_Contact_Patient.objects.filter(incident_ticket=inc_id[0])
+        context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient_contact': patient_contact}
+    return render(request, 'urec_app/view_incident_id.html', context)
+
+# Delete Incident Report
+@login_required
+@staff_member_required
+def delete_incident(request, incidentid):
+    incident = Incident_Ticket.objects.get(ticket_id=incidentid)
+    if request.method == "POST":
+        # delete from database
+        incident.delete()
+
+    return redirect('view_incident_tickets')
+
+
+
+
+
 # Counts Page
 @login_required
 def count(request):
@@ -157,9 +236,12 @@ def count(request):
 @login_required
 def count_update(request):
     if request.method == 'POST':
-        count_form = CountFormSet(request.POST)
+        count_form = CountFormSet(data=request.POST)
         if count_form.is_valid():
-            count_form.save()
+            for count in count_form:
+                count_instance = count.save(commit=False)
+                count_instance.staff_netid = request.user
+                count_instance.save()
 
             return redirect('count')
     count_form = CountFormSet(queryset=Count.objects.none())
@@ -185,6 +267,11 @@ def delete_count(request, countid):
         count.delete()
 
     return redirect('count_view_history')
+
+
+
+
+
 
 # ERP Page
 @login_required
@@ -271,136 +358,11 @@ def view_erps(request):
     context = {"Erps": Erps}
     return render(request, 'urec_app/view_erps.html', context)
 
-# Form Page (NOT YET IMPLEMENTED)
-@login_required
-def form(request):
-    return render(request, 'urec_app/form.html')
-
-# Incident Ticket Page
-@login_required
-def incident(request):
-    return render(request, 'urec_app/incident.html')
-
-# Create Incident Ticket
-# def create_incident_ticket(request):
-#     if request.method == "POST":
-#         incident_ticket = Incident_Ticket_Form(request.POST)
-#         incident_type = Incident_Ticket_Incident_Form(request.POST)
-#         contact_info = Incident_Ticket_Contact_Info_Form(request.POST)
-#         if incident_ticket.is_valid() and incident_type.is_valid() and contact_info.is_valid():
-#             incident_instance = incident_ticket.save(commit=False)
-#             incident_type_instance = incident_type.save(commit=False)
-#             contact_instance = contact_info.save(commit=False)
-#             incident_instance.save()
-#             incident_type_instance.incident_ticket = incident_instance
-#             incident_type_instance.save()
-#             contact_instance.incident_ticket = incident_instance
-#             contact_instance.save()
-#
-#             return redirect('incident')
-#             # incident_ticket = Incident_Ticket_Form()
-#             # incident_type = Incident_Ticket_Incident_Form()
-#             # contact_info = Incident_Ticket_Contact_Info_Form()
-#     else:
-#         incident_ticket = Incident_Ticket_Form()
-#         incident_type = Incident_Ticket_Incident_Form()
-#         contact_info = Incident_Ticket_Contact_Info_Form()
-#     context = { 'incident_ticket': incident_ticket, 'incident_type': incident_type, 'contact_info': contact_info}
-#     return render(request, 'urec_app/create_incident_ticket.html', context)
-
-# Create Incident View
-class CreateIncidentTicket(TemplateView):
-    template_name = "urec_app/create_incident_ticket.html"
-    def get(self, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return redirect('http://127.0.0.1:8000/accounts/login')
-        formset = IncidentTicketIncidentForm(queryset=Incident_Ticket_Incident.objects.none())
-        incident_ticket = Incident_Ticket_Form()
-        patient_contact = Incident_Ticket_Contact_Patient_Form()
-        witness_contact = Incident_Ticket_Contact_Witness_Form()
-
-        context = {
-            'incident_ticket': incident_ticket,
-            'incident_type_formset': formset,
-            'patient_contact': patient_contact,
-            'witness_contact': witness_contact,
-        }
-        return self.render_to_response(context)
-
-    def post(self, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return redirect('http://127.0.0.1:8000/accounts/login')
-        incident_ticket = Incident_Ticket_Form(data=self.request.POST)
-        incident_type = IncidentTicketIncidentForm(data=self.request.POST)
-        patient_contact = Incident_Ticket_Contact_Patient_Form(data=self.request.POST)
-        witness_contact = Incident_Ticket_Contact_Witness_Form(data=self.request.POST)
-
-        if incident_ticket.is_valid() and incident_type.is_valid() \
-                and patient_contact.is_valid() and witness_contact.is_valid():
-
-            ticket_instance = incident_ticket.save(commit=False)
-            type_instance = incident_type.save(commit=False)
-            patient_instance = patient_contact.save(commit=False)
-            witness_instance = witness_contact.save(commit=False)
-            incident_ticket.instance.staff_netid = self.request.user
-            ticket_instance.save()
-            for i in type_instance:
-                i.incident_ticket = ticket_instance
-                i.save()
-
-            patient_instance.incident_ticket = ticket_instance
-            patient_instance.save()
-            witness_instance.incident_ticket = ticket_instance
-            witness_instance.patient = patient_instance
-            witness_instance.save()
-
-            return redirect('home')
-
-        return self.render_to_response({'incident_type_formset': incident_type})
 
 
-# View all Incident Tickets
-@login_required
-@staff_member_required
-def view_incident_tickets(request):
-    incident_ticket = Incident_Ticket.objects.all().order_by('-ticket_id').values()
-    # incident_type = Incident_Ticket_Incident.objects.all()
-    # patient = Incident_Ticket_Contact_Patient.objects.all()
-    # witness = Incident_Ticket_Contact_Witness.objects.all()
-
-    context = {'incident_ticket': incident_ticket}# , 'incident_type': incident_type, 'patient': patient}
-    return render(request, 'urec_app/view_incident_tickets.html', context)
 
 
-# View/Edit an individual Incident Tickets
-@login_required
-@staff_member_required
-def view_incident_id(request):
-    if request.method == 'POST':
-        var = request.POST['id']
-        inc_id = Incident_Ticket.objects.filter(ticket_id=var)
-        incident_type = Incident_Ticket_Incident.objects.filter(incident_ticket=inc_id[0])
-        patient_contact = Incident_Ticket_Contact_Patient.objects.filter(incident_ticket=inc_id[0])
-        context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient_contact': patient_contact}
-    return render(request, 'urec_app/view_incident_id.html', context)
 
-
-# Delete Incident Report
-@login_required
-@staff_member_required
-def delete_incident(request, incidentid):
-    incident = Incident_Ticket.objects.get(ticket_id=incidentid)
-    if request.method == "POST":
-        # delete from database
-        incident.delete()
-
-    return redirect('view_incident_tickets')
-
-
-# SOP Page (NOT YET IMPLEMENTED)
-@login_required
-def sop(request):
-    return render(request, 'urec_app/sop.html')
 
 # Task Page
 @login_required
@@ -441,10 +403,8 @@ def my_tasks(request):
     context = {'task_item': task_item}
     return render(request, 'urec_app/my_tasks.html', context)
 
-
 # View an Individual Task
 @login_required
-@staff_member_required
 def view_task_id(request):
     if request.method == 'POST':
         var = request.POST['id']
@@ -452,6 +412,14 @@ def view_task_id(request):
         context = {'var': var, 'task_id': task_id}
     return render(request,'urec_app/task_id.html', context)
 
+# View an Individual Task
+@login_required
+def view_my_task(request):
+    if request.method == 'POST':
+        var = request.POST['id']
+        task_id = Task.objects.filter(task_id=var)
+        context = {'var': var, 'task_id': task_id}
+    return render(request,'urec_app/view_my_task.html', context)
 
 # Delete Task
 @login_required
@@ -465,7 +433,31 @@ def delete_task(request, taskid):
     return redirect('all_tasks')
 
 
+
+
+
+
 # Survey View (NOT YET IMPLEMENTED)
 @login_required
 def survey(request):
     return render(request, 'urec_app/survey.html')
+
+
+
+
+
+
+# SOP Page (NOT YET IMPLEMENTED)
+@login_required
+def sop(request):
+    return render(request, 'urec_app/sop.html')
+
+
+
+
+
+
+# Form Page (NOT YET IMPLEMENTED)
+@login_required
+def form(request):
+    return render(request, 'urec_app/form.html')
