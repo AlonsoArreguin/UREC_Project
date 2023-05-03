@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.generic import ListView, TemplateView
 from django.urls import reverse_lazy
+from django.utils.timezone import now
 
 from .forms import *
 from .storage_backends import *
@@ -400,9 +401,10 @@ def all_tasks(request):
 @login_required
 def my_tasks(request):
     username = request.user.username
-    task_item = Task.objects.filter(staff_netid=username)
+    uncompleted_tasks = Task.objects.filter(staff_netid=username, task_completion=False)
+    completed_tasks = Task.objects.filter(staff_netid=username, task_completion=True)
 
-    context = {'task_item': task_item}
+    context = {'uncompleted': uncompleted_tasks, 'completed': completed_tasks}
     return render(request, 'urec_app/my_tasks.html', context)
 
 # View an Individual Task
@@ -422,6 +424,18 @@ def view_my_task(request):
         task_id = Task.objects.filter(task_id=var)
         context = {'var': var, 'task_id': task_id}
     return render(request,'urec_app/view_my_task.html', context)
+
+# Complete Task
+@login_required
+def complete_task(request, taskid):
+    task = Task.objects.get(task_id=taskid)
+    if request.method == "POST":
+        # change task status to complete
+        task.task_completion = True
+        task.date_time_completion = now()
+        task.save()
+
+    return redirect('my_tasks')
 
 # Delete Task
 @login_required
