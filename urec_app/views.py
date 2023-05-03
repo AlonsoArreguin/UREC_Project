@@ -114,7 +114,8 @@ def edit_accident_id(request):
         acc_id = Accident_Ticket.objects.filter(ticket_id=var)
         injury_type = Accident_Ticket_Injury.objects.filter(accident_ticket=acc_id[0])
         patient = Accident_Ticket_Contact_Patient.objects.filter(accident_ticket=acc_id[0])
-        context = {'var': var, 'acc_id': acc_id, 'injury_type': injury_type,'contact_info': patient}
+        witness = Accident_Ticket_Contact_Witness.objects.filter(accident_ticket=acc_id[0])
+        context = {'var': var, 'acc_id': acc_id, 'injury_type': injury_type,'patient': patient, 'witness': witness}
     return render(request,'urec_app/edit_accident_id.html', context)
 
 # Delete Accident Report
@@ -208,8 +209,9 @@ def view_incident_id(request):
         var = request.POST['id']
         inc_id = Incident_Ticket.objects.filter(ticket_id=var)
         incident_type = Incident_Ticket_Incident.objects.filter(incident_ticket=inc_id[0])
-        patient_contact = Incident_Ticket_Contact_Patient.objects.filter(incident_ticket=inc_id[0])
-        context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient_contact': patient_contact}
+        patient = Incident_Ticket_Contact_Patient.objects.filter(incident_ticket=inc_id[0])
+        witness = Incident_Ticket_Contact_Witness.objects.filter(incident_ticket=inc_id[0])
+        context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient': patient, 'witness': witness}
     return render(request, 'urec_app/view_incident_id.html', context)
 
 # Delete Incident Report
