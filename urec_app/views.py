@@ -12,6 +12,9 @@ from .storage_backends import *
 
 import boto3
 
+# List of possible Facilities for count recents
+UREC_FACILITIES = ['Location 1', 'Location 2', 'Location 3', 'Location 4', 'Location 5', 'Location 6', 'Location 7', 'Location 8', 'Location 9']
+
 # Home Page
 @login_required
 def home(request):
@@ -257,7 +260,13 @@ def count_update(request):
 @staff_member_required
 def count_view_history(request):
     count_item = Count.objects.all().order_by('-count_id').values()
-    context = {'count_item': count_item}
+    recent_list = []
+    for location in UREC_FACILITIES:
+        recent_count = Count.objects.filter(location_in_facility=location).order_by('-date_time_submission').first()
+        recent_list.append(recent_count)
+
+    print(recent_list)
+    context = {'count_item': count_item, 'recent_list': recent_list}
     return render(request, 'urec_app/count_view_history.html', context)
 
 # Delete Task
