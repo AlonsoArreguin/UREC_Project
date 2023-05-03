@@ -9,7 +9,7 @@
     <title>Employee Tasks</title>
 </head>
 <body>
-    <h1>Tasks Page</h1>
+    <h1>Tasks Home Page</h1>
     {% if user.is_staff %}
     <a href="{% url 'create_task' %}"><button>Create New Task</button></a>
     <a href="{% url 'all_tasks' %}"><button>All Tasks History</button></a>

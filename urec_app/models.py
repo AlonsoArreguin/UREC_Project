@@ -92,16 +92,16 @@ class Accident_Ticket_Injury(models.Model):
 class Accident_Ticket_Contact_Patient(models.Model):
     accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
     accident_relation = models.CharField(max_length=255, default='wip')  # Acidentee or Witness
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.EmailField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
+    patient_first_name = models.CharField(max_length=255)
+    patient_middle_name = models.CharField(max_length=255, blank=True)
+    patient_last_name = models.CharField(max_length=255, blank=True)
+    patient_email_address = models.EmailField(max_length=255, blank=True)
+    patient_personal_phone_number = models.CharField(max_length=255, blank=True)
+    patient_home_phone_number = models.CharField(max_length=255, blank=True)
+    patient_street_address = models.CharField(max_length=255, blank=True)
+    patient_city = models.CharField(max_length=255, blank=True)
+    patient_state = models.CharField(max_length=255, blank=True)
+    patient_zip = models.CharField(max_length=255, blank=True)
 
     objects = models.Manager()
 
@@ -110,16 +110,16 @@ class Accident_Ticket_Contact_Witness(models.Model):
     accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
     accident_relation = models.CharField(max_length=255, default='wip')  # Acidentee or Witness
     patient = models.ForeignKey(Accident_Ticket_Contact_Patient, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.EmailField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
+    witness_first_name = models.CharField(max_length=255)
+    witness_middle_name = models.CharField(max_length=255, blank=True)
+    witness_last_name = models.CharField(max_length=255, blank=True)
+    witness_email_address = models.EmailField(max_length=255, blank=True)
+    witness_personal_phone_number = models.CharField(max_length=255, blank=True)
+    witness_home_phone_number = models.CharField(max_length=255, blank=True)
+    witness_street_address = models.CharField(max_length=255, blank=True)
+    witness_city = models.CharField(max_length=255, blank=True)
+    witness_state = models.CharField(max_length=255, blank=True)
+    witness_zip = models.CharField(max_length=255, blank=True)
 
     objects = models.Manager()
 
@@ -146,17 +146,17 @@ class Incident_Ticket_Incident(models.Model):
 # Patient Contact Information Model for Incident Ticket
 class Incident_Ticket_Contact_Patient(models.Model):
     incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.EmailField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
-    minor_status = models.CharField(max_length=255)
+    patient_first_name = models.CharField(max_length=255)
+    patient_middle_name = models.CharField(max_length=255, blank=True)
+    patient_last_name = models.CharField(max_length=255, blank=True)
+    patient_email_address = models.EmailField(max_length=255, blank=True)
+    patient_personal_phone_number = models.CharField(max_length=255, blank=True)
+    patient_home_phone_number = models.CharField(max_length=255, blank=True)
+    patient_street_address = models.CharField(max_length=255, blank=True)
+    patient_city = models.CharField(max_length=255, blank=True)
+    patient_state = models.CharField(max_length=255, blank=True)
+    patient_zip = models.CharField(max_length=255, blank=True)
+    patient_minor_status = models.CharField(max_length=255)
 
     objects = models.Manager()
 
@@ -164,17 +164,17 @@ class Incident_Ticket_Contact_Patient(models.Model):
 class Incident_Ticket_Contact_Witness(models.Model):
     incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
     patient = models.ForeignKey(Incident_Ticket_Contact_Patient, on_delete=models.CASCADE)  # foreign key
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.EmailField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
-    minor_status = models.CharField(max_length=255)
+    witness_first_name = models.CharField(max_length=255)
+    witness_middle_name = models.CharField(max_length=255, blank=True)
+    witness_last_name = models.CharField(max_length=255, blank=True)
+    witness_email_address = models.EmailField(max_length=255, blank=True)
+    witness_personal_phone_number = models.CharField(max_length=255, blank=True)
+    witness_home_phone_number = models.CharField(max_length=255, blank=True)
+    witness_street_address = models.CharField(max_length=255, blank=True)
+    witness_city = models.CharField(max_length=255, blank=True)
+    witness_state = models.CharField(max_length=255, blank=True)
+    witness_zip = models.CharField(max_length=255, blank=True)
+    witness_minor_status = models.CharField(max_length=255)
 
     objects = models.Manager()
 

@@ -41,15 +41,15 @@ AccidentTicketInjury = modelformset_factory(
 class Accident_Ticket_Contact_Patient_Form(forms.ModelForm):
     class Meta:
         model = Accident_Ticket_Contact_Patient
-        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
-                  "home_phone_number", "street_address", "city", "state", "zip"]
+        fields = ["patient_first_name", "patient_middle_name", "patient_last_name", "patient_email_address", "patient_personal_phone_number",
+                  "patient_home_phone_number", "patient_street_address", "patient_city", "patient_state", "patient_zip"]
 
 
 class Accident_Ticket_Contact_Witness_Form(forms.ModelForm):
     class Meta:
         model = Accident_Ticket_Contact_Witness
-        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
-                  "home_phone_number", "street_address", "city", "state", "zip"]
+        fields = ["witness_first_name", "witness_middle_name", "witness_last_name", "witness_email_address", "witness_personal_phone_number",
+                  "witness_home_phone_number", "witness_street_address", "witness_city", "witness_state", "witness_zip"]
 
 
 class Incident_Ticket_Form(forms.ModelForm):
@@ -66,15 +66,15 @@ IncidentTicketIncidentForm = modelformset_factory(
 class Incident_Ticket_Contact_Patient_Form(forms.ModelForm):
     class Meta:
         model = Incident_Ticket_Contact_Patient
-        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
-                  "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+        fields = ["patient_first_name", "patient_middle_name", "patient_last_name", "patient_email_address", "patient_personal_phone_number",
+                  "patient_home_phone_number", "patient_street_address", "patient_city", "patient_state", "patient_zip", "patient_minor_status"]
 
 
 class Incident_Ticket_Contact_Witness_Form(forms.ModelForm):
     class Meta:
         model = Incident_Ticket_Contact_Witness
-        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
-                  "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+        fields = ["witness_first_name", "witness_middle_name", "witness_last_name", "witness_email_address", "witness_personal_phone_number",
+                  "witness_home_phone_number", "witness_street_address", "witness_city", "witness_state", "witness_zip", "witness_minor_status"]
 
 
 class Task_Form(forms.ModelForm):
@@ -89,8 +89,8 @@ class Task_Form(forms.ModelForm):
         }
 
 
-CountFormSet = forms.modelformset_factory(
-    Count, fields=("location_in_facility", "location_count"), extra=4
+CountFormSet = modelformset_factory(
+    Count, fields=("location_in_facility", "location_count"), extra=1
 )
 
 

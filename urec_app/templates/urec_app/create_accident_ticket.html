@@ -9,9 +9,11 @@
     <title>Create Accident Ticket</title>
 </head>
 <body>
+    <a href="{% url 'accident' %}">Return to Accident Home</a>
+
     <div class="container">
         <form method="POST" id="form-container">
-            <h2>Create Accident Ticket</h2>
+            <h2>Create New Accident Report</h2>
             {% csrf_token %}
             {{ accident_ticket.as_p }}
             <br><h3>Injury Type</h3>

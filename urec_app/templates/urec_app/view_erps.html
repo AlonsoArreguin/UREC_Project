@@ -13,10 +13,9 @@
     <title>View ERP Page</title>
   </head>
   <body>
-    <h1>Emergency Response Protocols</h1>
-    <a href="{% url 'erp' %}"><button>ERP Home</button></a>
+    <a href="{% url 'erp' %}">Return to ERP Home</a>
 
-    <h3>All Erps</h3>
+    <h2>All ERPs</h2>
     <table class="table table-striped">
       <tr>
         <th>Title</th>
@@ -26,25 +25,17 @@
       </tr>
       {% for erp in Erps %}
       <tr>
-        <td>
-          <p>{{ erp.title }}</p>
-          <form
-            action="{% url 'download_erp' filename=erp.filename %}"
-            method="post"
-          >
+          <form action="{% url 'download_erp' filename=erp.filename %}" method="post">
             {% csrf_token %}
-            <input type="submit" value="Download" />
+            <td>{{ erp.title }}</td>
+            <td>{{ erp.filename }}</td>
+            <td>{{ erp.description }}</td>
+            <td>{{ erp.uploaded_at }}</td>
+            <td><input type="submit" value="Download" /></td>
           </form>
-        </td>
-        <td>{{ erp.filename }}</td>
-        <td>{{ erp.description }}</td>
-        <td>{{ erp.uploaded_at }}</td>
         {% if user.is_staff %}
         <td>
-          <form
-            action="{% url 'delete_erp' filename=erp.filename %}"
-            method="post"
-          >
+          <form action="{% url 'delete_erp' filename=erp.filename %}" method="post">
             {% csrf_token %}
             <input type="submit" value="Delete" />
           </form>

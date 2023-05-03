@@ -6,10 +6,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Incident Page</title>
+    <title>Incident Home Page</title>
 </head>
 <body>
-    <h1>Incident Page</h1>
+    <h1>Incident Home Page</h1>
     <a href="{% url 'create_incident_ticket' %}"><button>Create New Incident Report</button></a>
     {% if user.is_staff %}
     <a href="{% url 'view_incident_tickets' %}"><button>View Incident Reports</button></a>
