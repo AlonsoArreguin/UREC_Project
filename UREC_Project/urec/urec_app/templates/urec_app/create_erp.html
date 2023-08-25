@@ -1,0 +1,23 @@
+<link  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"id="bootstrap-css"/>
+
+{% include 'urec_app/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Create ERP Page</title>
+  </head>
+  <body>
+    <a href="{% url 'erp' %}">Return to ERP Home</a>
+
+    <h2>Create an ERP</h2>
+
+    <div class="container">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {{ erp_obj.as_p }} {{ erp_file.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
