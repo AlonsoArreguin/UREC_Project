@@ -1,6 +1,9 @@
 {% extends './base.html' %}
 {% load static %}
 
+{% block title %}
+    Counts
+{% endblock title%}
 
 {% block content %}
     <a href="{% url 'count' %}">Return to Counts Home</a>
@@ -16,4 +19,4 @@
             </fieldset>
         </form>
     </div>
-{% enblock content %}
+{% endblock content %}

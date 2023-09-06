@@ -1,11 +1,11 @@
 {% extends './base.html' %}
 {% load static %}
 
-{% title content %}
+{% block title %}
     {%for item in var%}
         Accident Report {{var}}
     {%endfor%} 
-{% endtitle content %}
+{% endblock title %}
 
 {% block content %}
     
