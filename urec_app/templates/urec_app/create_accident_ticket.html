@@ -1,14 +1,8 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create Accident Ticket</title>
-</head>
-<body>
+{% block content %}
     <a href="{% url 'accident' %}">Return to Accident Home</a>
 
     <div class="container">
@@ -56,4 +50,4 @@
             }
         </script>
     </div>
-</body>
+{% endblock content %}

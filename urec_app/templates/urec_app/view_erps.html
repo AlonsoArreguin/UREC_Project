@@ -1,14 +1,12 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    View ERP Page
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>View ERP Page</title>
-  </head>
-  <body>
+{% block content %}
+
     <a href="{% url 'erp' %}">Return to ERP Home</a>
 
     <h2>All ERPs</h2>
@@ -56,5 +54,5 @@
       </li>
     </ul>
     -->
-  </body>
-</html>
+
+{% endblock content %}
