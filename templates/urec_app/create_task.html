@@ -1,0 +1,18 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block content %}
+    <a href="{% url 'task' %}">Return to Task Home</a>
+
+    <div class="container">
+        <form method="POST">
+            <fieldset>
+                <legend>Add Task</legend>
+                {% csrf_token %}
+                {{ task_obj.media }}
+                {{ task_obj.as_p }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+{% endblock content %}

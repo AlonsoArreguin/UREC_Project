@@ -1,0 +1,15 @@
+{% extends './base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div>
+        <h1>Accident Page</h1>
+        <a href="{% url 'create_accident_ticket' %}"><button>Create New Accident Report</button></a>
+        <a href="{% url 'view_accident_tickets' %}"><button>View Accident Reports</button></a>
+    </div>
+{% endblock content %}
+
+
+
+    

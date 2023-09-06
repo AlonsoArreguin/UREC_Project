@@ -1,0 +1,14 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}
+    Incident Home Page
+{% endblock title%}
+
+{% block content %}
+
+
+    <h1>Incident Home Page</h1>
+    <a href="{% url 'create_incident_ticket' %}"><button>Create New Incident Report</button></a>
+    <a href="{% url 'view_incident_tickets' %}"><button>View Incident Reports</button></a>
+{% endblock content %}

@@ -1,0 +1,10 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Emergency Response Protocols</h1>
+    <a href="{% url 'erp' %}"><button>ERP Home</button></a>
+
+    <h3>Click Link Below to Navigate to ERP {{filename}}</h3>
+    <a href="{{ erp_url }}" target="_blank"><button>{{ erp_url }}</button></a>
+{% endblock content %}

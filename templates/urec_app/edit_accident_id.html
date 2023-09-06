@@ -1,0 +1,63 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% title content %}
+    {%for item in var%}
+        Accident Report {{var}}
+    {%endfor%} 
+{% endtitle content %}
+
+{% block content %}
+    
+    
+
+ <a href="{% url 'view_accident_tickets' %}">Return Accident Reports</a>
+ <table class="table table-striped">
+     <tr>
+            <th>Ticket ID</th>
+            <th>Injury Type</th>
+            <th>Injury Description</th>
+            <th>Care Provided</th>
+     </tr>
+     {% for item in acc_id %}
+     <tr>
+         <td>{{ item.ticket_id }}</td>
+         <td>{{ item.date_time_submission }}</td>
+         <td>{{ item.urec_facility }}</td>
+         <td>{{ item.location_in_facility }}</td>
+         <td>{{ item.activity_causing_injury }}</td>
+         <td>{{ item.staff_netid }}</td>
+     </tr>
+     {% endfor %}
+     <tr>
+            <th>Ticket ID</th>
+            <th>Injury Type</th>
+            <th>Injury Description</th>
+            <th>Care Provided</th>
+     </tr>
+     {% for item in injury_type %}
+     <tr>
+            <td>{{ item.accident_ticket }}</td>
+            <td>{{ item.injury_type }}</td>
+            <td>{{ item.injury_description }}</td>
+            <td>{{ item.care_provided }}</td>
+     </tr>
+     {% endfor %}
+     {% for item in contact_info %}
+     <tr>
+            <td>{{ item.accident_ticket }}</td>
+            <td>{{ item.first_name }}</td>
+            <td>{{ item.middle_name }}</td>
+            <td>{{ item.last_name }}</td>
+            <td>{{ item.email_address }}</td>
+            <td>{{ item.personal_phone_number }}</td>
+            <td>{{ item.home_phone_number }}</td>
+            <td>{{ item.street_address }}</td>
+            <td>{{ item.city }}</td>
+            <td>{{ item.state }}</td>
+            <td>{{ item.zip }}</td>
+        </tr>
+     {% endfor %}
+ </table>
+
+ {% endblock content %}

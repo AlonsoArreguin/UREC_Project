@@ -1,0 +1,118 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}
+    {%for item in var%}
+        Incident {{var}} 
+    {%endfor%}
+{% endblock title%}
+
+{% block content %}
+
+<a href="{% url 'view_incident_tickets' %}">Return to Incident Reports</a>
+ <h3>General Incident Information</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Ticket ID</th>
+            <th>Date/Time</th>
+            <th>Facility</th>
+            <th>Location in Facility</th>
+            <th>Activity during Incident</th>
+            <th>Staff</th>
+        </tr>
+        {% for item in inc_id %}
+        <tr>
+            <td>{{ item.ticket_id }}</td>
+            <td>{{ item.date_time_submission }}</td>
+            <td>{{ item.urec_facility }}</td>
+            <td>{{ item.location_in_facility }}</td>
+            <td>{{ item.activity_during_incident }}</td>
+            <td>{{ item.staff_netid }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Specific Incidents</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Ticket ID</th>
+            <th>Incident Nature</th>
+            <th>Incident Description</th>
+            <th>Action Taken</th>
+        </tr>
+        {% for item in incident_type %}
+        <tr>
+            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.incident_nature }}</td>
+            <td>{{ item.incident_description }}</td>
+            <td>{{ item.action_taken }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Patient Info</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Ticket ID</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email Address</th>
+            <th>Personal Phone Number</th>
+            <th>Home Phone Number</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+            <th>Minor Status</th>
+        </tr>
+        {% for item in patient %}
+        <tr>
+            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.patient_first_name }}</td>
+            <td>{{ item.patient_middle_name }}</td>
+            <td>{{ item.patient_last_name }}</td>
+            <td>{{ item.patient_email_address }}</td>
+            <td>{{ item.patient_personal_phone_number }}</td>
+            <td>{{ item.patient_home_phone_number }}</td>
+            <td>{{ item.patient_street_address }}</td>
+            <td>{{ item.patient_city }}</td>
+            <td>{{ item.patient_state }}</td>
+            <td>{{ item.patient_zip }}</td>
+            <td>{{ item.patient_minor_status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Witness Info</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Ticket ID</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email Address</th>
+            <th>Personal Phone Number</th>
+            <th>Home Phone Number</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+            <th>Minor Status</th>
+        </tr>
+        {% for item in witness %}
+        <tr>
+            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.witness_first_name }}</td>
+            <td>{{ item.witness_middle_name }}</td>
+            <td>{{ item.witness_last_name }}</td>
+            <td>{{ item.witness_email_address }}</td>
+            <td>{{ item.witness_personal_phone_number }}</td>
+            <td>{{ item.witness_home_phone_number }}</td>
+            <td>{{ item.witness_street_address }}</td>
+            <td>{{ item.witness_city }}</td>
+            <td>{{ item.witness_state }}</td>
+            <td>{{ item.witness_zip }}</td>
+            <td>{{ item.witness_minor_status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock content %}

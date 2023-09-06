@@ -1,0 +1,21 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}
+    Edit Account Page
+{% endblock title%}
+
+{% block content %}
+
+
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit Changes</button>
+        </form>
+        <br>
+    </div>
+    <p><a href="{% url 'password_reset' %}">Change Password (TODO)</a></p>
+
+{% endblock content %}
