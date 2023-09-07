@@ -1,14 +1,11 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    My Tasks
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My Tasks</title>
-</head>
-<body>
+{% block content %}
 
 <a href="{% url 'task' %}">Return to Task Home</a>
     <h1>My Tasks</h1>
@@ -72,5 +69,5 @@
     {% else %}
         <p>You have no available tasks.</p>
     {% endif %}
-</body>
-</html>
+
+{% endblock content %}

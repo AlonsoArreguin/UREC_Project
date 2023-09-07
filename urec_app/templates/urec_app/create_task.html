@@ -1,20 +1,11 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-
-{% include 'urec_app/navbar.html' %}
-
-<!DOCTYPE html>
+{% extends './base.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create New Task</title>
 
-    <script src="{% url 'js-catalog' %}"></script>
-    <script src="{% static '/admin/js/core.js' %}"></script>
-    <!---<link rel="stylesheet" href="{% static 'admin/css/base.css' %}">--->
-    <link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}">
-</head>
-<body>
+{% block title %}
+    Create Task
+{% endblock title%}
+
+{% block content %}
     <a href="{% url 'task' %}">Return to Task Home</a>
 
     <div class="container">
@@ -28,5 +19,4 @@
             </fieldset>
         </form>
     </div>
-</body>
-</html>
+{% endblock content %}

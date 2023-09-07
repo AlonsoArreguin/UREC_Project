@@ -1,15 +1,18 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    Accident Home
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Accident Page</title>
-</head>
-<body>
-    <h1>Accident Page</h1>
-    <a href="{% url 'create_accident_ticket' %}"><button>Create New Accident Report</button></a>
-    <a href="{% url 'view_accident_tickets' %}"><button>View Accident Reports</button></a>
-</body>
+{% block content %}
+    <div>
+        <h1>Accident Page</h1>
+        <a href="{% url 'create_accident_ticket' %}"><button>Create New Accident Report</button></a>
+        <a href="{% url 'view_accident_tickets' %}"><button>View Accident Reports</button></a>
+    </div>
+{% endblock content %}
+
+
+
+    

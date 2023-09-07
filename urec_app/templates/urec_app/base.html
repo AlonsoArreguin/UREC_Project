@@ -1,0 +1,57 @@
+{% load static %}
+
+<!-- base.html stores navbar for all pages
+also stores links for all pages -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="{% url 'js-catalog' %}"></script>
+    <script src="{% static '/admin/js/core.js' %}"></script>
+    <!---<link rel="stylesheet" href="{% static 'admin/css/base.css' %}">--->
+    <link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock title %}</title>
+</head>
+<body>
+    <nav class="navbar navbar-default fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">UREC</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li {% if request.path == '/' %} class="active"{% endif %}><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+      
+            <li {% if '/accident/' in request.path %} class="active"{% endif %}><a class="nav-link" href="{% url 'accident' %}">Accident</a></li>
+      
+            <li {% if '/incident/' in request.path %} class="active"{% endif %}><a class="nav-link" href="{% url 'incident' %}">Incident</a></li>
+      
+            <li {% if '/count/' in request.path %} class="active"{% endif %}><a class="nav-link" href="{% url 'count' %}">Counts</a></li>
+      
+            <li {% if '/task/' in request.path %} class="active"{% endif %}><a class="nav-link" href="{% url 'task' %}">Tasks</a></li>
+      
+            <li {% if '/erp/' in request.path %} class="active"{% endif %}><a class="nav-link" href="{% url 'erp' %}">ERP</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+              <li><a href="{% url 'edit' %}">My Account</a></li>
+      
+              {% if user.is_staff %}
+                <li><a href="{% url 'admin:index' %}">Admin</a></li>
+              {% endif %}
+      
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+      
+              <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+
+
+    {% block content %}   
+    {% endblock content %}
+</body>
+</html>

@@ -1,18 +1,17 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% block title %}
     {%for item in var%}
-    <title>Task {{var}} </title>
+        Task {{var}} 
     {%endfor%}
-</head>
-<body>
+{% endblock title%}
+
+{% block content %}
+
     <a href="{% url 'all_tasks' %}">Return to All Tasks</a>
 
-<table class="table table-striped">
+    <table class="table table-striped">
         <tr>
             <th>Task ID</th>
             <th>Task Name</th>
@@ -38,5 +37,5 @@
         </tr>
         {% endfor %}
     </table>
-</body>
-</html>
+
+{% endblock content %}

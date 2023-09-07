@@ -1,14 +1,13 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    Home
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home Page</title>
-</head>
-<body>
+{% block content %}
+
+<div>
     <h1>Welcome to the UREC Risk Management System, {{ user.username }}.</h1>
     <h4>Select an option below to get started.</h4>
     <a href="{% url 'accident' %}"><button>Accident</button></a>
@@ -19,5 +18,6 @@
     <a href="{% url 'erp' %}"><button>ERP</button></a>
     <!---<a href="{% url 'sop' %}"><button>SOPs</button></a>--->
     <!---<a href="{% url 'survey' %}"><button>Survey</button></a>--->
-</body>
-</html>
+</div>
+{% endblock content %}
+    

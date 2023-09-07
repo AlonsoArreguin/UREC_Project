@@ -1,14 +1,12 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    View Incident Tickets
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>View Incident Tickets</title>
-</head>
-<body>
+{% block content %}
+
     <a href="{% url 'incident' %}">Return to Incident Home</a>
 
     <h3>View Incident Tickets</h3>
@@ -91,4 +89,5 @@
         </tr>
         {% endfor %}
     </table>  -->
-</body>
+
+{% endblock content %}

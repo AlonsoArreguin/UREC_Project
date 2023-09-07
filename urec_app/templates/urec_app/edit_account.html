@@ -1,18 +1,13 @@
-<link
-  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
-  rel="stylesheet"
-  id="bootstrap-css"
-/>
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    Edit Account Page
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Edit Account Page</title>
-  </head>
-  <body>
+{% block content %}
+
+
     <div class="container">
         <form method="post">
             {% csrf_token %}
@@ -22,5 +17,5 @@
         <br>
     </div>
     <p><a href="{% url 'password_reset' %}">Change Password (TODO)</a></p>
-  </body>
-</html>
+
+{% endblock content %}

@@ -1,14 +1,11 @@
-<link  href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"id="bootstrap-css"/>
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    Create ERP
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Create ERP Page</title>
-  </head>
-  <body>
+{% block content %}
     <a href="{% url 'erp' %}">Return to ERP Home</a>
 
     <h2>Create an ERP</h2>
@@ -19,5 +16,4 @@
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
-  </body>
-</html>
+{% endblock content %}

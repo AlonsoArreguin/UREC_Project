@@ -1,16 +1,14 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+{% extends './base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    Tasks
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>All Task History</title>
-</head>
-<body>
 
-    <a href="{% url 'task' %}">Return to Task Home</a>
+{% block content %}
+    <div>
+        <a href="{% url 'task' %}">Return to Task Home</a>
 
     <h3>All Task History</h3>
     <table class="table table-striped">
@@ -48,5 +46,10 @@
         </tr>
         {% endfor %}
     </table>
-</body>
-</html>
+    </div>
+{% endblock content %}
+
+
+
+
+    
