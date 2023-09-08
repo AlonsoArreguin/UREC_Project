@@ -222,11 +222,18 @@ def count_update(request):
 def count_view_history(request):
     count_item = Count.objects.all().order_by('-count_id').values()
     recent_list = []
-    for location in UREC_FACILITIES:
-        recent_count = Count.objects.filter(location_in_facility=location).order_by('-date_time_submission').first()
-        recent_list.append(recent_count)
 
-    print(recent_list)
+    for facility, locations in UREC_LOCATIONS:
+        for location_id, location_name in locations:
+            recent_count = Count.objects.filter(location_in_facility=location_id).order_by('-date_time_submission').first()
+            recent_list.append(recent_count)
+
+            # alternative way to append
+            """
+            if recent_count != None:
+                recent_list.append(recent_count)
+            """
+
     context = {'count_item': count_item, 'recent_list': recent_list}
     return render(request, 'urec_app/count_view_history.html', context)
 
