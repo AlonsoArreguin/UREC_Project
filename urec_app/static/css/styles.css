@@ -1,3 +1,79 @@
-body {
-    background-color: #5D1752;
+/* MSU Maroon -> #5d1725
+   MSU Dark maroon from website -> #320c14
+   MSU Dark Grey -> #777777
+   MSU Light Grey -> #C1C6C8 
+   */
+nav, header {
+    background: rgb(50,12,20);
+    background: linear-gradient(90deg, rgba(50,12,20,1) 0%, rgba(93,23,37,1) 30%, rgba(93,23,37,1) 70%, rgba(50,12,20,1) 100%);
 }
+
+.urec-container{
+    padding: 1rem 2rem 2rem 1rem;
+}
+
+.urec-logo{
+    max-width: 80%;
+    height: auto;
+    margin: 5px;
+}
+
+.maroon-line{
+    background-color: #320c14;
+    width: auto;
+    height: 3px;
+
+}
+
+.maroon-button{
+    /* backface-visibility: hidden; */
+    /* border-radius: 10px; */
+    border-style: solid;
+    border-width: 0 2px 0 2px;
+    box-sizing: border-box;
+    border-color: #320c14;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1rem;
+    line-height: 1.3;
+    padding: 1rem 1.125rem;
+    margin: -7px 0 -7px 0;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transform: translateZ(0) scale(1);
+    transition: transform .2s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  
+  .maroon-button:not(:disabled):hover {
+    transform: scale(1.05);
+  }
+  
+  /* /* .maroon-button:not(:disabled):hover:active {
+    transform: scale(1.05) translateY(.125rem);
+  } */
+  .maroon-button:focus:before {
+    content: "";
+    left: calc(-1*.375rem);
+    pointer-events: none;
+    position: absolute;
+    top: calc(-1*.375rem);
+    transition: border-radius;
+    user-select: none;
+  }
+  
+  .maroon-button:focus:not(:focus-visible) {
+    outline: 0 solid transparent;
+  }
+  
+  .maroon-button:focus:not(:focus-visible):before {
+    border-width: 0;
+  }
+  
+  .maroon-button:not(:disabled):active {
+    transform: translateY(.125rem);
+  }
