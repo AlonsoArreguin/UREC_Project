@@ -21,17 +21,12 @@ nav, header {
     background: linear-gradient(90deg, var(--clr-primary-2) 0%, var(--clr-primary-1) 30%, var(--clr-primary-1) 70%, var(--clr-primary-2) 100%);
 }
 
-
 .urec-logo{
-    display: none;
+    display: flex;
+    max-width: 70%;
+    height: auto;
 }
 
-.urec-logo-sm{
-    display: flex;
-    width: 30%;
-    height: auto;
-    margin: 10px;
-}
 
 .nav-toggle{
     font-size: 1.75rem;
@@ -40,19 +35,52 @@ nav, header {
     background: transparent;
     border-color: transparent;
     cursor: pointer;
+    z-index: 99;
 }
 
-.nav-toggle:hover{
+
+.nav-toggle i:hover{
     color: var(--clr-grey-1);
 }
 
-.action-toggle{
+
+/* .action-toggle{
+    display: none;
+} */
+
+.nav-items-toggle{
+    display: block;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    background: rgba( 0, 0, 0, .8);
+    z-index: 98;
+}
+
+.nav-items-toggle ul {
+    margin-top: 3rem;
+}
+
+.nav-items-toggle ul li a{
+    margin: 5px;
+    color: var(--clr-white);
+}
+.nav-items-toggle-show{
+    bottom: 0;
+    transition: .8s;
+}
+
+.ua-hidden-items{
     display: none;
 }
 
-.nav-items-toggle{
-    display: none;
+.nav-user-toggle{
+    display: block;
 }
+
 
 /* the max screen width for classes above are 767px, if more than 767px,  
 classes below @media function will be used instead of above*/
@@ -61,13 +89,41 @@ classes below @media function will be used instead of above*/
         display: none;
     }
 
+    .ua-hidden-items{
+        display: grid;
+    }
+    @media screen and (min-width: 992px){
+        .ua-hidden-items{
+            display: flex;
+        }
+    }
+
    .action-toggle{
         display: flex;
    }
 
    .nav-items-toggle{
         display: flex;
+        position: relative;
+        width: 100vw;
+        height: 3rem;
+        left: 0;
+        right: 0;
+        background: linear-gradient(90deg, var(--clr-primary-2) 0%, var(--clr-primary-1) 30%, var(--clr-primary-1) 70%, var(--clr-primary-2) 100%);
    }
+
+   .nav-items-toggle ul {
+        margin-top: 0;
+    }
+
+    .nav-items-toggle ul li a{
+        margin: 0;
+        color: var(--clr-white);
+    }
+
+   .nav-user-toggle{
+        display: none;
+    }
 
     .urec-logo{
         display: flex;
@@ -76,100 +132,99 @@ classes below @media function will be used instead of above*/
         margin: 2px 300px 2px 2px;
     }
 
-    .urec-logo-sm{
-        display:none;
+
+    .maroon-line{
+        background-color: var(--clr-primary-2);
+        width: auto;
+        height: 3px;
+    
     }
-
-}
-
-
-.maroon-line{
-    background-color: var(--clr-primary-2);
-    width: auto;
-    height: 3px;
-
-}
-
-.maroon-button{
-    /* backface-visibility: hidden; */
-    /* border-radius: 10px; */
-    /* border-style: solid;
-    border-width: 2px; */
-    /* box-sizing: border-box;
-    border-color: #320c14;
-    border-radius: 10px; */
-    color: var(--clr-white);
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1rem;
-    position: relative;
-    text-align: left;
-    text-decoration: none;
-    transform: translateZ(0) scale(1);
-    transition: transform .2s;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-  }
-
-  .dropdown:hover .dropdown-menu{
-    display: block;
-  }
-
-  .dropdown-menu{
-    background:var(--clr-primary-2);
-    display: none;
-    animation: .2s slidedown;
-  }
-  @keyframes slidedown {
-    from{
-        transform:scale(0%);
-    }
-    to{
-        transform: scale(100%);
-    }
-  }
-
-  .dropdown-menu li{
-    margin: 5px;
-  }
-
-  .dropdown-menu li a{
-    color: var(--clr-white);
-    padding: 4px;
-  }
-  
-  .dropdown-item{
-    border-radius: 10px;
-  }
-
-  .dropdown-item:hover{
-    background-color: var(--clr-primary-1);
-    color: var(--clr-white);
-    transition: all .3s ease-in;
-  }
-
-/* if screen is less than 890px, dropdown menu slides left 
-to accomodate screen changes */
-  @media screen and (max-width: 890px) {
-    .dropdown-menu{
+    
+    .maroon-button{
+        /* backface-visibility: hidden; */
+        /* border-radius: 10px; */
+        /* border-style: solid;
+        border-width: 2px; */
+        /* box-sizing: border-box;
+        border-color: #320c14;
+        border-radius: 10px; */
+        color: var(--clr-white);
+        cursor: pointer;
+        display: inline-block;
+        font-size: 1rem;
+        position: relative;
+        text-align: left;
+        text-decoration: none;
+        transform: translateZ(0) scale(1);
+        transition: transform .2s;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+    
+      .dropdown:hover .dropdown-menu{
+        display: block;
+      }
+    
+      .dropdown-menu{
         background:var(--clr-primary-2);
         display: none;
-        transform: translateX(-30%);
-        animation: .2s slidein;
+        animation: .2s slidedown;
       }
-      @keyframes slidein {
+      @keyframes slidedown {
         from{
-            transform: translateX(-0%);
-            
+            transform:scale(0%);
         }
         to{
-
-            transform: translateX(-30%);
-
+            transform: scale(100%);
         }
       }
-  }
+    
+      .dropdown-menu li{
+        margin: 5px;
+      }
+    
+      .dropdown-menu li a{
+        color: var(--clr-white);
+        padding: 4px;
+      }
+      
+      .dropdown-item{
+        border-radius: 10px;
+      }
+    
+      .dropdown-item:hover{
+        background-color: var(--clr-primary-1);
+        color: var(--clr-white);
+        transition: all .3s ease-in;
+      }
+    
+    /* if screen is less than 890px, dropdown menu slides left 
+    to accomodate screen changes */
+      @media screen and (max-width: 890px) {
+        .dropdown-menu{
+            background:var(--clr-primary-2);
+            display: none;
+            transform: translateX(-30%);
+            animation: .2s slidein;
+          }
+          @keyframes slidein {
+            from{
+                transform: translateX(-0%);
+                
+            }
+            to{
+    
+                transform: translateX(-30%);
+    
+            }
+          }
+      }
+
+}
+
+
+
 
 
 

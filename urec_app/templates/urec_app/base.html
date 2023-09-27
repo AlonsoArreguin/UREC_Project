@@ -22,31 +22,33 @@ also stores links for all pages -->
   <header>
     <div class="container-fluid d-flex ">
       <img class="urec-logo ms-lg-5" src="{% static 'images/HORIZONTAL_WEB_white.svg' %}" />
-      <img class="urec-logo-sm" src="{% static 'images/VERTICAL_WEB_white.png' %}" />
     
       <div class="list-unstyled container-fluid d-grid d-lg-flex justify-content-end mt-2">
-        <a class="nav-toggle float-end">
-          <i class="fas fa-bars fa-lg"></i>
+        <a class="nav-toggle">
+          <i onclick="changeIcon(this)" class="fas fa-bars fa-lg"></i>
         </a>
-        {% if user.is_authenticated %}
-          <li class="action-toggle me-2"><a href="{% url 'edit' %}" class="nav-link text-light text-nowrap" >My Account</a></li>
+        <div class="ua-hidden-items">
+          {% if user.is_authenticated %}
+          <li class="action-toggle me-2 mb-2"><a href="{% url 'edit' %}" class="nav-link text-light text-nowrap" >My Account</a></li>
 
           {% if user.is_staff %}
-            <li class="action-toggle ms-3 mb-1"><a href="{% url 'admin:index' %}" class="nav-link text-light" >Admin</a></li>
+            <li class="action-toggle ms-3 mb-2"><a href="{% url 'admin:index' %}" class="nav-link text-light" >Admin</a></li>
           {% endif %}
 
-          <li class="action-toggle ms-3 mb-1 me-3"><a href="{% url 'logout' %}" class="nav-link text-light" >Logout</a></li>
+          <li class="action-toggle ms-3 mb-2 me-3"><a href="{% url 'logout' %}" class="nav-link text-light" >Logout</a></li>
         {% else %}
 
           <li class="action-toggle float- ms-4"><a href="{% url 'login' %}" class="nav-link text-light mx-2" >Login</a></li>
         {% endif %}
+        </div>
+        
       </div>
     </div>
   </header>
   <div class="maroon-line" ></div>
     <nav class="navbar navbar-expand-md nav-items-toggle">
         <div class="container-fluid d-flex justify-content-center">
-          <ul class="navbar-nav mb-2 mb-lg-0">
+          <ul class="navbar-nav mb-1 mb-lg-0">
             <li  class="mx-4 active">
               <a class="nav-link text-light maroon-button" href="{% url 'home' %}">Home</a>
             </li>
@@ -91,22 +93,28 @@ also stores links for all pages -->
                   <li><a class="dropdown-item" href="#">View ERP's</a></li>
                 </ul>
             </li>
-      
-            <!-- <li class="nav-item active">
-              <a class="nav-link" href="{% url 'incident' %}">Incident</a>
-            </li>
-      
-            <li {% if '/count/' in request.path %} class="nav-item active"{% endif %}>
-              <a class="nav-link" href="{% url 'count' %}">Counts</a>
-            </li>
-      
-            <li {% if '/task/' in request.path %} class="nav-item active"{% endif %}>
-              <a class="nav-link" href="{% url 'task' %}">Tasks</a>
-            </li>
-      
-            <li {% if '/erp/' in request.path %} class="nav-item active"{% endif %}>
-              <a class="nav-link" href="{% url 'erp' %}">ERP</a>
-            </li> -->
+
+            <div class="nav-user-toggle">
+              {% if user.is_authenticated %}
+                <li  class="mx-4">
+                  <a class="nav-link text-light maroon-button" href="{% url 'edit' %}">My Account</a>
+                </li>
+              {% if user.is_staff %}
+                <li  class="mx-4">
+                  <a class="nav-link text-light maroon-button" href="{% url 'admin:index' %}">Admin</a>
+                </li>
+              {% endif %}
+                <li  class="mx-4">
+                  <a class="nav-link text-light maroon-button" href="{% url 'logout' %}">Logout</a>
+                </li>
+              {% else %}
+                <li  class="mx-4">
+                  <a class="nav-link text-light maroon-button" href="{% url 'login' %}">Login</a>
+                </li>
+              {% endif %}
+            </div>
+            
+            
           </ul> 
         </div>
       </nav>
@@ -115,6 +123,6 @@ also stores links for all pages -->
     {% block content %}   
     {% endblock content %}
 
-    <script src="app.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>
