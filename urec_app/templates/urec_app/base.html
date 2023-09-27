@@ -13,22 +13,42 @@ also stores links for all pages -->
     <!---<link rel="stylesheet" href="{% static 'admin/css/base.css' %}">--->
     <link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock title %}</title>
 </head>
 
 <body>
   <header>
-    <div class="">
-      <img class="urec-logo ms-lg-5" src="{% static 'images/HORIZONTAL_WEB_white.png' %}" />
+    <div class="container-fluid d-flex ">
+      <img class="urec-logo ms-lg-5" src="{% static 'images/HORIZONTAL_WEB_white.svg' %}" />
+      <img class="urec-logo-sm" src="{% static 'images/VERTICAL_WEB_white.png' %}" />
+    
+      <div class="list-unstyled container-fluid d-grid d-lg-flex justify-content-end mt-2">
+        <a class="nav-toggle float-end">
+          <i class="fas fa-bars fa-lg"></i>
+        </a>
+        {% if user.is_authenticated %}
+          <li class="action-toggle me-2"><a href="{% url 'edit' %}" class="nav-link text-light text-nowrap" >My Account</a></li>
+
+          {% if user.is_staff %}
+            <li class="action-toggle ms-3 mb-1"><a href="{% url 'admin:index' %}" class="nav-link text-light" >Admin</a></li>
+          {% endif %}
+
+          <li class="action-toggle ms-3 mb-1 me-3"><a href="{% url 'logout' %}" class="nav-link text-light" >Logout</a></li>
+        {% else %}
+
+          <li class="action-toggle float- ms-4"><a href="{% url 'login' %}" class="nav-link text-light mx-2" >Login</a></li>
+        {% endif %}
+      </div>
     </div>
   </header>
   <div class="maroon-line" ></div>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-md nav-items-toggle">
         <div class="container-fluid d-flex justify-content-center">
           <ul class="navbar-nav mb-2 mb-lg-0">
-            <li {% if request.path == '/' %} class="mx-4 active"{% endif %}>
-              <a class="nav-link text-light" href="{% url 'home' %}">Home</a>
+            <li  class="mx-4 active">
+              <a class="nav-link text-light maroon-button" href="{% url 'home' %}">Home</a>
             </li>
       
             <li class="nav-item mx-4 dropdown">
@@ -87,26 +107,14 @@ also stores links for all pages -->
             <li {% if '/erp/' in request.path %} class="nav-item active"{% endif %}>
               <a class="nav-link" href="{% url 'erp' %}">ERP</a>
             </li> -->
-          </ul>
-          <ul class="navbar-nav">
-            {% if user.is_authenticated %}
-              <li><a href="{% url 'edit' %}" class="nav-link text-light" >My Account</a></li>
-      
-              {% if user.is_staff %}
-                <li><a href="{% url 'admin:index' %}" class="nav-link text-light" >Admin</a></li>
-              {% endif %}
-      
-              <li><a href="{% url 'logout' %}" class="nav-link text-light" >Logout</a></li>
-            {% else %}
-      
-              <li><a href="{% url 'login' %}" class="nav-link text-light" >Login</a></li>
-            {% endif %}
-          </ul>
+          </ul> 
         </div>
       </nav>
 
 
     {% block content %}   
     {% endblock content %}
+
+    <script src="app.js"></script>
 </body>
 </html>
