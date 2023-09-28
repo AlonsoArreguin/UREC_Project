@@ -21,6 +21,8 @@ nav, header {
     background: linear-gradient(90deg, var(--clr-primary-2) 0%, var(--clr-primary-1) 30%, var(--clr-primary-1) 70%, var(--clr-primary-2) 100%);
 }
 
+/* start of nav bar for mobile/smaller devices */
+
 .urec-logo{
     display: flex;
     max-width: 70%;
@@ -56,7 +58,7 @@ nav, header {
     bottom: 100%;
     left: 0;
     right: 0;
-    background: rgba( 0, 0, 0, .8);
+    background: rgba( 0, 0, 0, .9);
     z-index: 98;
 }
 
@@ -64,10 +66,24 @@ nav, header {
     margin-top: 3rem;
 }
 
-.nav-items-toggle ul li a{
+.nav-items-toggle ul.dropdown-menu {
+    margin-top: 0;
+}
+
+.nav-items-toggle ul li a.maroon-button{
+    font-size: large;
     margin: 5px;
     color: var(--clr-white);
 }
+
+.nav-items-toggle ul li a.maroon-button:hover{
+    color: rgba(255, 255, 255, .6);
+}
+
+.nav-items-toggle ul li a.maroon-button:focus{
+    color: rgba(255, 255, 255, .6);
+}
+
 .nav-items-toggle-show{
     bottom: 0;
     transition: .8s;
@@ -82,6 +98,42 @@ nav, header {
 }
 
 
+.dropdown-menu{
+    background: none;
+    border: none;
+    display: none;
+    max-width: 100vw;
+    margin-top: 0;
+    margin-left: .75rem;
+    animation: .8s slidedown;
+}
+    @keyframes slidedown {
+        from{
+            transform: translateY(-30%);
+            
+        }
+        to{
+
+            transform: translateY(0%);
+
+        }
+    }
+
+
+.dropdown-item{
+    color: var(--clr-white);
+    font-size: medium;
+    max-width: 5rem;
+}
+
+.dropdown-item:hover{
+    color: var(--clr-white);
+    background-color: transparent;
+    overflow: hidden;
+    max-width: fit-content;
+}
+
+/* start of nav bar on screen */
 /* the max screen width for classes above are 767px, if more than 767px,  
 classes below @media function will be used instead of above*/
 @media screen and (min-width: 768px) {
@@ -114,6 +166,10 @@ classes below @media function will be used instead of above*/
 
    .nav-items-toggle ul {
         margin-top: 0;
+    }
+
+    .nav-items-toggle ul.dropdown-menu {
+        margin-top: -.2rem;
     }
 
     .nav-items-toggle ul li a{
@@ -151,16 +207,17 @@ classes below @media function will be used instead of above*/
         color: var(--clr-white);
         cursor: pointer;
         display: inline-block;
-        font-size: 1rem;
         position: relative;
         text-align: left;
         text-decoration: none;
         transform: translateZ(0) scale(1);
         transition: transform .2s;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
       }
+
+      .nav-items-toggle ul li a.maroon-button{
+        font-size: medium;
+        color: var(--clr-white);
+    }
     
       .dropdown:hover .dropdown-menu{
         display: block;
@@ -169,14 +226,16 @@ classes below @media function will be used instead of above*/
       .dropdown-menu{
         background:var(--clr-primary-2);
         display: none;
-        animation: .2s slidedown;
+        transform: translateX(-30%);
+        margin-left: .75rem;
+        animation: .2s slidein;
       }
-      @keyframes slidedown {
+      @keyframes slidein {
         from{
-            transform:scale(0%);
+            transform: translateX(-0%);
         }
         to{
-            transform: scale(100%);
+            transform: translateX(-30%);
         }
       }
     
@@ -191,11 +250,13 @@ classes below @media function will be used instead of above*/
       
       .dropdown-item{
         border-radius: 10px;
+        max-width: none;
       }
     
       .dropdown-item:hover{
         background-color: var(--clr-primary-1);
         color: var(--clr-white);
+        max-width: none;
         transition: all .3s ease-in;
       }
     
@@ -211,12 +272,9 @@ classes below @media function will be used instead of above*/
           @keyframes slidein {
             from{
                 transform: translateX(-0%);
-                
             }
             to{
-    
                 transform: translateX(-30%);
-    
             }
           }
       }
