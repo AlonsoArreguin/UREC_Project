@@ -12,7 +12,7 @@ also stores links for all pages -->
     <script src="{% static '/admin/js/core.js' %}"></script>
     <!---<link rel="stylesheet" href="{% static 'admin/css/base.css' %}">--->
     <link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock title %}</title>
@@ -22,7 +22,7 @@ also stores links for all pages -->
   <header>
     <div class="container-fluid d-flex ">
       <img class="urec-logo ms-lg-5" src="{% static 'images/HORIZONTAL_WEB_white.svg' %}" />
-    
+      
       <div class="list-unstyled container-fluid d-grid d-lg-flex justify-content-end mt-2">
         <a class="nav-toggle">
           <i onclick="changeIcon(this)" class="fas fa-bars fa-lg"></i>
@@ -45,52 +45,54 @@ also stores links for all pages -->
       </div>
     </div>
   </header>
+
+  <!-- mobile view is toggled with css based on view size -->
   <div class="maroon-line" ></div>
     <nav class="navbar navbar-expand-md nav-items-toggle">
-        <div class="container-fluid d-block d-lg-flex justify-content-lg-center">
+        <div class="container-fluid d-block d-md-flex justify-content-md-center">
           <ul class="navbar-nav mb-1 mb-lg-0">
             <li  class="nav-item mx-2 mx-md-3 active">
               <a class="nav-link text-light maroon-button" href="{% url 'home' %}">Home</a>
             </li>
       
-            <li class="nav-item mx-2 mx-md-4 dropdown">
-              <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Accident</a>
+            <li class="nav-item mx-2 mx-md-3 dropdown">
+              <a class="nav-link maroon-button dropdown-toggle" href="#"role="button" data-bs-toggle="dropdown" aria-expanded="false">Accident</a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Create New Accident Report</a></li>
-                  <li><a class="dropdown-item" href="#">View Accident Reports</a></li>
+                  <li><a class="dropdown-item" href="{% url 'create_accident_ticket' %}">Create New Accident Report</a></li>
+                  <li><a class="dropdown-item" href="{% url 'view_accident_tickets' %}">View Accident Reports</a></li>
                 </ul>
             </li>
 
-            <li class="nav-item mx-2 mx-md-4 dropdown">
+            <li class="nav-item mx-2 mx-md-3 dropdown">
               <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Incident</a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Create New Incident Report</a></li>
-                  <li><a class="dropdown-item" href="#">View Incident Reports</a></li>
+                  <li><a class="dropdown-item" href="{% url 'create_incident_ticket' %}">Create New Incident Report</a></li>
+                  <li><a class="dropdown-item" href="{% url 'view_incident_tickets' %}">View Incident Reports</a></li>
                 </ul>
             </li>
 
-            <li class="nav-item mx-2 mx-md-4 dropdown">
+            <li class="nav-item mx-2 mx-md-3 dropdown">
               <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Counts</a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Update Count</a></li>
-                  <li><a class="dropdown-item" href="#">View Count History</a></li>
+                  <li><a class="dropdown-item" href="{% url 'count_update' %}">Update Count</a></li>
+                  <li><a class="dropdown-item" href="{% url 'count_view_history' %}">View Count History</a></li>
                 </ul>
             </li>
 
-            <li class="nav-item mx-2 mx-md-4 dropdown">
+            <li class="nav-item mx-2 mx-md-3 dropdown">
               <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tasks</a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Create New Task</a></li>
-                  <li><a class="dropdown-item" href="#">All Task History</a></li>
-                  <li><a class="dropdown-item" href="#">My Tasks</a></li>
+                  <li><a class="dropdown-item" href="{% url 'create_task' %}">Create New Task</a></li>
+                  <li><a class="dropdown-item" href="{% url 'all_tasks' %}">All Task History</a></li>
+                  <li><a class="dropdown-item" href="{% url 'my_tasks' %}">My Tasks</a></li>
                 </ul>
             </li>
 
             <li class="nav-item mx-2 mx-md-3 dropdown">
               <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">ERP</a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Create ERP</a></li>
-                  <li><a class="dropdown-item" href="#">View ERP's</a></li>
+                  <li><a class="dropdown-item" href="{% url 'create_erp' %}">Create ERP</a></li>
+                  <li><a class="dropdown-item" href="{% url 'view_erps' %}">View ERP's</a></li>
                 </ul>
             </li>
 
@@ -123,6 +125,6 @@ also stores links for all pages -->
     {% block content %}   
     {% endblock content %}
 
-    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
 </body>
 </html>

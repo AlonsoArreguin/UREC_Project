@@ -14,6 +14,5 @@ navToggle.addEventListener('click', function() {
 
 //changes bar icon to an X icon
 let changeIcon = function(icon){
-    console.log('hello');
     icon.classList.toggle('fa-times');
 }
