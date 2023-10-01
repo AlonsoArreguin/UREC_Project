@@ -1,0 +1,43 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}
+    Counts by Hour
+{% endblock title%}
+
+{% block content %}
+    <a href="{% url 'count' %}">Return to Counts Home</a>
+
+    <h3>Hourly Counts</h3>
+
+    <h3>Date: {{ today }} </h3>
+
+    {% for hour, counts_in_hour in hourly_counts.items %}
+    <h2>{{ hour }}</h2>
+    
+    <!-- Table structure -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Location</th>
+                <th>Count</th>
+                <th>Count ID</th>
+                <th>Timestamp</th>
+                <th>Staff</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for count in counts_in_hour %}
+            <tr>
+                <td>{{ count.location_in_facility }}</td>
+                <td>{{ count.location_count }}</td>
+                <td>{{ count.count_id }}</td>
+                <td>{{ count.date_time_submission }}</td>
+                <td>{{ count.staff_netid }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endfor %}
+{% endblock content %}
