@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from django.contrib.auth.models import AbstractUser
 
 # List of possible locations within facilities template
 UREC_LOCATIONS = (
@@ -215,3 +216,6 @@ class Erp(models.Model):
 # Erp Model for FileUpload ONLY
 class Erp_Upload(models.Model):
     file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
+
+class UREC_User(AbstractUser):
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
