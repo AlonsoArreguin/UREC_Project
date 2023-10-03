@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from .models import *
 from django.forms import modelformset_factory
+
+from django.contrib.auth import get_user_model
 
 class FormAccident(forms.ModelForm):
     class Meta:
@@ -78,8 +79,9 @@ class Incident_Ticket_Contact_Witness_Form(forms.ModelForm):
 
 
 class Task_Form(forms.ModelForm):
+    model = get_user_model()
     date_time_due = forms.SplitDateTimeField(widget=AdminSplitDateTime())
-    staff_netid = forms.ModelChoiceField(queryset=User.objects.all())
+    staff_netid = forms.ModelChoiceField(queryset=model.objects.all())
     class Meta:
         model = Task
         fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required"]
@@ -111,10 +113,11 @@ class EditAccountForm(UserChangeForm):
     password = None
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = (
             'email',
             'username',
             'first_name',
-            'last_name'\
+            'last_name',
+            'phone_number'
         )
