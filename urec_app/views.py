@@ -9,6 +9,9 @@ from django.urls import reverse_lazy
 from .forms import *
 #from .storage_backends import *
 
+from collections import defaultdict
+from datetime import datetime
+
 
 # Home Page
 def home(request):
@@ -236,6 +239,56 @@ def count_view_history(request):
 
     context = {'count_item': count_item, 'recent_list': recent_list}
     return render(request, 'urec_app/count_view_history.html', context)
+
+# Helper function for count_hourly()
+# TODO probably move somewhere else
+def convert_to_ampm(hour):
+    if hour == 0:
+        return "12:00 AM"
+    elif hour == 12:
+        return "12:00 PM"
+    elif hour < 12:
+        return f"{hour}:00 AM"
+    else:
+        return f"{hour-12}:00 PM"
+
+# Helper function for count_hourly()
+# TODO probably move somewhere else
+# TODO change to sort by better hours
+def sort_ampm_key(item):
+    hour_str, meridiem = item[0].split(":")[0], item[0].split()[1]
+    hour = int(hour_str) if hour_str != "12" else 0
+    return (1 if meridiem == "PM" else 0, hour)
+
+def count_hourly(request):
+    counts = Count.objects.all()
+
+    # Filter counts based on today's date
+    today = datetime.today().date()
+    today_counts = [count for count in counts if count.date_time_submission.date() == today]
+
+    hourly_counts = defaultdict(list)
+    
+    # Initialize all hours in the dictionary
+    for i in range(24):
+        #hourly_counts[i] = []
+        ampm_hour = convert_to_ampm(i)
+        hourly_counts[ampm_hour] = []
+
+    # Convert to AM/PM format and append to hourly_counts
+    for count in today_counts:
+        hour = count.date_time_submission.hour
+        ampm_hour = convert_to_ampm(hour)
+
+        hourly_counts[ampm_hour].append(count)
+        #hourly_counts[hour].append(count)
+
+    # Sorted counts by hour
+    sorted_hourly_counts = dict(sorted(hourly_counts.items(), key=sort_ampm_key))
+
+    context = {'hourly_counts': sorted_hourly_counts, 'today': today}
+    return render(request, 'urec_app/count_hourly.html', context)
+
 
 # Delete Task@login_required@staff_member_required
 def delete_count(request, countid):
