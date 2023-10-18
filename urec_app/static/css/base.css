@@ -8,7 +8,7 @@
 /* variables */
 
 :root{
-    --clr-primary-1: hsl(348, 60%, 23%);
+    --clr-primary-1: rgb(94, 23, 38);
     --clr-primary-2: hsl(347, 61%, 12%);
     --clr-grey-1: hsl(0, 0%, 47%);
     --clr-grey-2: hsl(197, 6%, 77%);
@@ -19,6 +19,25 @@
 nav, header {
     background: var(--clr-primary-2);
     background: linear-gradient(90deg, var(--clr-primary-2) 0%, var(--clr-primary-1) 30%, var(--clr-primary-1) 70%, var(--clr-primary-2) 100%);
+}
+
+/* Basic usage classes */
+
+.text-bg-maroon-light{
+    background-color: rgba(94, 23, 38, 0.2);
+}
+
+.simple-submit-btn{
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: transparent;
+    padding: 2px 8px 2px 8px;
+    
+}
+
+.simple-submit-btn:hover{
+    background-color: rgba(94, 23, 38, 0.3);
+    transition: all .8s;
 }
 
 /* start of nav bar for mobile/smaller devices */

@@ -20,7 +20,7 @@ also stores links for all pages -->
 
 <body>
   <header>
-    <div class="container-fluid d-flex ">
+    <div class="container-fluid d-flex">
       <img class="urec-logo ms-lg-5" src="{% static 'images/HORIZONTAL_WEB_white.svg' %}" />
       
       <div class="list-unstyled container-fluid d-grid d-lg-flex justify-content-end mt-2">
@@ -76,6 +76,7 @@ also stores links for all pages -->
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="{% url 'count_update' %}">Update Count</a></li>
                   <li><a class="dropdown-item" href="{% url 'count_view_history' %}">View Count History</a></li>
+                  <li><a class="dropdown-item" href="{% url 'count_hourly' %}">View Hourly Count</a></li>
                 </ul>
             </li>
 
