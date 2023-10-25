@@ -16,3 +16,41 @@ navToggle.addEventListener('click', function() {
 let changeIcon = function(icon){
     icon.classList.toggle('fa-times');
 }
+
+
+/*
+
+Section for jquery data table implementation
+
+*/
+//view most recent count history
+  $(document).ready( function () {
+    $('#recent_counts').DataTable({
+        responsive: true,
+        "scrollX": true,
+    });
+} );
+
+//view all count history
+$(document).ready( function () {
+    $('#all_counts').DataTable({
+        responsive: true,
+        "scrollX": true,
+    });
+} );
+
+// view hourly count (May not be used)
+$(document).ready( function () {
+    $('#hourly_counts').DataTable({
+        responsive: true,
+        "scrollX": true,
+    });
+} );
+
+// view accident tickets
+$(document).ready( function () {
+    $('#accident_ticket_metadata').DataTable({
+        responsive: true,
+        "scrollX": true,
+    });
+} );

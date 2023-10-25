@@ -23,6 +23,19 @@ nav, header {
 
 /* Basic usage classes */
 
+.maroon-bg{
+    background-color: var(--clr-primary-1);
+    padding: 5px;
+    color: white;
+}
+
+.sub-maroon-bg{
+    background-color: rgba(94, 23, 38, 0.3);
+    padding: 5px;
+    border-radius: 5px;
+    color: black;
+}
+
 .text-bg-maroon-light{
     background-color: rgba(94, 23, 38, 0.2);
 }
@@ -39,6 +52,12 @@ nav, header {
     background-color: rgba(94, 23, 38, 0.3);
     transition: all .8s;
 }
+
+.bg-tb-view{
+    background: var(--clr-grey-1);
+    /* background: linear-gradient(90deg, var(--clr-primary-2) 0%, var(--clr-primary-1) 30%, var(--clr-primary-1) 70%, var(--clr-primary-2) 100%); */
+}
+
 
 /* start of nav bar for mobile/smaller devices */
 
@@ -72,8 +91,8 @@ nav, header {
 
 .nav-items-toggle{
     display: block;
-    position: absolute;
-    width: 100vw;
+    position: fixed;
+    /* width: 100vw; */
     height: 100vh;
     bottom: 100%;
     left: 0;
@@ -91,7 +110,7 @@ nav, header {
 }
 
 .nav-items-toggle ul li a.maroon-button{
-    font-size: large;
+    font-size: xx-large;
     margin: 5px;
     color: var(--clr-white);
 }
@@ -142,13 +161,17 @@ nav, header {
 
 .dropdown-item{
     color: var(--clr-white);
-    font-size: medium;
-    max-width: 5rem;
+    font-size: larger;
+    background-color: rgba( 120, 120, 120, .6);
+    border-radius: 20px;
+    margin: 5px 0 5px 0;
+    max-width: fit-content;
 }
 
 .dropdown-item:hover{
     color: var(--clr-white);
-    background-color: transparent;
+    background-color: rgba( 0, 0, 0, .6);
+    border-radius: 5px;
     overflow: hidden;
     max-width: fit-content;
 }
@@ -177,7 +200,7 @@ classes below @media function will be used instead of above*/
    .nav-items-toggle{
         display: flex;
         position: relative;
-        width: 100vw;
+        /* width: 100vw; */
         height: 3rem;
         left: 0;
         right: 0;
@@ -249,7 +272,7 @@ classes below @media function will be used instead of above*/
         display: none;
         transform: translateX(-30%);
         margin-left: .75rem;
-        animation: .2s slidein;
+        animation: .4s slidein;
       }
       @keyframes slidein {
         from{
@@ -261,25 +284,28 @@ classes below @media function will be used instead of above*/
       }
     
       .dropdown-menu li{
-        margin: 5px;
+        margin: 10px;
       }
     
       .dropdown-menu li a{
         color: var(--clr-white);
-        padding: 4px;
+        padding: 8px;
       }
       
       .dropdown-item{
+        color: var(--clr-white);
+        font-size: medium;
+        background-color: rgba(94, 23, 38, 0.4);
         border-radius: 10px;
         max-width: none;
-      }
+    }
     
-      .dropdown-item:hover{
-        background-color: var(--clr-primary-1);
+    .dropdown-item:hover{
         color: var(--clr-white);
+        background-color: var(--clr-primary-1);
+        border-radius: 10px;
         max-width: none;
-        transition: all .3s ease-in;
-      }
+    }
     
     /* if screen is less than 890px, dropdown menu slides left 
     to accomodate screen changes */

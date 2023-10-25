@@ -7,54 +7,42 @@
 
 {% block content %}
     <!-- <a href="{% url 'accident' %}">Return to Accident Home</a> -->
-    <div class="container-fluid">
+    <div class="container-fluid bg-tb-view">
+        <br/>
         <div class="col-lg-10 mx-auto">
-            <div class="card rounded shadow border-0 m-2">
-              <div class="card-body p-3 bg-white rounded">
-                <form method="POST" id="form-container">
-                    <div class="row">
-                        <h2>Create New Accident Report</h2>
-                        {% csrf_token %}
-                        {% for item in accident_ticket%}
-                            <div class="col">
-                                <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
-                                    {{ item.label }}:
+            <div class="card rounded-2 shadow border-0">
+                <h2 class="text-center maroon-bg">Create Accident Report</h2>
+                <div class="card-body p-5 bg-white rounded">
+                    <form method="POST" id="form-container">
+                        <div class="row">
+                            {% csrf_token %}
+                            {% for item in accident_ticket%}
+                                <div class="col">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                        {{ item.label }}:
+                                    </div>
+                                    {{ item }}
                                 </div>
-                                {{ item }}
+                            {% endfor %}
+                                <!-- {{ accident_ticket.as_p }} -->
+                        </div>
+                        <div class="row">
+                            <br><h3 class="my-4 sub-maroon-bg">Injury Type</h3>
+                        <!-- {{ accident_ticket_injury_formset.management_form }} -->
+                        {% for form in accident_ticket_injury_formset %}
+                        <div class="accident-ticket-injury-form">
+                            <div class="col-lg-10 col my-2">
+                                    {{ form }}      
                             </div>
+                        </div>
                         {% endfor %}
-                            <!-- {{ accident_ticket.as_p }} -->
-                    </div>
-                    <div class="row">
-                        <br><h3 class="my-4 text-bg-maroon-light">Injury Type</h3>
-                    <!-- {{ accident_ticket_injury_formset.management_form }} -->
-                    {% for form in accident_ticket_injury_formset %}
-                    <div class="accident-ticket-injury-form">
-                        <div class="col-lg-10 col my-2">
-                                {{ form }}      
                         </div>
-                    </div>
-                    {% endfor %}
-                    </div>
-                    
-                    
-                    <button type="button" class="btn btn-md btn-primary" id="addrow1">Add Injury</button>
-                    <div class="row">
-                        <br><h3 class="my-4 text-bg-maroon-light">Patient Contact Information</h3>
-                    {% for item in patient %}
-                        <div class="col-lg-4 col">
-                            <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
-                                {{ item.label }}:
-                            </div>
-                            {{ item }}
-                        </div>
-                    {% endfor %}
-                    </div>
-                    
-                    <div class="row">
-                        <br><h3 class="my-4 text-bg-maroon-light">Witness Contact Information</h3>
-
-                        {% for item in witness %}
+                        
+                        
+                        <button type="button" class="btn btn-md btn-primary" id="addrow1">Add Injury</button>
+                        <div class="row">
+                            <br><h3 class="my-4 sub-maroon-bg">Patient Contact Information</h3>
+                        {% for item in patient %}
                             <div class="col-lg-4 col">
                                 <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
                                     {{ item.label }}:
@@ -62,35 +50,48 @@
                                 {{ item }}
                             </div>
                         {% endfor %}
-                    </div>
-                    <input type="button" class="btn btn-lg btn-primary mt-2" id="addrow2" value="Add Contact (not implemented)" />
-                
-                    <br/><br/>
-                    <button type="submit" class="simple-submit-btn mt-3">Submit</button>
+                        </div>
+                        
+                        <div class="row">
+                            <br><h3 class="my-4 sub-maroon-bg">Witness Contact Information</h3>
+
+                            {% for item in witness %}
+                                <div class="col-lg-4 col">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                        {{ item.label }}:
+                                    </div>
+                                    {{ item }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <input type="button" class="btn btn-lg btn-primary mt-2" id="addrow2" value="Add Contact (not implemented)" />
                     
-                </form>
-                <script>
-                    let accidentTicketInjury = document.querySelectorAll(".accident-ticket-injury-form")
-                    let container = document.querySelector("#form-container")
-                    let addButton = document.querySelector("#addrow1")
-                    let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
-        
-                    let formNum = accidentTicketInjury.length-1
-                    addButton.addEventListener('click', addForm)
-        
-                    function addForm(e){
-                        e.preventDefault()
-        
-                        let newForm = accidentTicketInjury[0].cloneNode(true)
-                        let formRegex = RegExp(`form-(\\d){1}-`,'g')
-        
-                        formNum++
-                        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
-                        container.insertBefore(newForm, addButton)
-        
-                        totalForms.setAttribute('value', `${formNum+1}`)
-                    }
-                </script>
+                        <br/><br/>
+                        <button type="submit" class="simple-submit-btn mt-3">Submit</button>
+                        
+                    </form>
+                    <script>
+                        let accidentTicketInjury = document.querySelectorAll(".accident-ticket-injury-form")
+                        let container = document.querySelector("#form-container")
+                        let addButton = document.querySelector("#addrow1")
+                        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+            
+                        let formNum = accidentTicketInjury.length-1
+                        addButton.addEventListener('click', addForm)
+            
+                        function addForm(e){
+                            e.preventDefault()
+            
+                            let newForm = accidentTicketInjury[0].cloneNode(true)
+                            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+            
+                            formNum++
+                            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+                            container.insertBefore(newForm, addButton)
+            
+                            totalForms.setAttribute('value', `${formNum+1}`)
+                        }
+                    </script>
               </div>
             </div>
         </div>

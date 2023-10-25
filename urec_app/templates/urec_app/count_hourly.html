@@ -5,39 +5,50 @@
     Counts by Hour
 {% endblock title%}
 
-{% block content %}
-    <a href="{% url 'count' %}">Return to Counts Home</a>
+{% block content %} 
+<div class="container-fluid bg-tb-view">
+    <div class="col-lg-10 mx-auto ">
+        <div class="card rounded shadow border-0">
+            <div class="card-body p-5 bg-white rounded">
+                <div class="table-responsive">
+                    <a href="{% url 'count' %}">Return to Counts Home</a>
 
-    <h3>Hourly Counts</h3>
+                    <h3>Hourly Counts</h3>
 
-    <h3>Date: {{ today }} </h3>
+                    <h3>Date: {{ today }} </h3>
+                    <!-- Table structure --> 
+                    <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        {% for hour, counts_in_hour in hourly_counts.items %}
+                            <thead>
+                                
+                                <tr>
+                                    <th>{{ hour }}</th>
+                                    <th>Location</th>
+                                    <th>Count</th>
+                                    <th>Count ID</th>
+                                    <th>Timestamp</th>
+                                    <th>Staff</th>
+                                </tr>
+                            </thead>
+                            {% endfor %}
+                            <tbody>
+                                {% for count in counts_in_hour %}
+                                    <tr>
+                                        <td>{{ count.location_in_facility }}</td>
+                                        <td>{{ count.location_count }}</td>
+                                        <td>{{ count.count_id }}</td>
+                                        <td>{{ count.date_time_submission }}</td>
+                                        <td>{{ count.staff_netid }}</td>
+                                    </tr>
+                                {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    {% for hour, counts_in_hour in hourly_counts.items %}
-    <h2>{{ hour }}</h2>
-    
-    <!-- Table structure -->
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Location</th>
-                <th>Count</th>
-                <th>Count ID</th>
-                <th>Timestamp</th>
-                <th>Staff</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for count in counts_in_hour %}
-            <tr>
-                <td>{{ count.location_in_facility }}</td>
-                <td>{{ count.location_count }}</td>
-                <td>{{ count.count_id }}</td>
-                <td>{{ count.date_time_submission }}</td>
-                <td>{{ count.staff_netid }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-{% endfor %}
 {% endblock content %}

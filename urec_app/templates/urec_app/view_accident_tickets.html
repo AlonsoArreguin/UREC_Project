@@ -6,13 +6,14 @@
 {% endblock title%}
 
 {% block content %}
-<div class="container-fluid">
-    <h3>View Accident Tickets</h3>
+<div class="container-fluid bg-tb-view vh-100">
+    <br/>
     <div class="col-lg-10 mx-auto">
-        <div class="card rounded shadow border-0">
+        <div class="card rounded-2 shadow border-0 mb-3">
+            <h2 class="text-center maroon-bg">Accident Reports</h2>
           <div class="card-body p-5 bg-white rounded">
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <tr>
                         <th>Ticket ID</th>
                         <th>Date/Time</th>
