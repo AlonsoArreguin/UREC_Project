@@ -8,83 +8,102 @@
 {% block content %}
 <div class="container-fluid bg-tb-view vh-100">
     <br/>
-    <div class="col-lg-10 mx-auto">
+    <div class="col mx-auto">
         <div class="card rounded-2 shadow border-0 mb-3">
             <h2 class="text-center maroon-bg">Accident Reports</h2>
           <div class="card-body p-5 bg-white rounded">
             <div class="table-responsive">
-                <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                    <tr>
-                        <th>Ticket ID</th>
-                        <th>Date/Time</th>
-                        <th>Facility</th>
-                        <th>Location in Facility</th>
-                        <th>Activity during Accident</th>
-                        <th>Staff</th>
-                    </tr>
-                    {% for item in accident_ticket %}
-                    <tr>
-                         <form action="{% url 'edit_accident_id' %}" method="POST">
-                            {% csrf_token %}
-                             <td>{{ item.ticket_id }}<input type="hidden" name="id" value="{{ item.ticket_id }}"></td>
-                             <td>{{ item.date_time_submission }}</td>
-                             <td>{{ item.urec_facility }}</td>
-                             <td>{{ item.location_in_facility }}</td>
-                             <td>{{ item.activity_causing_injury }}</td>
-                             <td>{{ item.staff_netid }}</td>
-                             <!-- <td><button type="submit">Expand Report</button></td> -->
-                        </form>
-                    </tr>
+                <table id="accident_ticket_info" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Date/Time</th>
+                            <th>Facility</th>
+                            <th>Location in Facility</th>
+                            <th>Activity during Accident</th>
+                            <th>Staff</th>
+                            <th> Options </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in accident_ticket %}
+                        <tr>
+                            <form action="{% url 'edit_accident_id' %}" method="POST">
+                                {% csrf_token %}
+                                <td>{{ item.ticket_id }}<input type="hidden" name="id" value="{{ item.ticket_id }}"></td>
+                                <td>{{ item.date_time_submission }}</td>
+                                <td>{{ item.urec_facility }}</td>
+                                <td>{{ item.location_in_facility }}</td>
+                                <td>{{ item.activity_causing_injury }}</td>
+                                <td>{{ item.staff_netid }}</td>
+                                <td><button type="submit" class="btn btn-secondary mx-3">Expand Report</button>
+                                    <form action="{% url 'delete_accident' accidentid=item.ticket_id %}" method="post">
+                                        {% csrf_token %}
+                                        <input class="btn btn-danger " type="submit" value="Delete" />
+                                    </form></td>
+                            </form>
+                        </tr>
+                    </tbody>
                     {% endfor %}
+
+                <!-- </table>
+                <h2 class="mt-5 mb-3 sub-maroon-bg">Injury</h2>
+                <table id="accident_ticket_injury" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Injury Type</th>
+                            <th>Injury Description</th>
+                            <th>Care Provided</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in injury_type %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.injury_type }}</td>
+                            <td>{{ item.injury_description }}</td>
+                            <td>{{ item.care_provided }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    
                 </table>
-                <h2 class="mt-4">Injury</h2>
-                <table class="table table-striped">
-                    <tr>
-                        <th>Ticket ID</th>
-                        <th>Injury Type</th>
-                        <th>Injury Description</th>
-                        <th>Care Provided</th>
-                    </tr>
-                    {% for item in injury_type %}
-                    <tr>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.injury_type }}</td>
-                        <td>{{ item.injury_description }}</td>
-                        <td>{{ item.care_provided }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <h2 class="my-4">Contact Info</h2>
-                <table class="table table-striped">
-                    <tr>
-                        <th>Ticket ID</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Last Name</th>
-                        <th>Email Address</th>
-                        <th>Personal Phone Number</th>
-                        <th>Home Phone Number</th>
-                        <th>Street Address</th>
-                        <th>City</th>
-                        <th>State</th>
-                        <th>Zip</th>
-                    </tr>
-                    {% for item in contact_info %}
-                    <tr>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.first_name }}</td>
-                        <td>{{ item.middle_name }}</td>
-                        <td>{{ item.last_name }}</td>
-                        <td>{{ item.email_address }}</td>
-                        <td>{{ item.personal_phone_number }}</td>
-                        <td>{{ item.home_phone_number }}</td>
-                        <td>{{ item.street_address }}</td>
-                        <td>{{ item.city }}</td>
-                        <td>{{ item.state }}</td>
-                        <td>{{ item.zip }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                <h2 class="mt-5 mb-3 sub-maroon-bg">Contact Info</h2>
+                <table id="accident_ticket_contact" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>Email Address</th>
+                            <th>Personal Phone Number</th>
+                            <th>Home Phone Number</th>
+                            <th>Street Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in contact_info %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.first_name }}</td>
+                            <td>{{ item.middle_name }}</td>
+                            <td>{{ item.last_name }}</td>
+                            <td>{{ item.email_address }}</td>
+                            <td>{{ item.personal_phone_number }}</td>
+                            <td>{{ item.home_phone_number }}</td>
+                            <td>{{ item.street_address }}</td>
+                            <td>{{ item.city }}</td>
+                            <td>{{ item.state }}</td>
+                            <td>{{ item.zip }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table> -->
     
             </div>
           </div>

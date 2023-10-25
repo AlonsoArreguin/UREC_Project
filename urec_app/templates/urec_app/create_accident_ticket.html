@@ -7,9 +7,9 @@
 
 {% block content %}
     <!-- <a href="{% url 'accident' %}">Return to Accident Home</a> -->
-    <div class="container-fluid bg-tb-view">
+    <div class=" container-fluid bg-tb-view">
         <br/>
-        <div class="col-lg-10 mx-auto">
+        <div class="col mx-auto">
             <div class="card rounded-2 shadow border-0">
                 <h2 class="text-center maroon-bg">Create Accident Report</h2>
                 <div class="card-body p-5 bg-white rounded">
@@ -29,17 +29,16 @@
                         <div class="row">
                             <br><h3 class="my-4 sub-maroon-bg">Injury Type</h3>
                         <!-- {{ accident_ticket_injury_formset.management_form }} -->
-                        {% for form in accident_ticket_injury_formset %}
-                        <div class="accident-ticket-injury-form">
-                            <div class="col-lg-10 col my-2">
-                                    {{ form }}      
-                            </div>
+                            {% for form in accident_ticket_injury_formset %}
+                                <div class="accident-ticket-injury-form">
+                                    <div class="col-lg-10 col my-2">
+                                            {{ form }}      
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                        </div>
-                        
-                        
                         <button type="button" class="btn btn-md btn-primary" id="addrow1">Add Injury</button>
+                        
                         <div class="row">
                             <br><h3 class="my-4 sub-maroon-bg">Patient Contact Information</h3>
                         {% for item in patient %}
@@ -64,6 +63,7 @@
                                 </div>
                             {% endfor %}
                         </div>
+                        
                         <input type="button" class="btn btn-lg btn-primary mt-2" id="addrow2" value="Add Contact (not implemented)" />
                     
                         <br/><br/>

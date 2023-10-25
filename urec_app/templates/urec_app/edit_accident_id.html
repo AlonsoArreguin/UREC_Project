@@ -11,53 +11,107 @@
     
     
 
- <a href="{% url 'view_accident_tickets' %}">Return Accident Reports</a>
- <table class="table table-striped">
-     <tr>
-            <th>Ticket ID</th>
-            <th>Injury Type</th>
-            <th>Injury Description</th>
-            <th>Care Provided</th>
-     </tr>
-     {% for item in acc_id %}
-     <tr>
-         <td>{{ item.ticket_id }}</td>
-         <td>{{ item.date_time_submission }}</td>
-         <td>{{ item.urec_facility }}</td>
-         <td>{{ item.location_in_facility }}</td>
-         <td>{{ item.activity_causing_injury }}</td>
-         <td>{{ item.staff_netid }}</td>
-     </tr>
-     {% endfor %}
-     <tr>
-            <th>Ticket ID</th>
-            <th>Injury Type</th>
-            <th>Injury Description</th>
-            <th>Care Provided</th>
-     </tr>
-     {% for item in injury_type %}
-     <tr>
-            <td>{{ item.accident_ticket }}</td>
-            <td>{{ item.injury_type }}</td>
-            <td>{{ item.injury_description }}</td>
-            <td>{{ item.care_provided }}</td>
-     </tr>
-     {% endfor %}
-     {% for item in contact_info %}
-     <tr>
-            <td>{{ item.accident_ticket }}</td>
-            <td>{{ item.first_name }}</td>
-            <td>{{ item.middle_name }}</td>
-            <td>{{ item.last_name }}</td>
-            <td>{{ item.email_address }}</td>
-            <td>{{ item.personal_phone_number }}</td>
-            <td>{{ item.home_phone_number }}</td>
-            <td>{{ item.street_address }}</td>
-            <td>{{ item.city }}</td>
-            <td>{{ item.state }}</td>
-            <td>{{ item.zip }}</td>
-        </tr>
-     {% endfor %}
- </table>
+ 
+ <div class="container-fluid bg-tb-view vh-100">
+    <br/>
+    <div class="col mx-auto">
+        <div class="card rounded-2 shadow border-0 mb-3">
+            <h2 class="text-center maroon-bg">Accident Reports</h2>
+          <div class="card-body p-5 bg-white rounded">
+            <a class="btn btn-secondary mb-4" href="{% url 'view_accident_tickets' %}">Return to Accident Reports</a>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Date/Time</th>
+                            <th>Facility</th>
+                            <th>Location in Facility</th>
+                            <th>Activity Causing Injury</th>
+                            <th>Staff NetID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in acc_id %}
+                        <tr>
+                            <td>{{ item.ticket_id }}</td>
+                            <td>{{ item.date_time_submission }}</td>
+                            <td>{{ item.urec_facility }}</td>
+                            <td>{{ item.location_in_facility }}</td>
+                            <td>{{ item.activity_causing_injury }}</td>
+                            <td>{{ item.staff_netid }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+
+                    <h2 class="mt-5 mb-3 sub-maroon-bg">Injury Description</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Injury Type</th>
+                                <th>Injury Description</th>
+                                <th>Care Provided</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in injury_type %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.injury_type }}</td>
+                                <td>{{ item.injury_description }}</td>
+                                <td>{{ item.care_provided }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    <h2 class="mt-5 mb-3 sub-maroon-bg">Contact Info</h2>
+                    <table class="table table-striped overflow-scroll">
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Last Name</th>
+                                <th>Email Address</th>
+                                <th>Personal Phone Number</th>
+                                <th>Home Phone Number</th>
+                                <th>Street Address</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in contact_info %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.first_name }}</td>
+                                <td>{{ item.middle_name }}</td>
+                                <td>{{ item.last_name }}</td>
+                                <td>{{ item.email_address }}</td>
+                                <td>{{ item.personal_phone_number }}</td>
+                                <td>{{ item.home_phone_number }}</td>
+                                <td>{{ item.street_address }}</td>
+                                <td>{{ item.city }}</td>
+                                <td>{{ item.state }}</td>
+                                <td>{{ item.zip }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    
+                    
+                
+            </div>
+          </div>
+        </div>
+    </div>
+ </div>
+ 
+ 
 
  {% endblock content %}

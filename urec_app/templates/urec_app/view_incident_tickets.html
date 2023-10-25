@@ -9,35 +9,58 @@
 
     <!-- <a href="{% url 'incident' %}">Return to Incident Home</a> -->
 
-    <h3>View Incident Tickets</h3>
-    <table class="table table-striped">
-        <tr>
-            <th>Ticket ID</th>
-            <th>Date/Time Submitted</th>
-            <th>Facility</th>
-            <th>Location in Facility</th>
-            <th>Activity during Incident</th>
-            <th>Staff</th>
-        </tr>
-        {% for item in incident_ticket %}
-        <tr>
-            <form action="{% url 'view_incident_id' %}" method="POST">
-                {% csrf_token %}
-                <td>{{ item.ticket_id }}<input type="hidden" name="id" value="{{ item.ticket_id }}"></td>
-                <td>{{ item.date_time_submission }}</td>
-                <td>{{ item.urec_facility }}</td>
-                <td>{{ item.location_in_facility }}</td>
-                <td>{{ item.activity_during_incident }}</td>
-                <td>{{ item.staff_netid }}</td>
-            <td><button type="submit">Expand Report</button></td>
-            </form>
-            <form action="{% url 'delete_incident' incidentid=item.ticket_id %}" method="post">
-                {% csrf_token %}
-                <td><input type="submit" value="Delete" /></td>
-            </form>
-        </tr>
-        {% endfor %}
-    </table>
+<div class="container-fluid bg-tb-view vh-100">
+    <br/>
+    <div class="col mx-auto">
+        <div class="card rounded-2 shadow border-0 mb-3">
+            <h2 class="text-center maroon-bg">Accident Reports</h2>
+            <div class="card-body p-5 bg-white rounded">
+                <div class="table-responsive">
+                    <table id="incident_ticket_info" class="display" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Date/Time Submitted</th>
+                                <th>Facility</th>
+                                <th>Location in Facility</th>
+                                <th>Activity during Incident</th>
+                                <th>Staff</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in incident_ticket %}
+                        <tr>
+                            <form action="{% url 'view_incident_id' %}" method="POST">
+                                {% csrf_token %}
+                                <td>{{ item.ticket_id }}<input type="hidden" name="id" value="{{ item.ticket_id }}"></td>
+                                <td>{{ item.date_time_submission }}</td>
+                                <td>{{ item.urec_facility }}</td>
+                                <td>{{ item.location_in_facility }}</td>
+                                <td>{{ item.activity_during_incident }}</td>
+                                <td>{{ item.staff_netid }}</td>
+                                <td>
+                                    <button type="submit" class="btn btn-secondary mx-3">Expand Report</button>
+                                    <form action="{% url 'delete_incident' incidentid=item.ticket_id %}" method="post">
+                                        {% csrf_token %}
+                                        <input class="btn btn-danger " type="submit" value="Delete" />
+                                    </form>
+                                </td>
+                            </form>
+                            
+                            
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <!-- OTHER RELATED TABLES
     <h3>Incident</h3>
     <table class="table table-striped">

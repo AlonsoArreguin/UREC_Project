@@ -49,8 +49,33 @@ $(document).ready( function () {
 
 // view accident tickets
 $(document).ready( function () {
-    $('#accident_ticket_metadata').DataTable({
+    $('#accident_ticket_info').DataTable({
         responsive: true,
         "scrollX": true,
     });
 } );
+
+// view accident tickets
+$(document).ready( function () {
+    $('#accident_ticket_injury').DataTable({
+        responsive: true,
+        "scrollX": true,
+    });
+} );
+
+// view accident tickets
+$(document).ready( function () {
+    $('#accident_ticket_contact').DataTable({
+        responsive: true,
+        "scrollX": true,
+    });
+} );
+
+// view incident tickets
+$(document).ready( function () {
+    $('#incident_ticket_info').DataTable({
+        responsive: true,
+        "scrollX": true,
+    });
+} );
+
