@@ -264,11 +264,24 @@ def count_hourly(request):
     counts = Count.objects.all()
 
     # Filter counts based on today's date
-    today = datetime.today().date()
-    today_counts = [count for count in counts if count.date_time_submission.date() == today]
+    #today = datetime.today().date()
+    #today_counts = [count for count in counts if count.date_time_submission.date() == today]
+    
+    # Filter counts based on datepicker
+    # If 'date' is provided in GET params, parse it. Otherwise, use today's date.
+    selected_date_str = request.GET.get('date', None)
+    selected_date = datetime.today().date()
+    
+    if selected_date_str:
+        selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
+    else:
+        selected_date = datetime.today().date()
+
+
+    today_counts = [count for count in counts if count.date_time_submission.date() == selected_date]
 
     hourly_counts = defaultdict(list)
-    
+
     # Initialize all hours in the dictionary
     for i in range(24):
         #hourly_counts[i] = []
@@ -281,12 +294,12 @@ def count_hourly(request):
         ampm_hour = convert_to_ampm(hour)
 
         hourly_counts[ampm_hour].append(count)
-        #hourly_counts[hour].append(count)
 
     # Sorted counts by hour
     sorted_hourly_counts = dict(sorted(hourly_counts.items(), key=sort_ampm_key))
 
-    context = {'hourly_counts': sorted_hourly_counts, 'today': today}
+    #context = {'hourly_counts': sorted_hourly_counts, 'today': today}
+    context = {'hourly_counts': sorted_hourly_counts, 'selected_date': selected_date}
     return render(request, 'urec_app/count_hourly.html', context)
 
 
