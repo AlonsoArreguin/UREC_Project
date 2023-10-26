@@ -16,6 +16,7 @@
 
                     <h3>Hourly Counts</h3>
 
+<<<<<<< HEAD
                     <h3>Date: {{ today }} </h3>
                     <!-- Table structure --> 
                     <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -51,5 +52,38 @@
         </div>
     </div>
 </div>
+=======
+    <p>Choose date:</p>
+
+    <!-- Date picking functionality -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <input type="text" id="datepicker"> 
+
+    <script>
+        $( function() {
+            var $datePicker = $( "#datepicker" );
+        
+            // If date picker input is empty, set to today's date
+            if (!$datePicker.val()) 
+            {
+                $datePicker.val($.datepicker.formatDate('yy-mm-dd', new Date()));
+            }
+        
+            $datePicker.datepicker({
+                dateFormat: "yy-mm-dd",
+                onSelect: function(dateText, inst) {
+                    // Redirect or fetch results for the selected date
+                    window.location.href = '{% url "count_hourly" %}?date=' + dateText;
+                }
+            });
+        });
+        </script>
+    <!-- End Date picking functionality -->
+
+    <p> Selected Date: {{ selected_date }} <p>
+>>>>>>> 946d62e87824d7812d0147db2fccbd0fa323f4e5
 
 {% endblock content %}

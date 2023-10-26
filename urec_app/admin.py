@@ -17,3 +17,5 @@ admin.site.register(Incident_Ticket)
 admin.site.register(Incident_Ticket_Incident)
 admin.site.register(Incident_Ticket_Contact_Patient)
 admin.site.register(Incident_Ticket_Contact_Witness)
+
+admin.site.register(Count)
