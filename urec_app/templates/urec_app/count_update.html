@@ -8,20 +8,21 @@
 {% block content %}
     <!-- <a href="{% url 'count' %}">Return to Counts Home</a> -->
 
-    <div class="container">
-        <form method="POST">
-            <fieldset>
-                <legend>Update Count</legend>
-                {% csrf_token %}
-                
-                <div class="row">
-                    {{ count_form.as_p }}
+    <div class=" container-fluid bg-tb-view">
+        <br/>
+        <div class="col mx-auto">
+            <div class="card rounded-2 shadow border-0">
+                <h2 class="text-center maroon-bg">Update Count</h2>
+                <div class="card-body p-5 bg-white rounded">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ count_form.as_p }}
+                            <!---<input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />--->
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        
+                    </form>
                 </div>
-                
-                
-                <!---<input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />--->
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </fieldset>
-        </form>
+            </div>
+        </div>
     </div>
 {% endblock content %}
