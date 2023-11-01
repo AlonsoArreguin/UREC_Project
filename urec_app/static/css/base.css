@@ -48,6 +48,20 @@ nav, header {
     
 }
 
+.basic-nav-btn{
+    background-color: var(--clr-primary-1);
+    border: none;
+    border-radius: 10px;
+    padding: .75rem;
+    color: white;
+    font-size: large;
+}
+
+.basic-nav-btn:hover{
+    background-color: var(--clr-primary-2);
+    transition: all .5s;
+}
+
 .simple-submit-btn:hover{
     background-color: rgba(94, 23, 38, 0.3);
     transition: all .8s;
@@ -56,6 +70,16 @@ nav, header {
 .bg-tb-view{
     background: var(--clr-grey-1);
     /* background: linear-gradient(90deg, var(--clr-primary-2) 0%, var(--clr-primary-1) 30%, var(--clr-primary-1) 70%, var(--clr-primary-2) 100%); */
+}
+
+.f-md{
+    font-size: medium;
+}
+.f-lg{
+    font-size: large;
+}
+.f-larger{
+    font-size: 100px;
 }
 
 

@@ -6,18 +6,28 @@
 {% endblock title%}
 
 {% block content %}
+<div class="container-fluid h-100 d-flex justify-content-center" style="background-image: url('static/images/Sanderson_exterior.jpg'); background-repeat: no-repeat; background-size: auto; background-position: center; opacity: 1;">
+    <div class="vh-100">
+        <div class="row pt-5">
+            <div class="col p-2 text-black text-center">
+                <h1>Welcome to the UREC Risk Management System, {{ user.username }}.</h1>
+                <h4 class="p-2">Select an option below to get started.</h4>
+                <a href="{% url 'accident' %}"><button class="basic-nav-btn m-2">Accident</button></a>
+                <a href="{% url 'incident' %}"><button class="basic-nav-btn m-2">Incident</button></a>
+                <a href="{% url 'count' %}"><button class="basic-nav-btn m-2">Counts</button></a>
+                <a href="{% url 'task' %}"><button class="basic-nav-btn m-2">Tasks</button></a>
+                <a href="{% url 'erp' %}"><button class="basic-nav-btn m-2">ERP</button></a>
 
-<div>
-    <h1>Welcome to the UREC Risk Management System, {{ user.username }}.</h1>
-    <h4>Select an option below to get started.</h4>
-    <a href="{% url 'accident' %}"><button>Accident</button></a>
-    <a href="{% url 'incident' %}"><button>Incident</button></a>
-    <a href="{% url 'count' %}"><button>Counts</button></a>
-    <a href="{% url 'task' %}"><button>Tasks</button></a>
-    <!---<a href="{% url 'form' %}"><button>Form</button></a>--->
-    <a href="{% url 'erp' %}"><button>ERP</button></a>
-    <!---<a href="{% url 'sop' %}"><button>SOPs</button></a>--->
-    <!---<a href="{% url 'survey' %}"><button>Survey</button></a>--->
+                
+                
+                <!---<a href="{% url 'form' %}"><button>Form</button></a>--->
+                <!---<a href="{% url 'sop' %}"><button>SOPs</button></a>--->
+                <!---<a href="{% url 'survey' %}"><button>Survey</button></a>--->
+            </div>
+        </div>
+    </div>
+    
 </div>
+
 {% endblock content %}
     
