@@ -59,7 +59,7 @@ nav, header {
 }
 
 
-/* start of nav bar for mobile/smaller devices */
+/* start of nav bar for mobile/smaller devices on base.html */
 
 .urec-logo{
     display: flex;
