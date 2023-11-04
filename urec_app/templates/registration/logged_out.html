@@ -1,17 +1,16 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+{% extends './login_base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    UREC Login
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Logout Page</title>
-  </head>
+{% block content %}
+<div class="container-fluid px-sm-3 px-1 pt-2">
   <body>
-    {% block content %}
-    <p>You have been logged out!</p>
-    <a href="{% url 'login'%}">Click here to login again.</a>
-    {% endblock %}
+    <h2 class="pb-2">You have been logged out!</h2>
+    <h6><a href="{% url 'login'%}" style="border: 2px solid black; border-radius: 10px; padding: 2px 5px; text-decoration: none; color: black;">Click here</a> to login again.</h6>
   </body>
-</html>
+</div>
+  
+{% endblock content %}

@@ -6,51 +6,96 @@
 {% endblock title%}
 
 {% block content %}
-    <a href="{% url 'accident' %}">Return to Accident Home</a>
+    <!-- <a href="{% url 'accident' %}">Return to Accident Home</a> -->
+    <div class=" container-fluid bg-tb-view">
+        <br/>
+        <div class="col mx-auto">
+            <div class="card rounded-2 shadow border-0">
+                <h2 class="text-center maroon-bg">Create Accident Report</h2>
+                <div class="card-body p-5 bg-white rounded">
+                    <form method="POST" id="form-container">
+                        <div class="row">
+                            {% csrf_token %}
+                            {% for item in accident_ticket%}
+                                <div class="col">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                        {{ item.label }}:
+                                    </div>
+                                    {{ item }}
+                                </div>
+                            {% endfor %}
+                                <!-- {{ accident_ticket.as_p }} -->
+                        </div>
+                        <div class="row">
+                            <br><h3 class="mt-5 mb-3 sub-maroon-bg">Injury Type</h3>
+                        <!-- {{ accident_ticket_injury_formset.management_form }} -->
+                            {% for form in accident_ticket_injury_formset %}
+                                <div class="accident-ticket-injury-form">
+                                    <div class="col-lg-10 col my-2">
+                                            {{ form }}      
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-md btn-primary" id="addrow1">Add Injury</button>
+                        
+                        <div class="row">
+                            <br><h3 class="my-4 sub-maroon-bg">Patient Contact Information</h3>
+                        {% for item in patient %}
+                            <div class="col-lg-4 col">
+                                <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                    {{ item.label }}:
+                                </div>
+                                {{ item }}
+                            </div>
+                        {% endfor %}
+                        </div>
+                        
+                        <div class="row">
+                            <br><h3 class="my-4 sub-maroon-bg">Witness Contact Information</h3>
 
-    <div class="container">
-        <form method="POST" id="form-container">
-            <h2>Create New Accident Report</h2>
-            {% csrf_token %}
-            {{ accident_ticket.as_p }}
-            <br><h3>Injury Type</h3>
-            {{ accident_ticket_injury_formset.management_form }}
-            {% for form in accident_ticket_injury_formset %}
-            <div class="accident-ticket-injury-form">
-                {{ form.as_p }}
+                            {% for item in witness %}
+                                <div class="col-lg-4 col">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                        {{ item.label }}:
+                                    </div>
+                                    {{ item }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <input type="button" class="btn btn-lg btn-primary mt-2" id="addrow2" value="Add Contact (not implemented)" />
+                    
+                        <br/><br/>
+                        <button type="submit" class="simple-submit-btn mt-3">Submit</button>
+                        
+                    </form>
+                    <script>
+                        let accidentTicketInjury = document.querySelectorAll(".accident-ticket-injury-form")
+                        let container = document.querySelector("#form-container")
+                        let addButton = document.querySelector("#addrow1")
+                        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+            
+                        let formNum = accidentTicketInjury.length-1
+                        addButton.addEventListener('click', addForm)
+            
+                        function addForm(e){
+                            e.preventDefault()
+            
+                            let newForm = accidentTicketInjury[0].cloneNode(true)
+                            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+            
+                            formNum++
+                            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+                            container.insertBefore(newForm, addButton)
+            
+                            totalForms.setAttribute('value', `${formNum+1}`)
+                        }
+                    </script>
+              </div>
             </div>
-            {% endfor %}
-            <button type="button" class="btn btn-lg btn-block" id="addrow1">Add Injury</button>
-
-            <br><h3>Patient Contact Information</h3>
-            {{ patient.as_p }}
-
-            <br><h3>Witness Contact Information</h3>
-            {{ witness.as_p }}
-            <input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <script>
-            let accidentTicketInjury = document.querySelectorAll(".accident-ticket-injury-form")
-            let container = document.querySelector("#form-container")
-            let addButton = document.querySelector("#addrow1")
-            let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
-
-            let formNum = accidentTicketInjury.length-1
-            addButton.addEventListener('click', addForm)
-
-            function addForm(e){
-                e.preventDefault()
-
-                let newForm = accidentTicketInjury[0].cloneNode(true)
-                let formRegex = RegExp(`form-(\\d){1}-`,'g')
-
-                formNum++
-                newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
-                container.insertBefore(newForm, addButton)
-
-                totalForms.setAttribute('value', `${formNum+1}`)
-            }
-        </script>
+        </div>
     </div>
+        
+
 {% endblock content %}

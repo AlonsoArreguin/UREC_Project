@@ -7,10 +7,12 @@
 
 
 {% block content %}
-    <div>
-        <a href="{% url 'task' %}">Return to Task Home</a>
-
-    <h3>All Task History</h3>
+<div class="container-fluid bg-tb-view ">
+    <div class="col-lg-8 mx-auto ">
+        <div class="card rounded shadow border-0">
+            <div class="card-body p-5 bg-white rounded">
+                <div class="table-responsive">
+                    <h3>All Task History</h3>
     <table class="table table-striped">
         <tr>
             <form action="{% url 'edit_accident_id' %}" method="POST"></form>
@@ -46,7 +48,15 @@
         </tr>
         {% endfor %}
     </table>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+        <!-- <a href="{% url 'task' %}">Return to Task Home</a> -->
+
+    
 {% endblock content %}
 
 

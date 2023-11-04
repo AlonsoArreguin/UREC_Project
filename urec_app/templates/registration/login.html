@@ -1,39 +1,56 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+{% extends './login_base.html' %}
+{% load static %}
 
-{% include 'urec_app/navbar.html' %}
+{% block title %}
+    UREC Login
+{% endblock title%}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Login Page</title>
-  </head>
+{% block content %}
   <body>
-    {% block content %} {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
+  
+     
 
+    <div class="container-fluid py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-md-8 col">
+          <div class="card" style="border-radius: 1rem;">
+            <h2 class="text-center maroon-bg" style="border-radius: .25rem .25rem 0 0;">Please login to access UREC Risk Management System.</h2>
+            <div class="card-body p-1 p-sm-4 text-black">
+              <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <table>
+                  <tr>
+                    <td class="p-md-2 p-0" style="font-size: large; font-weight: bold;">{{ form.username.label_tag }}</td>
+                    <td class="pe-md-0 pe-2">{{ form.username }}</td>
+                  </tr>
+                  <tr>
+                    <td class="p-md-2 p-0" style="font-size: large; font-weight: bold;">{{ form.password.label_tag }}</td>
+                    <td class="w-auto">{{ form.password }}</td>
+                  </tr>
+                </table>
+                {% if form.errors %}
+                  <p style="font-size: medium; color: red;"> Incorrect Username or Password.</p>
+                {% endif %}
+                <input class="btn btn-secondary my-2" type="submit" value="Login" />
+                <input type="hidden" name="next" value="{{ next }}" />
+              </form>
 
-    <h3>Please login to access UREC Risk Management System.</h3>
-    <form method="post" action="{% url 'login' %}">
-      {% csrf_token %}
-      <table>
-        <tr>
-          <td>{{ form.username.label_tag }}</td>
-          <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-          <td>{{ form.password.label_tag }}</td>
-          <td>{{ form.password }}</td>
-        </tr>
-      </table>
-      <input type="submit" value="Login" />
-      <input type="hidden" name="next" value="{{ next }}" />
-    </form>
+              {# Assumes you setup the password_reset view in your URLconf #}
+              <p>Lost Password? (TODO): <a href="{% url 'password_reset' %}">Click Here</a></p>
+              <p>Sign Up <a href=>Here</a> (TODO)</p>
 
-    {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Lost Password? (TODO)</a></p>
-    <p><a href=>Sign Up (TODO)</a></p>
-    {% endblock %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+              
+
+            </div>
+          </div>
+      </div>
+    </div>
+    
   </body>
-</html>
+{% endblock %}

@@ -6,45 +6,70 @@
 {% endblock title%}
 
 {% block content %}
-    <a href="{% url 'count' %}">Return to Counts Home</a>
+    <!-- <a href="{% url 'count' %}">Return to Counts Home</a> -->
+<div class="container-fluid bg-tb-view">
+    <br/>
+    <div class="col mx-auto overflow-hidden">
+        <div class="card rounded-2 shadow border-0 mb-3">
+            <h2 class="text-center maroon-bg">Count History</h2>
+          <div class="card-body p-5 bg-white rounded">
+            <div class="">
+                <h3>Most Recent Counts by Location</h3>
+                <table id="recent_counts" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Location Name</th>
+                            <th>Count</th>
+                            <th>Update Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in recent_list %}
+                    <tr>
+                        <td>{{ item.location_in_facility }}</td>
+                        <td>{{ item.location_count }}</td>
+                        <td>{{ item.date_time_submission }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    
+                </table>
+                <br><br>
 
-    <h3>Most Recent Counts by Location</h3>
-    <table class="table table-striped">
-        <tr>
-            <th>Location Name</th>
-            <th>Count</th>
-            <th>Update Time</th>
-        </tr>
-        {% for item in recent_list %}
-        <tr>
-            <td>{{ item.location_in_facility }}</td>
-            <td>{{ item.location_count }}</td>
-            <td>{{ item.date_time_submission }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+                <h3>All Count History</h3>
+                <table id="all_counts" class="display" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Count ID</th>
+                            <th>Location in Facility</th>
+                            <th>Location Count</th>
+                            <th>Update Time</th>
+                            <th>Staff</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in count_item %}
+                    <tr>
+                        <td>{{ item.count_id }}</td>
+                        <td>{{ item.location_in_facility }}</td>
+                        <td>{{ item.location_count }}</td>
+                        <td>{{ item.date_time_submission }}</td>
+                        <td>{{ item.staff_netid }}</td>
+                        <form action="{% url 'delete_count' countid=item.count_id %}" method="post">
+                            {% csrf_token %}
+                            <td><input type="submit" value="Delete" /></td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    
+                </table>
 
-    <h3>All Count History</h3>
-    <table class="table table-striped">
-        <tr>
-            <th>Count ID</th>
-            <th>Location in Facility</th>
-            <th>Location Count</th>
-            <th>Update Time</th>
-            <th>Staff</th>
-        </tr>
-        {% for item in count_item %}
-        <tr>
-            <td>{{ item.count_id }}</td>
-            <td>{{ item.location_in_facility }}</td>
-            <td>{{ item.location_count }}</td>
-            <td>{{ item.date_time_submission }}</td>
-            <td>{{ item.staff_netid }}</td>
-            <form action="{% url 'delete_count' countid=item.count_id %}" method="post">
-                {% csrf_token %}
-                <td><input type="submit" value="Delete" /></td>
-            </form>
-        </tr>
-        {% endfor %}
-    </table>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+    
 {% endblock content %}
