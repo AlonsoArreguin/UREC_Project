@@ -28,16 +28,16 @@
                         </div>
                         <div class="row">
                             <br><h3 class="mt-5 mb-3 sub-maroon-bg">Injury Type</h3>
-                        <!-- {{ accident_ticket_injury_formset.management_form }} -->
+                            {{ accident_ticket_injury_formset.management_form }}
                             {% for form in accident_ticket_injury_formset %}
-                                <div class="accident-ticket-injury-form">
+                                <div class="accident-ticket-injury-form" id="injury-form">
                                     <div class="col-lg-10 col my-2">
                                             {{ form }}      
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
-                        <button type="button" class="btn btn-md btn-primary" id="addrow1">Add Injury</button>
+                        <button type="button" class="btn btn-md btn-primary" id="addinjury">Add Injury</button>
                         
                         <div class="row">
                             <br><h3 class="my-4 sub-maroon-bg">Patient Contact Information</h3>
@@ -54,45 +54,63 @@
                         <div class="row">
                             <br><h3 class="my-4 sub-maroon-bg">Witness Contact Information</h3>
 
-                            {% for item in witness %}
-                                <div class="col-lg-4 col">
+                            {% for form in accident_ticket_witness_formset %}
+                                <div class="col-lg-4 col" id="witness-form">
                                     <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
-                                        {{ item.label }}:
+                                        {{ form.label }}:
                                     </div>
-                                    {{ item }}
+                                    {{ form.as_p }}
                                 </div>
                             {% endfor %}
                         </div>
                         
-                        <input type="button" class="btn btn-lg btn-primary mt-2" id="addrow2" value="Add Contact (not implemented)" />
+                        <input type="button" class="btn btn-lg btn-primary mt-2" id="addwitness" value="Add Witness Contact" />
                     
                         <br/><br/>
                         <button type="submit" class="simple-submit-btn mt-3">Submit</button>
                         
                     </form>
                     <script>
-                        let accidentTicketInjury = document.querySelectorAll(".accident-ticket-injury-form")
                         let container = document.querySelector("#form-container")
-                        let addButton = document.querySelector("#addrow1")
                         let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
-            
-                        let formNum = accidentTicketInjury.length-1
-                        addButton.addEventListener('click', addForm)
-            
-                        function addForm(e){
+
+                        let addInjuryButton = document.querySelector("#addinjury")
+                        let accidentTicketInjury = document.querySelectorAll("#injury-form")
+                        let injuryFormNum = accidentTicketInjury.length-1
+                        addInjuryButton.addEventListener('click', addInjuryForm)
+
+                        function addInjuryForm(e){
                             e.preventDefault()
-            
+
                             let newForm = accidentTicketInjury[0].cloneNode(true)
                             let formRegex = RegExp(`form-(\\d){1}-`,'g')
-            
-                            formNum++
-                            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
-                            container.insertBefore(newForm, addButton)
-            
-                            totalForms.setAttribute('value', `${formNum+1}`)
+
+                            injuryFormNum++
+                            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${injuryFormNum}-`)
+                            container.insertBefore(newForm, addInjuryButton)
+
+                            totalForms.setAttribute('value', `${injuryFormNum+1}`)
+                        }
+
+                        let addWitnessButton = document.querySelector("#addwitness")
+                        let witnessSet = document.querySelectorAll("#witness-form")
+                        let witnessFormNum = witnessSet.length-1
+                        addWitnessButton.addEventListener('click', addWitnessForm)
+
+                        function addWitnessForm(e){
+                            e.preventDefault()
+
+                            let newForm = witnessSet[0].cloneNode(true)
+                            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+                            witnessFormNum++
+                            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${injuryFormNum}-`)
+                            container.insertBefore(newForm, addWitnessButton)
+
+                            totalForms.setAttribute('value', `${injuryFormNum+1}`)
                         }
                     </script>
-              </div>
+                </div>
             </div>
         </div>
     </div>

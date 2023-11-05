@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse, Http404
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -7,7 +7,7 @@ from django.views.generic import ListView, TemplateView
 from django.urls import reverse_lazy
 
 from .forms import *
-#from .storage_backends import *
+# from .storage_backends import *
 
 from collections import defaultdict
 from datetime import datetime
@@ -16,6 +16,7 @@ from datetime import datetime
 # Home Page
 def home(request):
     return render(request, 'urec_app/home.html')
+
 
 # Edit User Account
 @login_required
@@ -31,9 +32,11 @@ def edit_account(request):
         args = {'form': form}
         return render(request, 'urec_app/edit_account.html', args)
 
+
 # Accident Ticket Page
 def accident(request):
     return render(request, 'urec_app/accident.html')
+
 
 # Create Accident View
 class CreateAccidentTicket(TemplateView):
@@ -42,15 +45,15 @@ class CreateAccidentTicket(TemplateView):
     def get(self, *args, **kwargs):
         '''if not self.request.user.is_authenticated:
             return redirect('http://127.0.0.1:8000/accounts/login')'''
-        formset = AccidentTicketInjury(queryset=Accident_Ticket_Injury.objects.none())
+        injury_formset = AccidentTicketInjury(queryset=Accident_Ticket_Injury.objects.none())
         accident_ticket = Accident_Ticket_Form()
         patient = Accident_Ticket_Contact_Patient_Form()
-        witness = Accident_Ticket_Contact_Witness_Form()
+        witness_formset = AccidentTicketWitnessContact(queryset=Accident_Ticket_Contact_Witness.objects.none())
         context = {
             'accident_ticket': accident_ticket,
-            'accident_ticket_injury_formset': formset,
+            'accident_ticket_injury_formset': injury_formset,
             'patient': patient,
-            'witness': witness,
+            'accident_ticket_witness_formset': witness_formset,
         }
         return self.render_to_response(context)
 
@@ -60,14 +63,15 @@ class CreateAccidentTicket(TemplateView):
         accident_ticket = Accident_Ticket_Form(data=self.request.POST)
         injury_type = AccidentTicketInjury(data=self.request.POST)
         patient = Accident_Ticket_Contact_Patient_Form(data=self.request.POST)
-        witness = Accident_Ticket_Contact_Witness_Form(data=self.request.POST)
+        witness = AccidentTicketWitnessContact(data=self.request.POST)
 
-        if accident_ticket.is_valid() and injury_type.is_valid() and patient.is_valid() and witness.is_valid():
+        all_good = (accident_ticket.is_valid(), injury_type.is_valid(), patient.is_valid(), witness.is_valid())
+
+        if False not in all_good:
             accident_instance = accident_ticket.save(commit=False)
             injury_instance = injury_type.save(commit=False)
             patient_instance = patient.save(commit=False)
-            witness_instance = witness.save(commit=False)
-            ##accident_ticket.instance.staff_netid = self.request.user
+            witness_instances = witness.save(commit=False)
             accident_instance.save()
             for i in injury_instance:
                 i.accident_ticket = accident_instance
@@ -75,14 +79,17 @@ class CreateAccidentTicket(TemplateView):
 
             patient_instance.accident_ticket = accident_instance
             patient_instance.save()
-            witness_instance.patient = patient_instance
-            witness_instance.accident_ticket = accident_instance
-            witness_instance.save()
+            for witness_instance in witness_instances:
+                witness_instance.patient = patient_instance
+                witness_instance.accident_ticket = accident_instance
+                witness_instance.save()
 
-            return render('urec_app/accident.html')
+            return redirect('accident')
 
-        return self.render_to_response({'accident-ticket-injury-formset': injury_type})
+        print(all_good)
 
+        return self.render_to_response({'accident-ticket-injury-formset': injury_type,
+                                        'accident_ticket_witness_formset': witness})
 
 
 # View all Accident Tickets
@@ -94,14 +101,16 @@ def view_accident_tickets(request):
     context = {'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': patient}
     return render(request, 'urec_app/view_accident_tickets.html', context)
 
+
 def edit_accident_id(request):
     if request.method == 'POST':
         var = request.POST['id']
         acc_id = Accident_Ticket.objects.filter(ticket_id=var)
         injury_type = Accident_Ticket_Injury.objects.filter(accident_ticket=acc_id[0])
         patient = Accident_Ticket_Contact_Patient.objects.filter(accident_ticket=acc_id[0])
-        context = {'var': var, 'acc_id': acc_id, 'injury_type': injury_type,'contact_info': patient}
-    return render(request,'urec_app/edit_accident_id.html', context)
+        context = {'var': var, 'acc_id': acc_id, 'injury_type': injury_type, 'contact_info': patient}
+    return render(request, 'urec_app/edit_accident_id.html', context)
+
 
 def delete_accident(request, accidentid):
     accident = Accident_Ticket.objects.get(ticket_id=accidentid)
@@ -111,27 +120,30 @@ def delete_accident(request, accidentid):
 
     return redirect('view_accident_tickets')
 
+
 # Incident Ticket Page
 ###@login_required
 def incident(request):
     return render(request, 'urec_app/incident.html')
 
+
 # Create Incident View
 class CreateIncidentTicket(TemplateView):
     template_name = "urec_app/create_incident_ticket.html"
+
     def get(self, *args, **kwargs):
         '''if not self.request.user.is_authenticated:
             return redirect('http://127.0.0.1:8000/accounts/login')'''
-        formset = IncidentTicketIncidentForm(queryset=Incident_Ticket_Incident.objects.none())
+        incident_formset = IncidentTicketIncidentForm(queryset=Incident_Ticket_Incident.objects.none())
         incident_ticket = Incident_Ticket_Form()
         patient_contact = Incident_Ticket_Contact_Patient_Form()
-        witness_contact = Incident_Ticket_Contact_Witness_Form()
+        witness_formset = IncidentTicketWitnessForm(queryset=Incident_Ticket_Contact_Witness.objects.none())
 
         context = {
             'incident_ticket': incident_ticket,
-            'incident_type_formset': formset,
+            'incident_type_formset': incident_formset,
             'patient_contact': patient_contact,
-            'witness_contact': witness_contact,
+            'incident_witness_formset': witness_formset,
         }
         return self.render_to_response(context)
 
@@ -141,7 +153,7 @@ class CreateIncidentTicket(TemplateView):
         incident_ticket = Incident_Ticket_Form(data=self.request.POST)
         incident_type = IncidentTicketIncidentForm(data=self.request.POST)
         patient_contact = Incident_Ticket_Contact_Patient_Form(data=self.request.POST)
-        witness_contact = Incident_Ticket_Contact_Witness_Form(data=self.request.POST)
+        witness_contact = IncidentTicketWitnessForm(data=self.request.POST)
 
         if incident_ticket.is_valid() and incident_type.is_valid() \
                 and patient_contact.is_valid() and witness_contact.is_valid():
@@ -149,8 +161,8 @@ class CreateIncidentTicket(TemplateView):
             ticket_instance = incident_ticket.save(commit=False)
             type_instance = incident_type.save(commit=False)
             patient_instance = patient_contact.save(commit=False)
-            witness_instance = witness_contact.save(commit=False)
-            #incident_ticket.instance.staff_netid = self.request.user
+            witness_instances = witness_contact.save(commit=False)
+            # incident_ticket.instance.staff_netid = self.request.user
             ticket_instance.save()
             for i in type_instance:
                 i.incident_ticket = ticket_instance
@@ -158,9 +170,11 @@ class CreateIncidentTicket(TemplateView):
 
             patient_instance.incident_ticket = ticket_instance
             patient_instance.save()
-            witness_instance.incident_ticket = ticket_instance
-            witness_instance.patient = patient_instance
-            witness_instance.save()
+
+            for witness_instance in witness_instances:
+                witness_instance.incident_ticket = ticket_instance
+                witness_instance.patient = patient_instance
+                witness_instance.save()
 
             return redirect('incident')
 
@@ -174,12 +188,13 @@ def view_incident_tickets(request):
     # patient = Incident_Ticket_Contact_Patient.objects.all()
     # witness = Incident_Ticket_Contact_Witness.objects.all()
 
-    context = {'incident_ticket': incident_ticket}# , 'incident_type': incident_type, 'patient': patient}
+    context = {'incident_ticket': incident_ticket}  # , 'incident_type': incident_type, 'patient': patient}
     return render(request, 'urec_app/view_incident_tickets.html', context)
 
+
 # View/Edit an individual Incident Tickets
-#@login_required
-#@staff_member_required
+# @login_required
+# @staff_member_required
 def view_incident_id(request):
     if request.method == 'POST':
         var = request.POST['id']
@@ -190,9 +205,10 @@ def view_incident_id(request):
         context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient': patient, 'witness': witness}
     return render(request, 'urec_app/view_incident_id.html', context)
 
+
 # Delete Incident Report
-#@login_required
-#@staff_member_required
+# @login_required
+# @staff_member_required
 def delete_incident(request, incidentid):
     incident = Incident_Ticket.objects.get(ticket_id=incidentid)
     if request.method == "POST":
@@ -201,9 +217,11 @@ def delete_incident(request, incidentid):
 
     return redirect('view_incident_tickets')
 
+
 # Counts Page@login_required
 def count(request):
     return render(request, 'urec_app/count.html')
+
 
 # Update Count in Facilities@login_required
 def count_update(request):
@@ -221,6 +239,7 @@ def count_update(request):
     context = {'count_form': count_form}
     return render(request, 'urec_app/count_update.html', context)
 
+
 # View All Count History@login_required@staff_member_required
 def count_view_history(request):
     count_item = Count.objects.all().order_by('-count_id').values()
@@ -228,7 +247,8 @@ def count_view_history(request):
 
     for facility, locations in UREC_LOCATIONS:
         for location_id, location_name in locations:
-            recent_count = Count.objects.filter(location_in_facility=location_id).order_by('-date_time_submission').first()
+            recent_count = Count.objects.filter(location_in_facility=location_id).order_by(
+                '-date_time_submission').first()
             recent_list.append(recent_count)
 
             # alternative way to append
@@ -240,6 +260,7 @@ def count_view_history(request):
     context = {'count_item': count_item, 'recent_list': recent_list}
     return render(request, 'urec_app/count_view_history.html', context)
 
+
 # Helper function for count_hourly()
 # TODO probably move somewhere else
 def convert_to_ampm(hour):
@@ -250,7 +271,8 @@ def convert_to_ampm(hour):
     elif hour < 12:
         return f"{hour}:00 AM"
     else:
-        return f"{hour-12}:00 PM"
+        return f"{hour - 12}:00 PM"
+
 
 # Helper function for count_hourly()
 # TODO probably move somewhere else
@@ -260,23 +282,23 @@ def sort_ampm_key(item):
     hour = int(hour_str) if hour_str != "12" else 0
     return (1 if meridiem == "PM" else 0, hour)
 
+
 def count_hourly(request):
     counts = Count.objects.all()
 
     # Filter counts based on today's date
-    #today = datetime.today().date()
-    #today_counts = [count for count in counts if count.date_time_submission.date() == today]
-    
+    # today = datetime.today().date()
+    # today_counts = [count for count in counts if count.date_time_submission.date() == today]
+
     # Filter counts based on datepicker
     # If 'date' is provided in GET params, parse it. Otherwise, use today's date.
     selected_date_str = request.GET.get('date', None)
     selected_date = datetime.today().date()
-    
+
     if selected_date_str:
         selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
     else:
         selected_date = datetime.today().date()
-
 
     today_counts = [count for count in counts if count.date_time_submission.date() == selected_date]
 
@@ -284,7 +306,7 @@ def count_hourly(request):
 
     # Initialize all hours in the dictionary
     for i in range(24):
-        #hourly_counts[i] = []
+        # hourly_counts[i] = []
         ampm_hour = convert_to_ampm(i)
         hourly_counts[ampm_hour] = []
 
@@ -298,7 +320,7 @@ def count_hourly(request):
     # Sorted counts by hour
     sorted_hourly_counts = dict(sorted(hourly_counts.items(), key=sort_ampm_key))
 
-    #context = {'hourly_counts': sorted_hourly_counts, 'today': today}
+    # context = {'hourly_counts': sorted_hourly_counts, 'today': today}
     context = {'hourly_counts': sorted_hourly_counts, 'selected_date': selected_date}
     return render(request, 'urec_app/count_hourly.html', context)
 
@@ -400,6 +422,7 @@ def view_erps(request):
 def task(request):
     return render(request, 'urec_app/task.html')
 
+
 # Create New Task@login_required@staff_member_required
 def create_task(request):
     if request.method == "POST":
@@ -414,12 +437,14 @@ def create_task(request):
     context = {'task_obj': task_obj}
     return render(request, 'urec_app/create_task.html', context)
 
+
 # View All Tasks@login_required@staff_member_required
 def all_tasks(request):
     task_item = Task.objects.all().order_by('-task_id').values()
 
     context = {'task_item': task_item}
     return render(request, 'urec_app/all_tasks.html', context)
+
 
 # View My Tasks@login_required
 def my_tasks(request):
@@ -430,13 +455,15 @@ def my_tasks(request):
     context = {'uncompleted': uncompleted_tasks, 'completed': completed_tasks}
     return render(request, 'urec_app/my_tasks.html', context)
 
+
 # View an Individual Task@login_required
 def view_task_id(request):
     if request.method == 'POST':
         var = request.POST['id']
         task_id = Task.objects.filter(task_id=var)
         context = {'var': var, 'task_id': task_id}
-    return render(request,'urec_app/task_id.html', context)
+    return render(request, 'urec_app/task_id.html', context)
+
 
 # View an Individual Task@login_required
 def view_my_task(request):
@@ -444,7 +471,8 @@ def view_my_task(request):
         var = request.POST['id']
         task_id = Task.objects.filter(task_id=var)
         context = {'var': var, 'task_id': task_id}
-    return render(request,'urec_app/view_my_task.html', context)
+    return render(request, 'urec_app/view_my_task.html', context)
+
 
 # Complete Task@login_required
 def complete_task(request, taskid):
@@ -457,6 +485,7 @@ def complete_task(request, taskid):
 
     return redirect('my_tasks')
 
+
 # Delete Task@login_required@staff_member_required
 def delete_task(request, taskid):
     task = Task.objects.get(task_id=taskid)
@@ -465,24 +494,18 @@ def delete_task(request, taskid):
         task.delete()
 
     return redirect('all_tasks')
+
+
 # Survey View (NOT YET IMPLEMENTED)
 @login_required
 def survey(request):
     return render(request, 'urec_app/survey.html')
 
 
-
-
-
-
 # SOP Page (NOT YET IMPLEMENTED)
 @login_required
 def sop(request):
     return render(request, 'urec_app/sop.html')
-
-
-
-
 
 
 # Form Page (NOT YET IMPLEMENTED)

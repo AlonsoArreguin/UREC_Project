@@ -46,11 +46,11 @@ class Accident_Ticket_Contact_Patient_Form(forms.ModelForm):
                   "home_phone_number", "street_address", "city", "state", "zip"]
 
 
-class Accident_Ticket_Contact_Witness_Form(forms.ModelForm):
-    class Meta:
-        model = Accident_Ticket_Contact_Witness
-        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
-                  "home_phone_number", "street_address", "city", "state", "zip"]
+AccidentTicketWitnessContact = modelformset_factory(
+    Accident_Ticket_Contact_Witness, fields=("first_name", "middle_name", "last_name", "email_address",
+                                             "personal_phone_number", "home_phone_number", "street_address",
+                                             "city", "state", "zip"), extra=1
+)
 
 
 class Incident_Ticket_Form(forms.ModelForm):
@@ -70,13 +70,11 @@ class Incident_Ticket_Contact_Patient_Form(forms.ModelForm):
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
 
-
-class Incident_Ticket_Contact_Witness_Form(forms.ModelForm):
-    class Meta:
-        model = Incident_Ticket_Contact_Witness
-        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
-                  "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
-
+IncidentTicketWitnessForm = modelformset_factory(
+    Incident_Ticket_Contact_Witness, fields=("first_name", "middle_name", "last_name", "email_address",
+                                             "personal_phone_number", "home_phone_number", "street_address", "city",
+                                             "state", "zip", "minor_status"), extra=1
+)
 
 class Task_Form(forms.ModelForm):
     model = get_user_model()
