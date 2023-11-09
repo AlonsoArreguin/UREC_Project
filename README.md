@@ -1,16 +1,28 @@
-# UREC_Project
-UREC Risk Management System.
-Build & Run:
-// create virtual environment & install dependencies
-python -m venv .
-env\Scripts\activate
-python -m pip install Django
-python -m pip install Pillow
+# UREC Project
 
-// run server
-python manage.py runserver
+UREC Risk Management System
 
-// when you are running the server for the first time you
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
+## Create virtual environment & install dependencies
+
+Ensure Python is installed on your system. Windows users are recommended to use Windows Terminal or an IDE.
+
+`python -m venv .venv`  
+
+Linux:  
+`. .venv/bin/activate`  
+Windows:  
+`. .venv\Scripts\activate`
+
+`python -m pip install --upgrade -r requirements.txt`
+
+## Create database *(before first run only)*
+
+`python manage.py migrate`
+
+## Create superuser *(recommended)*
+
+`python manage.py createsuperuser`
+
+## Run server
+
+`python manage.py runserver`
