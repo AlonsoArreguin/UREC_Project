@@ -21,6 +21,16 @@ nav, header {
     background: linear-gradient(90deg, var(--clr-primary-2) 0%, var(--clr-primary-1) 30%, var(--clr-primary-1) 70%, var(--clr-primary-2) 100%);
 }
 
+.home-bg {
+    position: absolute;
+    z-index: -1;
+    background-image: url('../images/Sanderson_exterior.jpg'); 
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: center;
+}
+
+
 /* Basic usage classes */
 
 .maroon-bg{
@@ -126,7 +136,7 @@ nav, header {
 }
 
 .nav-items-toggle ul {
-    margin-top: 3rem;
+    margin-top: 4rem;
 }
 
 .nav-items-toggle ul.dropdown-menu {
