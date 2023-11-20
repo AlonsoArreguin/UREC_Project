@@ -1,11 +1,2 @@
-asgiref==3.5.2
-backports.zoneinfo==0.2.1
-boto3==1.26.110
-Django==4.1.2
-django-storages==1.13.2
-mysql-connector-python==8.0.31
-mysqlclient==2.1.1
-protobuf==3.20.1
-python-dotenv==0.21.0
-sqlparse==0.4.3
-tzdata==2022.6
+Django
+pip
