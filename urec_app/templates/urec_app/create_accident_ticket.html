@@ -7,12 +7,12 @@
 
 {% block content %}
     <!-- <a href="{% url 'accident' %}">Return to Accident Home</a> -->
-    <div class=" container-fluid bg-tb-view">
+    <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
         <br/>
         <div class="col mx-auto">
-            <div class="card rounded-2 shadow border-0">
-                <h2 class="text-center maroon-bg">Create Accident Report</h2>
-                <div class="card-body p-5 bg-white rounded">
+            <div class="card card-glassmorph shadow border-0">
+                <h2 class="card-header text-center maroon-bg">Create Accident Report</h2>
+                <div class="card-body p-5">
                     <form method="POST" id="form-container">
                         <div class="row">
                             {% csrf_token %}

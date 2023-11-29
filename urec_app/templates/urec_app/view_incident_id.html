@@ -10,12 +10,12 @@
 {% block content %}
 
 <!-- <a href="{% url 'view_incident_tickets' %}">Return to Incident Reports</a> -->
-<div class="container-fluid bg-tb-view vh-100">
+<div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
     <br/>
     <div class="col mx-auto">
-        <div class="card rounded-2 shadow border-0 mb-3">
-            <h2 class="text-center maroon-bg">General Incident Information</h2>
-          <div class="card-body p-5 bg-white rounded">
+        <div class="card card-glassmorph border-0 mb-3">
+            <h2 class="card-header text-center maroon-bg">General Incident Information</h2>
+          <div class="card-body p-5">
             <a class="btn btn-secondary mb-4" href="{% url 'view_accident_tickets' %}">Return to Accident Reports</a>
             <div class="table-responsive">
                 <table class="table table-striped">
