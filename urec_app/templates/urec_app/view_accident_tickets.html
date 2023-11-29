@@ -38,11 +38,12 @@
                                 <td>{{ item.activity_causing_injury }}</td>
                                 <td>{{ item.staff_netid }}</td>
                                 <td><button type="submit" class="btn btn-secondary">Expand Report</button></td>
+                            </form>
                                 <td><form action="{% url 'delete_accident' accidentid=item.ticket_id %}" method="post">
                                         {% csrf_token %}
                                         <input class="btn btn-danger" type="submit" value="Delete" />
                                     </form></td>
-                            </form>
+                            
                         </tr>
                     </tbody>
                     {% endfor %}

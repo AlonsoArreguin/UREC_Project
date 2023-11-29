@@ -26,6 +26,7 @@
                                 <th>Activity during Incident</th>
                                 <th>Staff</th>
                                 <th>Options</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,12 +42,15 @@
                                 <td>{{ item.staff_netid }}</td>
                                 <td>
                                     <button type="submit" class="btn btn-secondary mx-3">Expand Report</button>
+                                </td>
+                                </form>
+                                <td>
                                     <form action="{% url 'delete_incident' incidentid=item.ticket_id %}" method="post">
                                         {% csrf_token %}
                                         <input class="btn btn-danger " type="submit" value="Delete" />
                                     </form>
                                 </td>
-                            </form>
+                            
                             
                             
                         </tr>
