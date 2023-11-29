@@ -38,17 +38,26 @@
                         <div class="row">
                             <br><h3 class="mt-5 mb-3 sub-maroon-bg">Incident Type Type</h3>
                             {{ incident_type_formset.management_form }}
-                            {% for form in incident_type_formset %}
-                                <div class="accident-ticket-injury-form" id="incident-form">
-                                    <div class="col-lg-10 col my-2">
-                                            {{ form }}
-                                    </div>
+                            <div class="accident-ticket-injury-form" id="incident-form">
+                                <div class="col-lg-10 col my-3">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Indicent Nature:</div>
+                                    <input type="text" name="form-0-incident_nature" maxlength="255" id="id_form-0-incident_nature" data-np-intersection-state="observed">
                                 </div>
-                            {% endfor %}
+    
+                                <div class="col-lg-10 col my-3">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Incident Description:</div>
+                                    <textarea class="col-md-5 col-10" name="form-0-incident_description" cols="30" rows="6" maxlength="1023" id="id_form-0-incident_description" data-np-intersection-state="observed"></textarea>
+                                </div>
+    
+                                <div class="col-lg-10 col my-3">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Action Taken:</div>
+                                    <textarea class="col-md-5 col-10" name="form-0-action_taken" cols="30" rows="6" maxlength="1023" id="id_form-0-action_taken" data-np-intersection-state="observed"></textarea>
+                                </div>
+                            </div>
                         </div>
                         <button class="btn btn-md btn-primary" id="addincident">Add Incident</button>
 
-                        
+                        <!-- Patient Info -->
                         <div class="row">
                             <br><h3 class="mt-5 mb-3 sub-maroon-bg">Patient Contact Information</h3>
                         {% for item in patient_contact %}
@@ -61,19 +70,39 @@
                         {% endfor %}
                         </div>
                         
+
+                        <!-- Witness Info -->
                         <div class="row">
-                            <br><h3 class="mt-5 mb-3 sub-maroon-bg">Witness Contact Information</h3>
+                            <br><h3 class="my-4 sub-maroon-bg">Witness Contact Information</h3>
 
                             {% for form in incident_witness_formset %}
-                                <div class="col-lg-4 col" id="witness-form">
-                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
-                                        {{ form.label }}:
-                                    </div>
-                                    {{ form.as_p }}
+                                <div class="row" id="witness-form">
+                                    {% for item in form %}
+                                        {% if item.is_hidden %}
+                                        <div class="col-lg-4 col">
+                                            <div class="me-3 my-2">
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                            <div class="col-lg-4 col">
+                                                <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                                    {{ item.label }}:
+                                                </div>
+                                                {{ item }}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
+                                    <!-- <div class="col-lg-4 col" id="witness-form">
+                                        <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                            {{ form.label }}:
+                                        </div>
+                                        {{ form.as_p }}
+                                    </div> -->
                             {% endfor %}
                         </div>
-
+                        
+                        <br/>
                         <input type="button" class="btn btn-lg btn-primary mt-2" id="addwitness" value="Add Witness Contact" />
 
                         <br/><br/>

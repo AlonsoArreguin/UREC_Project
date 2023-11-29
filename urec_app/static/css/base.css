@@ -12,7 +12,7 @@
     --clr-primary-2: hsl(347, 61%, 12%);
     --clr-grey-1: rgb(117, 120, 123);
     --clr-grey-2: rgb(193, 198, 200);
-    --clr-white: hsl(0, 0%, 100%);
+    --clr-white: rgb(255, 255, 255);
 }
 
 

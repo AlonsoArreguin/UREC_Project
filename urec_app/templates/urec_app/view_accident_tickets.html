@@ -22,7 +22,8 @@
                             <th>Location in Facility</th>
                             <th>Activity during Accident</th>
                             <th>Staff</th>
-                            <th> Options </th>
+                            <th> View </th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,10 +37,10 @@
                                 <td>{{ item.location_in_facility }}</td>
                                 <td>{{ item.activity_causing_injury }}</td>
                                 <td>{{ item.staff_netid }}</td>
-                                <td><button type="submit" class="btn btn-secondary mx-3">Expand Report</button>
-                                    <form action="{% url 'delete_accident' accidentid=item.ticket_id %}" method="post">
+                                <td><button type="submit" class="btn btn-secondary">Expand Report</button></td>
+                                <td><form action="{% url 'delete_accident' accidentid=item.ticket_id %}" method="post">
                                         {% csrf_token %}
-                                        <input class="btn btn-danger " type="submit" value="Delete" />
+                                        <input class="btn btn-danger" type="submit" value="Delete" />
                                     </form></td>
                             </form>
                         </tr>

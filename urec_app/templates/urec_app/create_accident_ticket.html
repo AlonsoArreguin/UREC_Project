@@ -29,41 +29,84 @@
                         <div class="row">
                             <br><h3 class="mt-5 mb-3 sub-maroon-bg">Injury Type</h3>
                             {{ accident_ticket_injury_formset.management_form }}
-                            {% for form in accident_ticket_injury_formset %}
-                                <div class="accident-ticket-injury-form" id="injury-form">
-                                    <div class="col-lg-10 col my-2">
-                                            {{ form }}      
-                                    </div>
+                            <div class="accident-ticket-injury-form" id="injury-form">
+
+                                <div class="col-lg-10 col my-2">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Injury Type:</div>
+                                    <input type="text" name="form-0-injury_type" maxlength="255" id="id_form-0-injury_type" data-np-intersection-state="observed">
                                 </div>
-                            {% endfor %}
+
+                                    
+                                <div class="col-lg-10 col my-3">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Injury Description:</div>
+                                    <textarea class="col-md-5 col-10" name="form-0-injury_description" cols="30" rows="6" maxlength="1023" id="id_form-0-injury_description" data-np-intersection-state="observed"></textarea>
+                                </div>
+
+                                
+                                <div class="col-lg-10 col my-3">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Care Provided:</div>
+                                    <textarea class="col-md-5 col-10" name="form-0-care_provided" cols="30" rows="6" maxlength="1023" id="id_form-0-care_provided" data-np-intersection-state="observed"></textarea>
+                                </div>
+                                
+                            </div>
+                            <!-- {% for form in accident_ticket_injury_formset %}
+                                {% for item in form %}
+                                    
+                                        <div class="col-lg-10 col my-2">
+                                                <p>{{ item.label }}: {{item}}  </p>    
+                                        </div>
+                                    
+                                {% endfor %}
+                                </div>
+                            {% endfor %} -->
                         </div>
                         <button type="button" class="btn btn-md btn-primary" id="addinjury">Add Injury</button>
                         
+                        <!-- Patient Info -->
                         <div class="row">
                             <br><h3 class="my-4 sub-maroon-bg">Patient Contact Information</h3>
-                        {% for item in patient %}
-                            <div class="col-lg-4 col">
-                                <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
-                                    {{ item.label }}:
+                            <div class="row">
+                                {% for item in patient %}
+                                <div class="col-lg-4 col">
+                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                        {{ item.label }}:
+                                    </div>
+                                    {{ item }}
                                 </div>
-                                {{ item }}
+                                {% endfor %}
                             </div>
-                        {% endfor %}
+                        
                         </div>
                         
+
+                        <!-- Witness Info -->
                         <div class="row">
                             <br><h3 class="my-4 sub-maroon-bg">Witness Contact Information</h3>
 
                             {% for form in accident_ticket_witness_formset %}
-                                <div class="col-lg-4 col" id="witness-form">
-                                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
-                                        {{ form.label }}:
+                            <div class="row" id="witness-form">
+                                {% for item in form %}
+                                    {% if item.is_hidden %}
+                                    <div class="col-lg-4 col">
+                                        <div class="me-3 my-2">
+                                        </div>
                                     </div>
-                                    {{ form.as_p }}
-                                </div>
+                                    {% else %}
+                                        <div class="col-lg-4 col">
+                                            <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
+                                                {{ item.label }}:
+                                            </div>
+                                            {{ item }}
+                                        </div>
+                                    {% endif %}
+                                    
+                                {% endfor %}
+                            </div>
+                                
                             {% endfor %}
                         </div>
                         
+                        <br/>
                         <input type="button" class="btn btn-lg btn-primary mt-2" id="addwitness" value="Add Witness Contact" />
                     
                         <br/><br/>
