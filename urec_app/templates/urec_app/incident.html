@@ -6,9 +6,20 @@
 {% endblock title%}
 
 {% block content %}
-
-
-    <h1>Incident Home Page</h1>
-    <a href="{% url 'create_incident_ticket' %}"><button>Create New Incident Report</button></a>
-    <a href="{% url 'view_incident_tickets' %}"><button>View Incident Reports</button></a>
+<div class="">
+    <div class="container-fluid h-100 d-flex justify-content-center home-bg">
+        <div class="vh-100">
+            <div class="row pt-5">
+                <div class="col p-2 text-black text-center">
+                    <h1 class="pb-4">Incident Home Page</h1>
+                    <a href="{% url 'create_incident_ticket' %}"><button class="basic-nav-btn m-2">Create New Incident Report</button></a>
+                    <a href="{% url 'view_incident_tickets' %}"><button class="basic-nav-btn m-2">View Incident Reports</button></a>                
+                    <!---<a href="{% url 'form' %}"><button>Form</button></a>--->
+                    <!---<a href="{% url 'sop' %}"><button>SOPs</button></a>--->
+                    <!---<a href="{% url 'survey' %}"><button>Survey</button></a>--->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

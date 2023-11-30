@@ -8,15 +8,20 @@
 {% block content %}
     <!-- <a href="{% url 'task' %}">Return to Task Home</a> -->
 
-    <div class="container">
-        <form method="POST">
-            <fieldset>
-                <legend>Add Task</legend>
-                {% csrf_token %}
-                {{ task_obj.media }}
-                {{ task_obj.as_p }}
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </fieldset>
-        </form>
+    <div class=" container-fluid py-3 min-vh-100 d-flex bg-tb-view">
+        <br/>
+        <div class="col mx-auto overflow-hidden">
+            <div class="card card-glassmorph border-0 mb-3">
+                <h2 class="card-header text-center maroon-bg">Create Task</h2>
+                <div class="card-body p-5">
+                    <form method="POST" id="form-container">
+                        {% csrf_token %}
+                        {{ task_obj.media }}
+                        {{ task_obj.as_p }}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock content %}

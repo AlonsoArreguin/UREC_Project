@@ -7,52 +7,61 @@
 
 
 {% block content %}
-<div class="container-fluid bg-tb-view ">
-    <div class="col-lg-8 mx-auto ">
-        <div class="card rounded shadow border-0">
-            <div class="card-body p-5 bg-white rounded">
-                <div class="table-responsive">
-                    <h3>All Task History</h3>
-    <table class="table table-striped">
-        <tr>
-            <form action="{% url 'edit_accident_id' %}" method="POST"></form>
-            <th>Task ID</th>
-            <th>Task Name</th>
-            <th>Task Description</th>
-            <th>Assigned To</th>
-            <th>Text Input Required</th>
-            <th>Optional Text</th>
-            <th>Task Complete?</th>
-            <th>Date/Time Due</th>
-            <th>Date/Time Completion</th>
-        </tr>
-        {% for item in task_item %}
-        <tr>
-            <form action="{% url 'view_task_id' %}" method="POST">
-                {% csrf_token %}
-                <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
-                <td>{{ item.task_name }}</td>
-                <td>{{ item.task_description }}</td>
-                <td>{{ item.staff_netid }}</td>
-                <td>{{ item.text_input_required }}</td>
-                <td>{{ item.optional_text }}</td>
-                <td>{{ item.task_completion }}</td>
-                <td>{{ item.date_time_due }}</td>
-                <td>{{ item.date_time_completion }}</td>
-                <td><button type="submit">Expand Task</button></td>
-            </form>
-            <form action="{% url 'delete_task' taskid=item.task_id %}" method="post">
-                {% csrf_token %}
-                <td><input type="submit" value="Delete" /></td>
-            </form>
-        </tr>
-        {% endfor %}
-    </table>
-                </div>
+
+    <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
+    <br/>
+    <div class="col mx-auto overflow-hidden">
+        <div class="card card-glassmorph border-0 mb-3">
+            <h2 class="card-header text-center maroon-bg">All Tasks</h2>
+          <div class="card-body p-5">
+            <div class="table-responsive">
+                <table id="" class="table table-striped" cellspacing="0" width="100%">
+
+                    <tr>
+                        <form action="{% url 'edit_accident_id' %}" method="POST"></form>
+                        <th>Task ID</th>
+                        <th>Task Name</th>
+                        <th>Task Description</th>
+                        <th>Assigned To</th>
+                        <th>Text Input Required</th>
+                        <th>Optional Text</th>
+                        <th>Task Complete?</th>
+                        <th>Date/Time Due</th>
+                        <th>Date/Time Completion</th>
+                        <th>Options</th>
+                        <th></th>
+                    </tr>
+                    {% for item in task_item %}
+                    <tr>
+                        <form action="{% url 'view_task_id' %}" method="POST">
+                            {% csrf_token %}
+                            <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
+                            <td>{{ item.task_name }}</td>
+                            <td>{{ item.task_description }}</td>
+                            <td>{{ item.staff_netid }}</td>
+                            <td>{{ item.text_input_required }}</td>
+                            <td>{{ item.optional_text }}</td>
+                            <td>{{ item.task_completion }}</td>
+                            <td>{{ item.date_time_due }}</td>
+                            <td>{{ item.date_time_completion }}</td>
+                            <td><button class="btn btn-secondary" type="submit">Expand Task</button></td>
+                        </form>
+                        <form action="{% url 'delete_task' taskid=item.task_id %}" method="post">
+                            {% csrf_token %}
+                            <td><input class="btn btn-danger" type="submit" value="Delete" /></td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+
+                </table>
             </div>
+          </div>
         </div>
     </div>
 </div>
+
+
+
 
         <!-- <a href="{% url 'task' %}">Return to Task Home</a> -->
 

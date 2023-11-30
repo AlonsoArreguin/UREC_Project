@@ -8,36 +8,51 @@
 {% block content %}
 
     <!-- <a href="{% url 'erp' %}">Return to ERP Home</a> -->
+    <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
+      <br/>
+      <div class="col mx-auto overflow-hidden">
+          <div class="card card-glassmorph border-0 mb-3">
+              <h2 class="text-center maroon-bg">All ERPs</h2>
+            <div class="card-body p-5">
+              <div class="table-responsive">
+                  <table class="table table-striped">
+                  <tr>
+                    <th>Title</th>
+                    <th>File Name</th>
+                    <th>Description</th>
+                    <th>Upload Time</th>
+                    <th>Options</th>
+                    <th></th>
+                  </tr>
+                  {% for erp in Erps %}
+                  <tr>
+                      <form action="{% url 'download_erp' filename=erp.filename %}" method="post">
+                        {% csrf_token %}
+                        <td>{{ erp.title }}</td>
+                        <td>{{ erp.filename }}</td>
+                        <td>{{ erp.description }}</td>
+                        <td>{{ erp.uploaded_at }}</td>
+                        <td><input class="btn btn-dark" type="submit" value="Download" /></td>
+                      </form>
+                    {% if user.is_staff %}
+                    <td>
+                      <form action="{% url 'delete_erp' filename=erp.filename %}" method="post">
+                        {% csrf_token %}
+                        <input class="btn btn-danger" type="submit" value="Delete" />
+                      </form>
+                    </td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                </table>
+                </div>
+                
+              </div>
+          </div>
+      </div>
+    </div>
 
-    <h2>All ERPs</h2>
-    <table class="table table-striped">
-      <tr>
-        <th>Title</th>
-        <th>File Name</th>
-        <th>Description</th>
-        <th>Upload Time</th>
-      </tr>
-      {% for erp in Erps %}
-      <tr>
-          <form action="{% url 'download_erp' filename=erp.filename %}" method="post">
-            {% csrf_token %}
-            <td>{{ erp.title }}</td>
-            <td>{{ erp.filename }}</td>
-            <td>{{ erp.description }}</td>
-            <td>{{ erp.uploaded_at }}</td>
-            <td><input type="submit" value="Download" /></td>
-          </form>
-        {% if user.is_staff %}
-        <td>
-          <form action="{% url 'delete_erp' filename=erp.filename %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Delete" />
-          </form>
-        </td>
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </table>
+    
 
     <!--
     <ul>

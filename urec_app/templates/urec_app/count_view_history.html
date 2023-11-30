@@ -7,15 +7,15 @@
 
 {% block content %}
     <!-- <a href="{% url 'count' %}">Return to Counts Home</a> -->
-<div class="container-fluid bg-tb-view">
+<div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
     <br/>
     <div class="col mx-auto overflow-hidden">
-        <div class="card rounded-2 shadow border-0 mb-3">
+        <div class="card card-glassmorph border-0 mb-3">
             <h2 class="text-center maroon-bg">Count History</h2>
-          <div class="card-body p-5 bg-white rounded">
+          <div class="card-body p-5">
             <div class="">
                 <h3>Most Recent Counts by Location</h3>
-                <table id="recent_counts" class="display" cellspacing="0" width="100%">
+                <table id="recent_counts" class="display" width="100%">
                     <thead>
                         <tr>
                             <th>Location Name</th>

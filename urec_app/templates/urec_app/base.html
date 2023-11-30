@@ -21,114 +21,117 @@ also stores links for all pages -->
     <title>{% block title %} {% endblock title %}</title>
 </head>
 
-<body>
-  <header>
-    <div class="container-fluid d-flex">
-      <img class="urec-logo ms-lg-5" src="{% static 'images/HORIZONTAL_WEB_white.svg' %}" />
-      
-      <div class="list-unstyled container-fluid d-grid d-lg-flex justify-content-end mt-2">
-        <a class="nav-toggle">
-          <i onclick="changeIcon(this)" class="fas fa-bars fa-lg"></i>
-        </a>
-        <div class="ua-hidden-items">
-          {% if user.is_authenticated %}
-          <li class="action-toggle me-2 mb-2"><a href="{% url 'edit' %}" class="nav-link text-light text-nowrap" >My Account</a></li>
-
-          {% if user.is_staff %}
-            <li class="action-toggle ms-3 mb-2"><a href="{% url 'admin:index' %}" class="nav-link text-light" >Admin</a></li>
-          {% endif %}
-
-          <li class="action-toggle ms-3 mb-2 me-3"><a href="{% url 'logout' %}" class="nav-link text-light" >Logout</a></li>
-        {% else %}
-
-          <li class="action-toggle float- ms-4"><a href="{% url 'login' %}" class="nav-link text-light mx-2" >Login</a></li>
-        {% endif %}
-        </div>
+  <body>
+    <header>
+      <div class="container-fluid d-flex">
+        <img class="urec-logo ms-lg-5" src="{% static 'images/HORIZONTAL_WEB_white.svg' %}" />
         
-      </div>
-    </div>
-  </header>
+        <div class="list-unstyled container-fluid d-grid d-lg-flex justify-content-end mt-2">
+          <a class="nav-toggle">
+            <i onclick="changeIcon(this)" class="fas fa-bars fa-lg"></i>
+          </a>
+          <div class="ua-hidden-items">
+            {% if user.is_authenticated %}
+            <li class="action-toggle me-2 mb-2"><a href="{% url 'edit' %}" class="nav-link text-light text-nowrap" >My Account</a></li>
 
-  <!-- mobile view is toggled with css based on view size -->
-  <div class="maroon-line" ></div>
-    <nav class="navbar navbar-expand-md nav-items-toggle">
-        <div class="container-fluid d-block d-md-flex justify-content-md-center">
-          <ul class="navbar-nav mb-1 mb-lg-0">
-            <li  class="nav-item mx-2 mx-md-3 active">
-              <a class="nav-link text-light maroon-button" href="{% url 'home' %}">Home</a>
-            </li>
-      
-            <li class="nav-item mx-2 mx-md-3 dropdown">
-              <a class="nav-link maroon-button dropdown-toggle" href="#"role="button" data-bs-toggle="dropdown" aria-expanded="false">Accident</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'create_accident_ticket' %}">Create New Accident Report</a></li>
-                  <li><a class="dropdown-item" href="{% url 'view_accident_tickets' %}">View Accident Reports</a></li>
-                </ul>
-            </li>
+            {% if user.is_staff %}
+              <li class="action-toggle ms-3 mb-2"><a href="{% url 'admin:index' %}" class="nav-link text-light" >Admin</a></li>
+            {% endif %}
 
-            <li class="nav-item mx-2 mx-md-3 dropdown">
-              <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Incident</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'create_incident_ticket' %}">Create New Incident Report</a></li>
-                  <li><a class="dropdown-item" href="{% url 'view_incident_tickets' %}">View Incident Reports</a></li>
-                </ul>
-            </li>
+            <li class="action-toggle ms-3 mb-2 me-3"><a href="{% url 'logout' %}" class="nav-link text-light" >Logout</a></li>
+          {% else %}
 
-            <li class="nav-item mx-2 mx-md-3 dropdown">
-              <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Counts</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'count_update' %}">Update Count</a></li>
-                  <li><a class="dropdown-item" href="{% url 'count_view_history' %}">View Count History</a></li>
-                  <li><a class="dropdown-item" href="{% url 'count_hourly' %}">View Hourly Count</a></li>
-                </ul>
-            </li>
-
-            <li class="nav-item mx-2 mx-md-3 dropdown">
-              <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tasks</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'create_task' %}">Create New Task</a></li>
-                  <li><a class="dropdown-item" href="{% url 'all_tasks' %}">All Task History</a></li>
-                  <li><a class="dropdown-item" href="{% url 'my_tasks' %}">My Tasks</a></li>
-                </ul>
-            </li>
-
-            <li class="nav-item mx-2 mx-md-3 dropdown">
-              <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">ERP</a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'create_erp' %}">Create ERP</a></li>
-                  <li><a class="dropdown-item" href="{% url 'view_erps' %}">View ERP's</a></li>
-                </ul>
-            </li>
-
-            <div class="nav-user-toggle">
-              {% if user.is_authenticated %}
-                <li  class="mx-2 mx-md-4">
-                  <a class="nav-link text-light maroon-button" href="{% url 'edit' %}">My Account</a>
-                </li>
-              {% if user.is_staff %}
-                <li  class="mx-2 mx-md-4">
-                  <a class="nav-link text-light maroon-button" href="{% url 'admin:index' %}">Admin</a>
-                </li>
-              {% endif %}
-                <li  class="mx-2 mx-md-4">
-                  <a class="nav-link text-light maroon-button" href="{% url 'logout' %}">Logout</a>
-                </li>
-              {% else %}
-                <li  class="mx-2 mx-md-4">
-                  <a class="nav-link text-light maroon-button" href="{% url 'login' %}">Login</a>
-                </li>
-              {% endif %}
-            </div>
-            
-            
-          </ul> 
+            <li class="action-toggle float- ms-4"><a href="{% url 'login' %}" class="nav-link text-light mx-2" >Login</a></li>
+          {% endif %}
+          </div>
+          
         </div>
-      </nav>
+      </div>
+    </header>
+
+    <!-- mobile view is toggled with css based on view size -->
+    <div class="maroon-line" ></div>
+      <nav class="navbar navbar-expand-md nav-items-toggle">
+          <div class="container-fluid d-block d-md-flex justify-content-md-center">
+            <ul class="navbar-nav mb-1 mb-lg-0">
+              <li  class="nav-item mx-2 mx-md-3 active">
+                <a class="nav-link text-light maroon-button" href="{% url 'home' %}">Home</a>
+              </li>
+        
+              <li class="nav-item mx-2 mx-md-3 dropdown">
+                <a class="nav-link maroon-button dropdown-toggle" href="#"role="button" data-bs-toggle="dropdown" aria-expanded="false">Accident</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'create_accident_ticket' %}">Create New Accident Report</a></li>
+                    <li><a class="dropdown-item" href="{% url 'view_accident_tickets' %}">View Accident Reports</a></li>
+                  </ul>
+              </li>
+
+              <li class="nav-item mx-2 mx-md-3 dropdown">
+                <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Incident</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'create_incident_ticket' %}">Create New Incident Report</a></li>
+                    <li><a class="dropdown-item" href="{% url 'view_incident_tickets' %}">View Incident Reports</a></li>
+                  </ul>
+              </li>
+
+              <li class="nav-item mx-2 mx-md-3 dropdown">
+                <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Counts</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'count_update' %}">Update Count</a></li>
+                    <li><a class="dropdown-item" href="{% url 'count_view_history' %}">View Count History</a></li>
+                    <li><a class="dropdown-item" href="{% url 'count_hourly' %}">View Hourly Count</a></li>
+                  </ul>
+              </li>
+
+              <li class="nav-item mx-2 mx-md-3 dropdown">
+                <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tasks</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'create_task' %}">Create New Task</a></li>
+                    <li><a class="dropdown-item" href="{% url 'all_tasks' %}">All Task History</a></li>
+                    <li><a class="dropdown-item" href="{% url 'my_tasks' %}">My Tasks</a></li>
+                  </ul>
+              </li>
+
+              <li class="nav-item mx-2 mx-md-3 dropdown">
+                <a class="nav-link maroon-button dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">ERP</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'create_erp' %}">Create ERP</a></li>
+                    <li><a class="dropdown-item" href="{% url 'view_erps' %}">View ERP's</a></li>
+                  </ul>
+              </li>
+
+              <div class="nav-user-toggle">
+                {% if user.is_authenticated %}
+                  <li  class="mx-2 mx-md-4">
+                    <a class="nav-link text-light maroon-button" href="{% url 'edit' %}">My Account</a>
+                  </li>
+                {% if user.is_staff %}
+                  <li  class="mx-2 mx-md-4">
+                    <a class="nav-link text-light maroon-button" href="{% url 'admin:index' %}">Admin</a>
+                  </li>
+                {% endif %}
+                  <li  class="mx-2 mx-md-4">
+                    <a class="nav-link text-light maroon-button" href="{% url 'logout' %}">Logout</a>
+                  </li>
+                {% else %}
+                  <li  class="mx-2 mx-md-4">
+                    <a class="nav-link text-light maroon-button" href="{% url 'login' %}">Login</a>
+                  </li>
+                {% endif %}
+              </div>
+              
+              
+            </ul> 
+          </div>
+        </nav>
 
 
-    {% block content %}   
-    {% endblock content %}
+          {% block content %}   
+        {% endblock content %}
 
-    <script src="{% static 'js/base.js' %}"></script>
-</body>
+          
+
+
+      <script src="{% static 'js/base.js' %}"></script>
+  </body>
 </html>

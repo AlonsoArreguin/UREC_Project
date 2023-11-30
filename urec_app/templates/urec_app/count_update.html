@@ -8,15 +8,59 @@
 {% block content %}
     <!-- <a href="{% url 'count' %}">Return to Counts Home</a> -->
 
-    <div class=" container-fluid bg-tb-view vh-100">
+    <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
         <br/>
         <div class="col mx-auto">
-            <div class="card rounded-2 shadow border-0">
-                <h2 class="text-center maroon-bg">Update Count</h2>
-                <div class="card-body p-5 bg-white rounded">
+            <div class="card card-glassmorph border-0">
+                <h2 class="card-header text-center maroon-bg">Update Count</h2>
+                <div class="card-body p-5">
                     <form method="POST">
                         {% csrf_token %}
+                    
                         {{ count_form.as_p }}
+                         <!--<div class="row">
+                                
+                            <div class="col-12">
+                                Location in Facility:
+                                <select name="location_in_facility" required id="id_location_in_facility">
+                                    <option value="" selected="">---------</option>
+                                
+                                    <optgroup label="Facility 1">
+                                    <option value="Location 1">Location 1</option>
+                                
+                                    <option value="Location 2">Location 2</option>
+                                
+                                    <option value="Location 3">Location 3</option>
+                                
+                                    </optgroup>
+                                    <optgroup label="Facility 2">
+                                    <option value="Location 4">Location 4</option>
+                                
+                                    <option value="Location 5">Location 5</option>
+                                
+                                    <option value="Location 6">Location 6</option>
+                                
+                                    </optgroup>
+                                    <optgroup label="Facility 3">
+                                    <option value="Location 7">Location 7</option>
+                                
+                                    <option value="Location 8">Location 8</option>
+                                
+                                    <option value="Location 9">Location 9</option>
+                                
+                                    </optgroup>
+                                </select>
+                            </div>
+                            
+
+                            <div class="col-12 my-3">
+                                Location Count:
+                              <input class="col-sm-4 col-8" type="number" name="location_count" id="id_location_count">  
+                            </div>
+                            
+                        </div> -->
+                        
+
                             <!---<input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />--->
                             <button type="submit" class="btn btn-primary">Submit</button>
                         
