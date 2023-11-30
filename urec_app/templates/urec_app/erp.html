@@ -7,8 +7,24 @@
 
 {% block content %}
 
-    <h1>Emergency Response Protocols</h1>
+<div class="">
+    <div class="container-fluid h-100 d-flex justify-content-center home-bg">
+        <div class="vh-100">
+            <div class="row pt-5">
+                <div class="col p-2 text-black text-center">
+                    <h1 class="pb-4">Emergency Response Protocols Home Page</h1>
+                    <a href="{% url 'create_erp' %}"><button class="basic-nav-btn m-2">Create ERP</button></a>
+                    <a href="{% url 'view_erps' %}"><button class="basic-nav-btn m-2">View ERPs</button></a>              
+                    <!---<a href="{% url 'form' %}"><button>Form</button></a>--->
+                    <!---<a href="{% url 'sop' %}"><button>SOPs</button></a>--->
+                    <!---<a href="{% url 'survey' %}"><button>Survey</button></a>--->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- <h1>Emergency Response Protocols</h1>
     <a href="{% url 'create_erp' %}"><button>Create ERP</button></a>
-    <a href="{% url 'view_erps' %}"><button>View ERPs</button></a>
+    <a href="{% url 'view_erps' %}"><button>View ERPs</button></a> -->
 
 {% endblock content %}

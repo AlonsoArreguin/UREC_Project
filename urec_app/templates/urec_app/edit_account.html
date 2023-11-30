@@ -7,8 +7,66 @@
 
 {% block content %}
 
+<div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
+    <br/>
+    <div class="col mx-auto overflow-hidden">
+        <div class="card card-glassmorph border-0 mb-3">
+            <h2 class="card-header text-center maroon-bg">Edit Account</h2>
+            <div class="card-body p-5">
+              <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-lg-10 col-11 my-2">
+                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.email.label}}:</div>
+                  {{form.email}}
+                </div>
+              </div>
 
-    <div class="container">
+              <div class="row">
+                <div class="col-lg-10 col-11 my-2">
+                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.username.label}}:</div>
+                  {{form.username}}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-10 col-11 my-2">
+                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.first_name.label}}:</div>
+                  {{form.first_name}}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-10 col-11 my-2">
+                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.last_name.label}}:</div>
+                  {{form.last_name}}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-10 col-11 my-2">
+                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.phone_number.label}}:</div>
+                  {{form.phone_number}}
+                </div>
+              </div>
+
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p style="color: red"> {{error}} </p>
+                    {% endfor %}
+                {% endfor %}
+
+                <p><a href="{% url 'password_change' %}">Change Password</a></p>
+              
+              <!-- {{ erp_obj.as_p }} {{ erp_file.as_p }} -->
+              <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+        </div>
+    </div>
+  </div>
+
+    <!-- <div class="container">
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
@@ -16,6 +74,6 @@
         </form>
         <br>
     </div>
-    <p><a href="{% url 'password_change' %}">Change Password</a></p>
+    <p><a href="{% url 'password_change' %}">Change Password</a></p> -->
 
 {% endblock content %}
