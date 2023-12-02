@@ -50,6 +50,14 @@ nav, header {
     color: white;
 }
 
+.sub-maroon-bg-count{
+    background-color: rgb(94, 23, 38);
+    padding: 5px;
+    max-width: fit-content;
+    border-radius: 5px;
+    color: white;
+}
+
 .text-bg-maroon-light{
     background-color: rgba(94, 23, 38, 0.2);
 }
@@ -154,7 +162,7 @@ nav, header {
 }
 
 .nav-items-toggle ul {
-    margin-top: 4rem;
+    margin-top: 3rem;
 }
 
 .nav-items-toggle ul.dropdown-menu {
@@ -162,7 +170,7 @@ nav, header {
 }
 
 .nav-items-toggle ul li a.maroon-button{
-    font-size: xx-large;
+    font-size: x-large;
     margin: 5px;
     color: var(--clr-white);
 }
@@ -213,7 +221,7 @@ nav, header {
 
 .dropdown-item{
     color: var(--clr-white);
-    font-size: larger;
+    font-size: large;
     background-color: rgba( 120, 120, 120, .6);
     border-radius: 20px;
     margin: 5px 0 5px 0;

@@ -13,10 +13,23 @@
         <div class="col col-md-8 col">
           <div class="card" style="border-radius: 1rem;">
             <h2 class="text-center maroon-bg" style="border-radius: .25rem .25rem 0 0;">Please login to access UREC Risk Management System.</h2>
-            <div class="card-body p-1 p-sm-4 text-black">
+            <div class="card-body text-black">
               <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
-                <table>
+                <div class="row">
+                  <div class="col-lg-10 col-11 my-2">
+                      <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.username.label_tag}}</div>
+                      <input class="col-lg-4 col-8 m-1" type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-10 col-11 my-2">
+                      <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.password.label_tag}}</div>
+                      <input class="col-lg-4 col-8 m-1" type="password" name="password" autocomplete="current-password" required="" id="id_password">
+                  </div>
+                </div>
+                <!-- <table>
                   <tr>
                     <td class="p-md-2 p-0" style="font-size: large; font-weight: bold;">{{ form.username.label_tag }}</td>
                     <td class="pe-md-0 pe-2">{{ form.username }}</td>
@@ -25,7 +38,7 @@
                     <td class="p-md-2 p-0" style="font-size: large; font-weight: bold;">{{ form.password.label_tag }}</td>
                     <td class="w-auto">{{ form.password }}</td>
                   </tr>
-                </table>
+                </table> -->
                 {% if form.errors %}
                   <p style="font-size: medium; color: red;"> Incorrect Username or Password.</p>
                 {% endif %}

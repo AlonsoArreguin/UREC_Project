@@ -13,19 +13,21 @@
 
     <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
         <br/>
-        <div class="col mx-auto">
+        <div class="col mx-auto overflow-hidden">
             <div class="card card-glassmorph border-0">
                 <h2 class="text-center maroon-bg">View Hourly Count</h2>
                 <div class="card-body p-5">
-
-                    <a href="{% url 'count' %}">Return to Counts Home</a>
 
                     <h3>Hourly Counts</h3>
 
                     <p>Choose date:</p>
 
-
-                    <input type="text" id="datepicker"> 
+                    <div class="row">
+                        <div class="col-5">
+                            <input class="col-sm-6 col-9" type="text" id="datepicker"> 
+                        </div>
+                    </div>
+                    
                     
                     <script>
                         $( function() {
@@ -49,7 +51,31 @@
                     <!-- End Date picking functionality -->
 
                     <p> Selected Date: {{ selected_date }} <p>
-
+                    {% for hour, counts_in_hour in hourly_counts.items %}
+                    <h3 class="mb-1 mt-4 sub-maroon-bg-count">{{hour}}</h3>
+                        <div class="table-responsive">
+                            <!-- Table structure -->
+                            <table class="table table-striped" cellspacing="0" width="100%">
+                                <tr>
+                                    <th>Location</th>
+                                    <th>Count</th>
+                                    <th>Count ID</th>
+                                    <th>Timestamp</th>
+                                    <th>Staff</th>
+                                    
+                                </tr>
+                                {% for count in counts_in_hour %}
+                                    <tr>
+                                        <td>{{ count.location_in_facility }}</td>
+                                        <td>{{ count.location_count }}</td>
+                                        <td>{{ count.count_id }}</td>
+                                        <td>{{ count.date_time_submission }}</td>
+                                        <td>{{ count.staff_netid }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
