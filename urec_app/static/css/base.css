@@ -153,6 +153,7 @@ nav, header {
     display: block;
     position: fixed;
     /* width: 100vw; */
+    overflow: scroll;
     height: 100vh;
     bottom: 100%;
     left: 0;
@@ -261,6 +262,7 @@ classes below @media function will be used instead of above*/
         display: flex;
         position: relative;
         /* width: 100vw; */
+        overflow: visible;
         height: 3rem;
         left: 0;
         right: 0;
