@@ -52,7 +52,7 @@ class AccidentTicket(models.Model):
     activity_causing_injury = models.CharField(max_length=255)
     injury_type = models.CharField(max_length=255)
     injury_description = models.CharField(max_length=1023)
-    staff_netid = models.CharField(max_length=255, default='tst123')
+    staff_netid = models.CharField(max_length=255)
 
 class AccidentTicketContactInfo(models.Model):
     accident_ticket = models.ForeignKey(AccidentTicket, on_delete=models.CASCADE) # foreign key
@@ -76,7 +76,7 @@ class Accident_Ticket(models.Model):
     urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
     location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
     activity_causing_injury = models.CharField(max_length=255)
-    staff_netid = models.CharField(max_length=255, default='tst123')
+    staff_netid = models.CharField(max_length=255)
 
     objects = models.Manager()
 
@@ -131,7 +131,7 @@ class Incident_Ticket(models.Model):
     urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
     location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
     activity_during_incident = models.CharField(max_length=255)
-    staff_netid = models.CharField(max_length=255, default='tst123')
+    staff_netid = models.CharField(max_length=255)
 
     objects = models.Manager()
 
@@ -199,7 +199,7 @@ class Count(models.Model):
     date_time_submission = models.DateTimeField(auto_now_add=True)
     location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
     location_count = models.SmallIntegerField()
-    staff_netid = models.CharField(max_length=255, default='tst123')
+    staff_netid = models.CharField(max_length=255)
 
     objects = models.Manager()
 

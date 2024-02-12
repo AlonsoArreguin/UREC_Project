@@ -14,6 +14,7 @@ from datetime import datetime
 
 
 # Home Page
+@login_required
 def home(request):
     return render(request, 'urec_app/home.html')
 
@@ -34,6 +35,7 @@ def edit_account(request):
 
 
 # Accident Ticket Page
+@login_required
 def accident(request):
     return render(request, 'urec_app/accident.html')
 
@@ -43,8 +45,8 @@ class CreateAccidentTicket(TemplateView):
     template_name = "urec_app/create_accident_ticket.html"
 
     def get(self, *args, **kwargs):
-        '''if not self.request.user.is_authenticated:
-            return redirect('http://127.0.0.1:8000/accounts/login')'''
+        if not self.request.user.is_authenticated:
+            return redirect('/accounts/login')
         injury_formset = AccidentTicketInjury(queryset=Accident_Ticket_Injury.objects.none())
         accident_ticket = Accident_Ticket_Form()
         patient = Accident_Ticket_Contact_Patient_Form()
@@ -58,8 +60,8 @@ class CreateAccidentTicket(TemplateView):
         return self.render_to_response(context)
 
     def post(self, *args, **kwargs):
-        '''if not self.request.user.is_authenticated:
-            return redirect('http://127.0.0.1:8000/accounts/login')'''
+        if not self.request.user.is_authenticated:
+            return redirect('/accounts/login')
         accident_ticket = Accident_Ticket_Form(data=self.request.POST)
         injury_type = AccidentTicketInjury(data=self.request.POST)
         patient = Accident_Ticket_Contact_Patient_Form(data=self.request.POST)
@@ -72,6 +74,7 @@ class CreateAccidentTicket(TemplateView):
             injury_instance = injury_type.save(commit=False)
             patient_instance = patient.save(commit=False)
             witness_instances = witness.save(commit=False)
+            accident_instance.staff_netid = self.request.user
             accident_instance.save()
             for i in injury_instance:
                 i.accident_ticket = accident_instance
@@ -93,6 +96,7 @@ class CreateAccidentTicket(TemplateView):
 
 
 # View all Accident Tickets
+@login_required
 def view_accident_tickets(request):
     accident_ticket = Accident_Ticket.objects.all()
     injury_type = Accident_Ticket_Injury.objects.all()
@@ -102,6 +106,7 @@ def view_accident_tickets(request):
     return render(request, 'urec_app/view_accident_tickets.html', context)
 
 
+@login_required
 def edit_accident_id(request):
     if request.method == 'POST':
         var = request.POST['id']
@@ -112,6 +117,7 @@ def edit_accident_id(request):
     return render(request, 'urec_app/edit_accident_id.html', context)
 
 
+@login_required
 def delete_accident(request, accidentid):
     accident = Accident_Ticket.objects.get(ticket_id=accidentid)
     if request.method == "POST":
@@ -122,7 +128,7 @@ def delete_accident(request, accidentid):
 
 
 # Incident Ticket Page
-###@login_required
+@login_required
 def incident(request):
     return render(request, 'urec_app/incident.html')
 
@@ -132,8 +138,8 @@ class CreateIncidentTicket(TemplateView):
     template_name = "urec_app/create_incident_ticket.html"
 
     def get(self, *args, **kwargs):
-        '''if not self.request.user.is_authenticated:
-            return redirect('http://127.0.0.1:8000/accounts/login')'''
+        if not self.request.user.is_authenticated:
+            return redirect('/accounts/login')
         incident_formset = IncidentTicketIncidentForm(queryset=Incident_Ticket_Incident.objects.none())
         incident_ticket = Incident_Ticket_Form()
         patient_contact = Incident_Ticket_Contact_Patient_Form()
@@ -148,8 +154,8 @@ class CreateIncidentTicket(TemplateView):
         return self.render_to_response(context)
 
     def post(self, *args, **kwargs):
-        '''if not self.request.user.is_authenticated:
-            return redirect('http://127.0.0.1:8000/accounts/login')'''
+        if not self.request.user.is_authenticated:
+            return redirect('/accounts/login')
         incident_ticket = Incident_Ticket_Form(data=self.request.POST)
         incident_type = IncidentTicketIncidentForm(data=self.request.POST)
         patient_contact = Incident_Ticket_Contact_Patient_Form(data=self.request.POST)
@@ -162,7 +168,7 @@ class CreateIncidentTicket(TemplateView):
             type_instance = incident_type.save(commit=False)
             patient_instance = patient_contact.save(commit=False)
             witness_instances = witness_contact.save(commit=False)
-            # incident_ticket.instance.staff_netid = self.request.user
+            incident_ticket.instance.staff_netid = self.request.user
             ticket_instance.save()
             for i in type_instance:
                 i.incident_ticket = ticket_instance
@@ -181,7 +187,9 @@ class CreateIncidentTicket(TemplateView):
         return self.render_to_response({'incident_type_formset': incident_type})
 
 
-# View all Incident Tickets@login_required@staff_member_required
+# View all Incident Tickets
+@login_required
+# @staff_member_required
 def view_incident_tickets(request):
     incident_ticket = Incident_Ticket.objects.all().order_by('-ticket_id').values()
     # incident_type = Incident_Ticket_Incident.objects.all()
@@ -193,7 +201,7 @@ def view_incident_tickets(request):
 
 
 # View/Edit an individual Incident Tickets
-# @login_required
+@login_required
 # @staff_member_required
 def view_incident_id(request):
     if request.method == 'POST':
@@ -207,7 +215,7 @@ def view_incident_id(request):
 
 
 # Delete Incident Report
-# @login_required
+@login_required
 # @staff_member_required
 def delete_incident(request, incidentid):
     incident = Incident_Ticket.objects.get(ticket_id=incidentid)
@@ -218,12 +226,14 @@ def delete_incident(request, incidentid):
     return redirect('view_incident_tickets')
 
 
-# Counts Page@login_required
+# Counts Page
+@login_required
 def count(request):
     return render(request, 'urec_app/count.html')
 
 
-# Update Count in Facilities@login_required
+# Update Count in Facilities
+@login_required
 def count_update(request):
     if request.method == 'POST':
         count_form = CountFormSet(data=request.POST)
@@ -240,7 +250,9 @@ def count_update(request):
     return render(request, 'urec_app/count_update.html', context)
 
 
-# View All Count History@login_required@staff_member_required
+# View All Count History
+@login_required
+# @staff_member_required
 def count_view_history(request):
     count_item = Count.objects.all().order_by('-count_id').values()
     recent_list = []
@@ -282,7 +294,7 @@ def sort_ampm_key(item):
     hour = int(hour_str) if hour_str != "12" else 0
     return (1 if meridiem == "PM" else 0, hour)
 
-
+@login_required
 def count_hourly(request):
     counts = Count.objects.all()
 
@@ -325,7 +337,9 @@ def count_hourly(request):
     return render(request, 'urec_app/count_hourly.html', context)
 
 
-# Delete Task@login_required@staff_member_required
+# Delete Task
+@login_required
+# @staff_member_required
 def delete_count(request, countid):
     count = Count.objects.get(count_id=countid)
     if request.method == "POST":
@@ -335,12 +349,15 @@ def delete_count(request, countid):
     return redirect('count_view_history')
 
 
-# ERP Page@login_required
+# ERP Page
+@login_required
 def erp(request):
     return render(request, 'urec_app/erp.html')
 
 
-# Create ERP Page@login_required@staff_member_required
+# Create ERP Page
+@login_required
+# @staff_member_required
 def create_erp(request):
     if request.method == "POST":
         # get form data from requests
@@ -369,7 +386,9 @@ def create_erp(request):
     return render(request, 'urec_app/create_erp.html', context)
 
 
-# Delete ERP Process@login_required@staff_member_required
+# Delete ERP Process
+@login_required
+# @staff_member_required
 def delete_erp(request, filename):
     erp = Erp.objects.get(filename=filename)
     if request.method == "POST":
@@ -391,7 +410,8 @@ def delete_erp(request, filename):
     return redirect('view_erps')
 
 
-# Download ERP Page/Process@login_required
+# Download ERP Page/Process
+@login_required
 def download_erp(request, filename):
     # set variables necessary for S3 connection
     AWS_REGION = settings.AWS_DEFAULT_REGION
@@ -411,19 +431,23 @@ def download_erp(request, filename):
     return render(request, 'urec_app/download_erp.html', context)
 
 
-# View all ERPs@login_required
+# View all ERPs
+@login_required
 def view_erps(request):
     Erps = Erp.objects.all().order_by('filename').values()
     context = {"Erps": Erps}
     return render(request, 'urec_app/view_erps.html', context)
 
 
-# Task Page@login_required
+# Task Page
+@login_required
 def task(request):
     return render(request, 'urec_app/task.html')
 
 
-# Create New Task@login_required@staff_member_required
+# Create New Task
+@login_required
+# @staff_member_required
 def create_task(request):
     if request.method == "POST":
         task_obj = Task_Form(request.POST)
@@ -438,7 +462,9 @@ def create_task(request):
     return render(request, 'urec_app/create_task.html', context)
 
 
-# View All Tasks@login_required@staff_member_required
+# View All Tasks
+@login_required
+# @staff_member_required
 def all_tasks(request):
     task_item = Task.objects.all().order_by('-task_id').values()
 
@@ -446,7 +472,8 @@ def all_tasks(request):
     return render(request, 'urec_app/all_tasks.html', context)
 
 
-# View My Tasks@login_required
+# View My Tasks
+@login_required
 def my_tasks(request):
     username = request.user.username
     uncompleted_tasks = Task.objects.filter(staff_netid=username, task_completion=False)
@@ -456,7 +483,8 @@ def my_tasks(request):
     return render(request, 'urec_app/my_tasks.html', context)
 
 
-# View an Individual Task@login_required
+# View an Individual Task
+@login_required
 def view_task_id(request):
     if request.method == 'POST':
         var = request.POST['id']
@@ -465,7 +493,8 @@ def view_task_id(request):
     return render(request, 'urec_app/task_id.html', context)
 
 
-# View an Individual Task@login_required
+# View an Individual Task
+@login_required
 def view_my_task(request):
     if request.method == 'POST':
         var = request.POST['id']
@@ -474,7 +503,8 @@ def view_my_task(request):
     return render(request, 'urec_app/view_my_task.html', context)
 
 
-# Complete Task@login_required
+# Complete Task
+@login_required
 def complete_task(request, taskid):
     task = Task.objects.get(task_id=taskid)
     if request.method == "POST":
@@ -486,7 +516,9 @@ def complete_task(request, taskid):
     return redirect('my_tasks')
 
 
-# Delete Task@login_required@staff_member_required
+# Delete Task
+@login_required
+# @staff_member_required
 def delete_task(request, taskid):
     task = Task.objects.get(task_id=taskid)
     if request.method == "POST":
