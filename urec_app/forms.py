@@ -6,27 +6,6 @@ from django.forms import modelformset_factory
 
 from django.contrib.auth import get_user_model
 
-class FormAccident(forms.ModelForm):
-    class Meta:
-        model = Accident
-        fields = ["staff_netid", "accident_type", "accident_description",
-                  "first_name", "last_name", "phone_number"]
-
-
-class AccidentTicketForm(forms.ModelForm):
-    class Meta:
-        model = AccidentTicket
-        fields = ["urec_facility", "location_in_facility", "activity_causing_injury",
-                  "injury_type", "injury_description"]
-
-
-class AccidentTicketContactInfoForm(forms.ModelForm):
-    class Meta:
-        model = AccidentTicketContactInfo
-        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
-                  "home_phone_number", "street_address", "city", "state", "zip", ]
-        # exclude = ('accident_ticket', 'accident_relation',)
-
 
 class Accident_Ticket_Form(forms.ModelForm):
     class Meta:

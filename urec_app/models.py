@@ -31,44 +31,6 @@ UREC_FACILITIES = (
 
 # Create your models here.
 
-# ----------------------------------------------------------------------------------------------------------------------
-# To-Be Deleted
-# First from Models and Forms
-# And then from Database
-
-class Accident(models.Model):
-    staff_netid = models.CharField(max_length=255)
-    accident_type = models.CharField(max_length=255)
-    accident_description = models.CharField(max_length=255)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255)
-
-class AccidentTicket(models.Model):
-    ticket_id = models.AutoField(primary_key=True)
-    date_time_submission = models.DateTimeField(auto_now_add=True)
-    urec_facility = models.CharField(max_length=255)
-    location_in_facility = models.CharField(max_length=255)
-    activity_causing_injury = models.CharField(max_length=255)
-    injury_type = models.CharField(max_length=255)
-    injury_description = models.CharField(max_length=1023)
-    staff_netid = models.CharField(max_length=255)
-
-class AccidentTicketContactInfo(models.Model):
-    accident_ticket = models.ForeignKey(AccidentTicket, on_delete=models.CASCADE) # foreign key
-    accident_relation = models.CharField(max_length=255, default='wip') # Acidentee or Witness (multiple witness/ticket)
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.CharField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
-# ----------------------------------------------------------------------------------------------------------------------
-
 # Primary Accident Ticket Model
 class Accident_Ticket(models.Model):
     ticket_id = models.AutoField(primary_key=True)
