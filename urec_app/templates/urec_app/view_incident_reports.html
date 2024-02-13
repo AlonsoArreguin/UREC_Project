@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    View Incident Tickets
+    View Incident Reports
 {% endblock title%}
 
 {% block content %}
@@ -16,10 +16,10 @@
                 <h2 class="card-header text-center maroon-bg">Incident Reports</h2>
               <div class="card-body p-5">
                 <div class="">
-                    <table id="incident_ticket_info" class="display" cellspacing="0" width="100%">
+                    <table id="incident_report_info" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th>Ticket ID</th>
+                                <th>Report ID</th>
                                 <th>Date/Time Submitted</th>
                                 <th>Facility</th>
                                 <th>Location in Facility</th>
@@ -30,11 +30,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in incident_ticket %}
+                            {% for item in incident_report %}
                         <tr>
-                            <form action="{% url 'view_incident_id' %}" method="POST">
+                            <form action="{% url 'view_incident' %}" method="POST">
                                 {% csrf_token %}
-                                <td>{{ item.ticket_id }}<input type="hidden" name="id" value="{{ item.ticket_id }}"></td>
+                                <td>{{ item.report_id }}<input type="hidden" name="id" value="{{ item.report_id }}"></td>
                                 <td>{{ item.date_time_submission }}</td>
                                 <td>{{ item.urec_facility }}</td>
                                 <td>{{ item.location_in_facility }}</td>
@@ -45,7 +45,7 @@
                                 </td>
                                 </form>
                                 <td>
-                                    <form action="{% url 'delete_incident' incidentid=item.ticket_id %}" method="post">
+                                    <form action="{% url 'delete_incident' incident_id=item.report_id %}" method="post">
                                         {% csrf_token %}
                                         <input class="btn btn-danger " type="submit" value="Delete" />
                                     </form>
@@ -69,14 +69,14 @@
     <h3>Incident</h3>
     <table class="table table-striped">
         <tr>
-            <th>Ticket ID</th>
+            <th>Report ID</th>
             <th>Incident Nature</th>
             <th>Incident Description</th>
             <th>Action Taken</th>
         </tr>
         {% for item in incident_type %}
         <tr>
-            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.incident_report }}</td>
             <td>{{ item.incident_nature }}</td>
             <td>{{ item.incident_description }}</td>
             <td>{{ item.action_taken }}</td>
@@ -86,7 +86,7 @@
     <h3>Contact Info</h3>
     <table class="table table-striped">
         <tr>
-            <th>Ticket ID</th>
+            <th>Report ID</th>
             <th>First Name</th>
             <th>Middle Name</th>
             <th>Last Name</th>
@@ -101,7 +101,7 @@
         </tr>
         {% for item in contact_info %}
         <tr>
-            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.incident_report }}</td>
             <td>{{ item.first_name }}</td>
             <td>{{ item.middle_name }}</td>
             <td>{{ item.last_name }}</td>

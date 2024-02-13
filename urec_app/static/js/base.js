@@ -47,33 +47,33 @@ $(document).ready( function () {
     });
 } );
 
-// view accident tickets
+// view injury/illness reports
 $(document).ready( function () {
-    $('#accident_ticket_info').DataTable({
+    $('#injury_illness_report_info').DataTable({
         responsive: true,
         "scrollX": true,
     });
 } );
 
-// view accident tickets
+// view injury/illness reports
 $(document).ready( function () {
-    $('#accident_ticket_injury').DataTable({
+    $('#injury_illness_report_injury').DataTable({
         responsive: true,
         "scrollX": true,
     });
 } );
 
-// view accident tickets
+// view injury/illness reports
 $(document).ready( function () {
-    $('#accident_ticket_contact').DataTable({
+    $('#injury_illness_report_contact').DataTable({
         responsive: true,
         "scrollX": true,
     });
 } );
 
-// view incident tickets
+// view incident reports
 $(document).ready( function () {
-    $('#incident_ticket_info').DataTable({
+    $('#incident_report_info').DataTable({
         responsive: true,
         "scrollX": true,
     });

@@ -2,25 +2,23 @@ from django.urls import path, include
 from . import views
 from django.views.i18n import JavaScriptCatalog
 
-urlpatterns =[
+urlpatterns = [
     path('', views.home, name='home'),
 
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/edit', views.edit_account, name="edit"),
 
-    path('accident/', views.accident, name='accident'),
-    path('accident/create_accident_ticket/', views.CreateAccidentTicket.as_view(), name='create_accident_ticket'),
-    path('accident/view_accident_tickets/', views.view_accident_tickets, name='view_accident_tickets'),
-    path('accident/edit_accident_id/', views.edit_accident_id, name='edit_accident_id'),
-    path('accident/delete/<str:accidentid>', views.delete_accident, name='delete_accident'),
-
-    path('accident/delete/<str:accidentid>', views.delete_accident, name='delete_accident'),
+    path('injury/', views.injury_illness, name='injury_illness'),
+    path('injury/create_injury_report/', views.CreateInjuryIllnessReport.as_view(), name='create_injury_illness_report'),
+    path('injury/view_injury_reports/', views.view_injury_illness_reports, name='view_injury_illness_reports'),
+    path('injury/edit_injury/', views.edit_injury_illness, name='edit_injury_illness'),
+    path('injury/delete/<str:injury_illness_id>', views.delete_injury_illness, name='delete_injury_illness'),
 
     path('count/', views.count, name='count'),
     path('count/update', views.count_update, name='count_update'),
     path('count/view_history', views.count_view_history, name='count_view_history'),
-    path('count/count_hourly', views.count_hourly, name = "count_hourly"),
-    path('count/delete/<str:countid>', views.delete_count, name='delete_count'),
+    path('count/count_hourly', views.count_hourly, name="count_hourly"),
+    path('count/delete/<str:count_id>', views.delete_count, name='delete_count'),
 
     path('erp/', views.erp, name='erp'),
     path('erp/create_erp', views.create_erp, name='create_erp'),
@@ -31,10 +29,10 @@ urlpatterns =[
     path('form/', views.form, name='form'),
 
     path('incident/', views.incident, name='incident'),
-    path('incident/create_incident_ticket/', views.CreateIncidentTicket.as_view(), name='create_incident_ticket'),
-    path('incident/view_incident_tickets/', views.view_incident_tickets, name='view_incident_tickets'),
-    path('incident/view_incident_id/', views.view_incident_id, name='view_incident_id'),
-    path('incident/delete/<str:incidentid>', views.delete_incident, name='delete_incident'),
+    path('incident/create_incident_report/', views.CreateIncidentReport.as_view(), name='create_incident_report'),
+    path('incident/view_incident_reports/', views.view_incident_reports, name='view_incident_reports'),
+    path('incident/view_incident/', views.view_incident_id, name='view_incident'),
+    path('incident/delete/<str:incident_id>', views.delete_incident, name='delete_incident'),
 
     path('task/', views.task, name='task'),
     path('task/create_task', views.create_task, name='create_task'),

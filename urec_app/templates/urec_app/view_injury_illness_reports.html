@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    View Accident Tickets
+    View Injury/Illness Reports
 {% endblock title%}
 
 {% block content %}
@@ -10,28 +10,28 @@
     <br/>
     <div class="col mx-auto overflow-hidden">
         <div class="card card-glassmorph border-0 mb-3">
-            <h2 class="card-header text-center maroon-bg">Accident Reports</h2>
+            <h2 class="card-header text-center maroon-bg">Injury/Illness Reports</h2>
           <div class="card-body p-5">
             <div class="">
-                <table id="accident_ticket_info" class="display" width="100%">
+                <table id="injury_illness_report_info" class="display" width="100%">
                     <thead>
                         <tr>
-                            <th>Ticket ID</th>
+                            <th>Report ID</th>
                             <th>Date/Time</th>
                             <th>Facility</th>
                             <th>Location in Facility</th>
-                            <th>Activity during Accident</th>
+                            <th>Activity causing injury/illness</th>
                             <th>Staff</th>
                             <th> View </th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in accident_ticket %}
+                        {% for item in injury_illness_report %}
                         <tr>
-                            <form action="{% url 'edit_accident_id' %}" method="POST">
+                            <form action="{% url 'edit_injury_illness' %}" method="POST">
                                 {% csrf_token %}
-                                <td>{{ item.ticket_id }}<input type="hidden" name="id" value="{{ item.ticket_id }}"></td>
+                                <td>{{ item.report_id }}<input type="hidden" name="id" value="{{ item.report_id }}"></td>
                                 <td>{{ item.date_time_submission }}</td>
                                 <td>{{ item.urec_facility }}</td>
                                 <td>{{ item.location_in_facility }}</td>
@@ -39,7 +39,7 @@
                                 <td>{{ item.staff_netid }}</td>
                                 <td><button type="submit" class="btn btn-secondary">Expand Report</button></td>
                             </form>
-                                <td><form action="{% url 'delete_accident' accidentid=item.ticket_id %}" method="post">
+                                <td><form action="{% url 'delete_injury_illness' injury_illness_id=item.report_id %}" method="post">
                                         {% csrf_token %}
                                         <input class="btn btn-danger" type="submit" value="Delete" />
                                     </form></td>
@@ -50,10 +50,10 @@
 
                 <!-- </table>
                 <h2 class="mt-5 mb-3 sub-maroon-bg">Injury</h2>
-                <table id="accident_ticket_injury" class="display" cellspacing="0" width="100%">
+                <table id="injury_illness_report_injury" class="display" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Ticket ID</th>
+                            <th>Report ID</th>
                             <th>Injury Type</th>
                             <th>Injury Description</th>
                             <th>Care Provided</th>
@@ -72,10 +72,10 @@
                     
                 </table>
                 <h2 class="mt-5 mb-3 sub-maroon-bg">Contact Info</h2>
-                <table id="accident_ticket_contact" class="display" cellspacing="0" width="100%">
+                <table id="injury_illness_report_contact" class="display" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Ticket ID</th>
+                            <th>Report ID</th>
                             <th>First Name</th>
                             <th>Middle Name</th>
                             <th>Last Name</th>

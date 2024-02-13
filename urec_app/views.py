@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, FileResponse, Http404
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
-from django.views.generic import ListView, TemplateView
-from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 
 from .forms import *
 # from .storage_backends import *
@@ -34,119 +31,119 @@ def edit_account(request):
         return render(request, 'urec_app/edit_account.html', args)
 
 
-# Accident Ticket Page
+# Injury/Illness Report Page
 @login_required
-def accident(request):
-    return render(request, 'urec_app/accident.html')
+def injury_illness(request):
+    return render(request, 'urec_app/injury_illness.html')
 
 
-# Create Accident View
-class CreateAccidentTicket(TemplateView):
-    template_name = "urec_app/create_accident_ticket.html"
+# Create Injury/Illness View
+class CreateInjuryIllnessReport(TemplateView):
+    template_name = "urec_app/create_injury_illness_report.html"
 
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
             return redirect('/accounts/login')
-        injury_formset = AccidentTicketInjury(queryset=Accident_Ticket_Injury.objects.none())
-        accident_ticket = Accident_Ticket_Form()
-        patient = Accident_Ticket_Contact_Patient_Form()
-        witness_formset = AccidentTicketWitnessContact(queryset=Accident_Ticket_Contact_Witness.objects.none())
+        injury_formset = injury_illness_report_injury_formset(queryset=InjuryIllnessReportInjury.objects.none())
+        injury_illness_report = InjuryIllnessReportForm()
+        patient = InjuryIllnessReportContactPatientForm()
+        witness_formset = injury_illness_report_witness_contact_formset(queryset=InjuryIllnessReportContactWitness.objects.none())
         context = {
-            'accident_ticket': accident_ticket,
-            'accident_ticket_injury_formset': injury_formset,
+            'injury_illness_report': injury_illness_report,
+            'injury_illness_report_injury_formset': injury_formset,
             'patient': patient,
-            'accident_ticket_witness_formset': witness_formset,
+            'injury_illness_report_witness_formset': witness_formset,
         }
         return self.render_to_response(context)
 
     def post(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
             return redirect('/accounts/login')
-        accident_ticket = Accident_Ticket_Form(data=self.request.POST)
-        injury_type = AccidentTicketInjury(data=self.request.POST)
-        patient = Accident_Ticket_Contact_Patient_Form(data=self.request.POST)
-        witness = AccidentTicketWitnessContact(data=self.request.POST)
+        injury_illness_report = InjuryIllnessReportForm(data=self.request.POST)
+        injury_type = injury_illness_report_injury_formset(data=self.request.POST)
+        patient = InjuryIllnessReportContactPatientForm(data=self.request.POST)
+        witness = injury_illness_report_witness_contact_formset(data=self.request.POST)
 
-        all_good = (accident_ticket.is_valid(), injury_type.is_valid(), patient.is_valid(), witness.is_valid())
+        all_good = (injury_illness_report.is_valid(), injury_type.is_valid(), patient.is_valid(), witness.is_valid())
 
         if False not in all_good:
-            accident_instance = accident_ticket.save(commit=False)
+            injury_illness_instance = injury_illness_report.save(commit=False)
             injury_instance = injury_type.save(commit=False)
             patient_instance = patient.save(commit=False)
             witness_instances = witness.save(commit=False)
-            accident_instance.staff_netid = self.request.user
-            accident_instance.save()
+            injury_illness_instance.staff_netid = self.request.user
+            injury_illness_instance.save()
             for i in injury_instance:
-                i.accident_ticket = accident_instance
+                i.injury_illness_report = injury_illness_instance
                 i.save()
 
-            patient_instance.accident_ticket = accident_instance
+            patient_instance.injury_illness_report = injury_illness_instance
             patient_instance.save()
             for witness_instance in witness_instances:
                 witness_instance.patient = patient_instance
-                witness_instance.accident_ticket = accident_instance
+                witness_instance.injury_illness_report = injury_illness_instance
                 witness_instance.save()
 
-            return redirect('accident')
+            return redirect('injury_illness')
 
         print(all_good)
 
-        return self.render_to_response({'accident-ticket-injury-formset': injury_type,
-                                        'accident_ticket_witness_formset': witness})
+        return self.render_to_response({'injury-illness-report-injury-formset': injury_type,
+                                        'injury_illness_report_witness_formset': witness})
 
 
-# View all Accident Tickets
+# View all Injury/Illness Reports
 @login_required
-def view_accident_tickets(request):
-    accident_ticket = Accident_Ticket.objects.all()
-    injury_type = Accident_Ticket_Injury.objects.all()
-    patient = Accident_Ticket_Contact_Patient.objects.all()
+def view_injury_illness_reports(request):
+    injury_illness_report = InjuryIllnessReport.objects.all()
+    injury_type = InjuryIllnessReportInjury.objects.all()
+    patient = InjuryIllnessReportContactPatient.objects.all()
 
-    context = {'accident_ticket': accident_ticket, 'injury_type': injury_type, 'contact_info': patient}
-    return render(request, 'urec_app/view_accident_tickets.html', context)
+    context = {'injury_illness_report': injury_illness_report, 'injury_type': injury_type, 'contact_info': patient}
+    return render(request, 'urec_app/view_injury_illness_reports.html', context)
 
 
 @login_required
-def edit_accident_id(request):
+def edit_injury_illness(request):
     if request.method == 'POST':
         var = request.POST['id']
-        acc_id = Accident_Ticket.objects.filter(ticket_id=var)
-        injury_type = Accident_Ticket_Injury.objects.filter(accident_ticket=acc_id[0])
-        patient = Accident_Ticket_Contact_Patient.objects.filter(accident_ticket=acc_id[0])
-        context = {'var': var, 'acc_id': acc_id, 'injury_type': injury_type, 'contact_info': patient}
-    return render(request, 'urec_app/edit_accident_id.html', context)
+        ill_id = InjuryIllnessReport.objects.filter(report_id=var)
+        injury_type = InjuryIllnessReportInjury.objects.filter(injury_illness_report=ill_id[0])
+        patient = InjuryIllnessReportContactPatient.objects.filter(injury_illness_report=ill_id[0])
+        context = {'var': var, 'ill_id': ill_id, 'injury_type': injury_type, 'contact_info': patient}
+    return render(request, 'urec_app/view_injury_illness.html', context)
 
 
 @login_required
-def delete_accident(request, accidentid):
-    accident = Accident_Ticket.objects.get(ticket_id=accidentid)
+def delete_injury_illness(request, injury_illness_id):
+    injury_illness = InjuryIllnessReport.objects.get(report_id=injury_illness_id)
     if request.method == "POST":
         # delete from database
-        accident.delete()
+        injury_illness.delete()
 
-    return redirect('view_accident_tickets')
+    return redirect('view_injury_illness_reports')
 
 
-# Incident Ticket Page
+# Incident Report Page
 @login_required
 def incident(request):
     return render(request, 'urec_app/incident.html')
 
 
 # Create Incident View
-class CreateIncidentTicket(TemplateView):
-    template_name = "urec_app/create_incident_ticket.html"
+class CreateIncidentReport(TemplateView):
+    template_name = "urec_app/create_incident_report.html"
 
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
             return redirect('/accounts/login')
-        incident_formset = IncidentTicketIncidentForm(queryset=Incident_Ticket_Incident.objects.none())
-        incident_ticket = Incident_Ticket_Form()
-        patient_contact = Incident_Ticket_Contact_Patient_Form()
-        witness_formset = IncidentTicketWitnessForm(queryset=Incident_Ticket_Contact_Witness.objects.none())
+        incident_formset = incident_report_incident_formset(queryset=IncidentReportIncident.objects.none())
+        incident_report = IncidentReportForm()
+        patient_contact = IncidentReportContactPatientForm()
+        witness_formset = incident_report_witness_formset(queryset=IncidentReportContactWitness.objects.none())
 
         context = {
-            'incident_ticket': incident_ticket,
+            'incident_report': incident_report,
             'incident_type_formset': incident_formset,
             'patient_contact': patient_contact,
             'incident_witness_formset': witness_formset,
@@ -156,29 +153,29 @@ class CreateIncidentTicket(TemplateView):
     def post(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
             return redirect('/accounts/login')
-        incident_ticket = Incident_Ticket_Form(data=self.request.POST)
-        incident_type = IncidentTicketIncidentForm(data=self.request.POST)
-        patient_contact = Incident_Ticket_Contact_Patient_Form(data=self.request.POST)
-        witness_contact = IncidentTicketWitnessForm(data=self.request.POST)
+        incident_report = IncidentReportForm(data=self.request.POST)
+        incident_type = incident_report_incident_formset(data=self.request.POST)
+        patient_contact = IncidentReportContactPatientForm(data=self.request.POST)
+        witness_contact = incident_report_witness_formset(data=self.request.POST)
 
-        if incident_ticket.is_valid() and incident_type.is_valid() \
+        if incident_report.is_valid() and incident_type.is_valid() \
                 and patient_contact.is_valid() and witness_contact.is_valid():
 
-            ticket_instance = incident_ticket.save(commit=False)
+            report_instance = incident_report.save(commit=False)
             type_instance = incident_type.save(commit=False)
             patient_instance = patient_contact.save(commit=False)
             witness_instances = witness_contact.save(commit=False)
-            incident_ticket.instance.staff_netid = self.request.user
-            ticket_instance.save()
+            incident_report.instance.staff_netid = self.request.user
+            report_instance.save()
             for i in type_instance:
-                i.incident_ticket = ticket_instance
+                i.incident_report = report_instance
                 i.save()
 
-            patient_instance.incident_ticket = ticket_instance
+            patient_instance.incident_report = report_instance
             patient_instance.save()
 
             for witness_instance in witness_instances:
-                witness_instance.incident_ticket = ticket_instance
+                witness_instance.incident_report = report_instance
                 witness_instance.patient = patient_instance
                 witness_instance.save()
 
@@ -187,43 +184,40 @@ class CreateIncidentTicket(TemplateView):
         return self.render_to_response({'incident_type_formset': incident_type})
 
 
-# View all Incident Tickets
+# View all Incident Reports
 @login_required
 # @staff_member_required
-def view_incident_tickets(request):
-    incident_ticket = Incident_Ticket.objects.all().order_by('-ticket_id').values()
-    # incident_type = Incident_Ticket_Incident.objects.all()
-    # patient = Incident_Ticket_Contact_Patient.objects.all()
-    # witness = Incident_Ticket_Contact_Witness.objects.all()
+def view_incident_reports(request):
+    incident_reports = IncidentReport.objects.all().order_by('-report_id').values()
 
-    context = {'incident_ticket': incident_ticket}  # , 'incident_type': incident_type, 'patient': patient}
-    return render(request, 'urec_app/view_incident_tickets.html', context)
+    context = {'incident_report': incident_reports}  # , 'incident_type': incident_type, 'patient': patient}
+    return render(request, 'urec_app/view_incident_reports.html', context)
 
 
-# View/Edit an individual Incident Tickets
+# View/Edit an individual Incident Reports
 @login_required
 # @staff_member_required
 def view_incident_id(request):
     if request.method == 'POST':
         var = request.POST['id']
-        inc_id = Incident_Ticket.objects.filter(ticket_id=var)
-        incident_type = Incident_Ticket_Incident.objects.filter(incident_ticket=inc_id[0])
-        patient = Incident_Ticket_Contact_Patient.objects.filter(incident_ticket=inc_id[0])
-        witness = Incident_Ticket_Contact_Witness.objects.filter(incident_ticket=inc_id[0])
+        inc_id = IncidentReport.objects.filter(report_id=var)
+        incident_type = IncidentReportIncident.objects.filter(incident_report=inc_id[0])
+        patient = IncidentReportContactPatient.objects.filter(incident_report=inc_id[0])
+        witness = IncidentReportContactWitness.objects.filter(incident_report=inc_id[0])
         context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient': patient, 'witness': witness}
-    return render(request, 'urec_app/view_incident_id.html', context)
+    return render(request, 'urec_app/view_incident.html', context)
 
 
 # Delete Incident Report
 @login_required
 # @staff_member_required
-def delete_incident(request, incidentid):
-    incident = Incident_Ticket.objects.get(ticket_id=incidentid)
+def delete_incident(request, incident_id):
+    incident = IncidentReport.objects.get(report_id=incident_id)
     if request.method == "POST":
         # delete from database
         incident.delete()
 
-    return redirect('view_incident_tickets')
+    return redirect('view_incident_reports')
 
 
 # Counts Page
@@ -340,8 +334,8 @@ def count_hourly(request):
 # Delete Task
 @login_required
 # @staff_member_required
-def delete_count(request, countid):
-    count = Count.objects.get(count_id=countid)
+def delete_count(request, count_id):
+    count = Count.objects.get(count_id=count_id)
     if request.method == "POST":
         # delete from database
         count.delete()
@@ -361,8 +355,8 @@ def erp(request):
 def create_erp(request):
     if request.method == "POST":
         # get form data from requests
-        erp_file = ERP_Upload_Form(request.POST, request.FILES)
-        erp_obj = ERP_Form(request.POST)
+        erp_file = ErpUploadForm(request.POST, request.FILES)
+        erp_obj = ErpForm(request.POST)
 
         # extract file information
         uploadfile = request.FILES['file']  # entire file
@@ -380,8 +374,8 @@ def create_erp(request):
             return redirect('erp')
     else:
         # give blank forms if not POST request
-        erp_file = ERP_Upload_Form()
-        erp_obj = ERP_Form()
+        erp_file = ErpUploadForm()
+        erp_obj = ErpForm()
     context = {'erp_obj': erp_obj, 'erp_file': erp_file}
     return render(request, 'urec_app/create_erp.html', context)
 
@@ -450,14 +444,14 @@ def task(request):
 # @staff_member_required
 def create_task(request):
     if request.method == "POST":
-        task_obj = Task_Form(request.POST)
+        task_obj = TaskForm(request.POST)
         if task_obj.is_valid():
             task_obj.pk = None
             task_obj.save()
 
             return redirect('task')
     else:
-        task_obj = Task_Form()
+        task_obj = TaskForm()
     context = {'task_obj': task_obj}
     return render(request, 'urec_app/create_task.html', context)
 

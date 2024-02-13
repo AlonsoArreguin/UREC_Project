@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractUser
@@ -31,9 +30,27 @@ UREC_FACILITIES = (
 
 # Create your models here.
 
-# Primary Accident Ticket Model
-class Accident_Ticket(models.Model):
-    ticket_id = models.AutoField(primary_key=True)
+
+# This model acts as the basis for all other contact related models.
+class UrecContact(models.Model):
+    first_name = models.CharField(max_length=255)
+    middle_name = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, blank=True)
+    email_address = models.EmailField(max_length=255, blank=True)
+    personal_phone_number = models.CharField(max_length=255, blank=True)
+    home_phone_number = models.CharField(max_length=255, blank=True)
+    street_address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    state = models.CharField(max_length=255, blank=True)
+    zip = models.CharField(max_length=255, blank=True)
+    minor_status = models.CharField(max_length=255)
+
+    objects = models.Manager()
+
+
+# Primary Injury/Illness Report Model
+class InjuryIllnessReport(models.Model):
+    report_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
     urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
     location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
@@ -42,53 +59,33 @@ class Accident_Ticket(models.Model):
 
     objects = models.Manager()
 
-# Injury Model for Accident Ticket
-class Accident_Ticket_Injury(models.Model):
-    accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
+
+# Injury Model for Injury/Illness Report
+class InjuryIllnessReportInjury(models.Model):
+    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
     injury_type = models.CharField(max_length=255)
     injury_description = models.TextField(max_length=1023)
     care_provided = models.TextField(max_length=1023)
 
     objects = models.Manager()
 
-# Patient Contact Information Model for Accident Ticket
-class Accident_Ticket_Contact_Patient(models.Model):
-    accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
-    accident_relation = models.CharField(max_length=255, default='wip')  # Acidentee or Witness
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.EmailField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
 
-    objects = models.Manager()
+# Patient Contact Information Model for Injury/Illness Report
+class InjuryIllnessReportContactPatient(UrecContact):
+    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
+    injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
 
-# Witness Contact Information Model for Accident Ticket
-class Accident_Ticket_Contact_Witness(models.Model):
-    accident_ticket = models.ForeignKey(Accident_Ticket, on_delete=models.CASCADE)  # foreign key
-    accident_relation = models.CharField(max_length=255, default='wip')  # Acidentee or Witness
-    patient = models.ForeignKey(Accident_Ticket_Contact_Patient, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.EmailField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
 
-    objects = models.Manager()
+# Witness Contact Information Model for Injury/Illness Report
+class InjuryIllnessReportContactWitness(UrecContact):
+    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
+    injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
+    patient = models.ForeignKey(InjuryIllnessReportContactPatient, on_delete=models.CASCADE)
 
-# Primary Incident Ticket Model
-class Incident_Ticket(models.Model):
-    ticket_id = models.AutoField(primary_key=True)
+
+# Primary Incident Report Model
+class IncidentReport(models.Model):
+    report_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
     urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
     location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
@@ -97,49 +94,27 @@ class Incident_Ticket(models.Model):
 
     objects = models.Manager()
 
+
 # Incident Sub-Model for Incident Specifics
-class Incident_Ticket_Incident(models.Model):
-    incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
+class IncidentReportIncident(models.Model):
+    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
     incident_nature = models.CharField(max_length=255)
     incident_description = models.TextField(max_length=1023)
     action_taken = models.TextField(max_length=1023)
 
     objects = models.Manager()
 
-# Patient Contact Information Model for Incident Ticket
-class Incident_Ticket_Contact_Patient(models.Model):
-    incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.EmailField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
-    minor_status = models.CharField(max_length=255)
 
-    objects = models.Manager()
+# Patient Contact Information Model for Incident Report
+class IncidentReportContactPatient(UrecContact):
+    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
 
-# Witness Contact Information Model for Incident Ticket
-class Incident_Ticket_Contact_Witness(models.Model):
-    incident_ticket = models.ForeignKey(Incident_Ticket, on_delete=models.CASCADE)  # foreign key
-    patient = models.ForeignKey(Incident_Ticket_Contact_Patient, on_delete=models.CASCADE)  # foreign key
-    first_name = models.CharField(max_length=255)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    email_address = models.EmailField(max_length=255, blank=True)
-    personal_phone_number = models.CharField(max_length=255, blank=True)
-    home_phone_number = models.CharField(max_length=255, blank=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    state = models.CharField(max_length=255, blank=True)
-    zip = models.CharField(max_length=255, blank=True)
-    minor_status = models.CharField(max_length=255)
 
-    objects = models.Manager()
+# Witness Contact Information Model for Incident Report
+class IncidentReportContactWitness(UrecContact):
+    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+    patient = models.ForeignKey(IncidentReportContactPatient, on_delete=models.CASCADE)  # foreign key
+
 
 # Task Model
 class Task(models.Model):
@@ -155,9 +130,10 @@ class Task(models.Model):
 
     objects = models.Manager()
 
+
 # Count Model
 class Count(models.Model):
-    count_id = models.AutoField(primary_key = True)
+    count_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
     location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
     location_count = models.SmallIntegerField()
@@ -165,19 +141,22 @@ class Count(models.Model):
 
     objects = models.Manager()
 
+
 # Erp Model for Database
 class Erp(models.Model):
-    # erp_id = models.AudtoField()
-    filename = models.CharField(primary_key = True, max_length=255)
+    # erp_id = models.AutoField()
+    filename = models.CharField(primary_key=True, max_length=255)
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=1023)
     uploaded_at = models.DateTimeField(auto_now=True)
 
     objects = models.Manager()
 
+
 # Erp Model for FileUpload ONLY
-class Erp_Upload(models.Model):
+class ErpUpload(models.Model):
     file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
 
-class UREC_User(AbstractUser):
+
+class UrecUser(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)

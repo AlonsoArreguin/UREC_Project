@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    Create Incident Ticket
+    Create Incident Report
 {% endblock title%}
 
 {% block content %}
@@ -17,7 +17,7 @@
                     <form method="POST" id="form-container">
                         <div class="row">
                             {% csrf_token %}
-                            {% for item in incident_ticket %}
+                            {% for item in incident_report %}
                             <div class="col">
                                 <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
                                     {{ item.label }}:
@@ -38,7 +38,7 @@
                         <div class="row">
                             <br><h3 class="mt-5 mb-3 sub-maroon-bg">Incident Type Type</h3>
                             {{ incident_type_formset.management_form }}
-                            <div class="accident-ticket-injury-form" id="incident-form">
+                            <div class="injury-illness-report-injury-form" id="incident-form">
                                 <div class="col-lg-10 col my-3">
                                     <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Indicent Nature:</div>
                                     <input type="text" name="form-0-incident_nature" maxlength="255" id="id_form-0-incident_nature" data-np-intersection-state="observed">

@@ -7,58 +7,61 @@ from django.forms import modelformset_factory
 from django.contrib.auth import get_user_model
 
 
-class Accident_Ticket_Form(forms.ModelForm):
+class InjuryIllnessReportForm(forms.ModelForm):
     class Meta:
-        model = Accident_Ticket
+        model = InjuryIllnessReport
         fields = ["urec_facility", "location_in_facility", "activity_causing_injury"]
 
 
-AccidentTicketInjury = modelformset_factory(
-    Accident_Ticket_Injury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
+injury_illness_report_injury_formset = modelformset_factory(
+    InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
 )
 
 
-class Accident_Ticket_Contact_Patient_Form(forms.ModelForm):
+class InjuryIllnessReportContactPatientForm(forms.ModelForm):
     class Meta:
-        model = Accident_Ticket_Contact_Patient
-        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
-                  "home_phone_number", "street_address", "city", "state", "zip"]
-
-
-AccidentTicketWitnessContact = modelformset_factory(
-    Accident_Ticket_Contact_Witness, fields=("first_name", "middle_name", "last_name", "email_address",
-                                             "personal_phone_number", "home_phone_number", "street_address",
-                                             "city", "state", "zip"), extra=1
-)
-
-
-class Incident_Ticket_Form(forms.ModelForm):
-    class Meta:
-        model = Incident_Ticket
-        fields = ["urec_facility", "location_in_facility", "activity_during_incident"]
-
-
-IncidentTicketIncidentForm = modelformset_factory(
-    Incident_Ticket_Incident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1
-)
-
-
-class Incident_Ticket_Contact_Patient_Form(forms.ModelForm):
-    class Meta:
-        model = Incident_Ticket_Contact_Patient
+        model = InjuryIllnessReportContactPatient
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
 
-IncidentTicketWitnessForm = modelformset_factory(
-    Incident_Ticket_Contact_Witness, fields=("first_name", "middle_name", "last_name", "email_address",
-                                             "personal_phone_number", "home_phone_number", "street_address", "city",
-                                             "state", "zip", "minor_status"), extra=1
+
+injury_illness_report_witness_contact_formset = modelformset_factory(
+    InjuryIllnessReportContactWitness, fields=("first_name", "middle_name", "last_name", "email_address",
+                                               "personal_phone_number", "home_phone_number", "street_address",
+                                               "city", "state", "zip", "minor_status"), extra=1
 )
 
-class Task_Form(forms.ModelForm):
+
+class IncidentReportForm(forms.ModelForm):
+    class Meta:
+        model = IncidentReport
+        fields = ["urec_facility", "location_in_facility", "activity_during_incident"]
+
+
+incident_report_incident_formset = modelformset_factory(
+    IncidentReportIncident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1
+)
+
+
+class IncidentReportContactPatientForm(forms.ModelForm):
+    class Meta:
+        model = IncidentReportContactPatient
+        fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
+                  "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+
+
+incident_report_witness_formset = modelformset_factory(
+    IncidentReportContactWitness, fields=("first_name", "middle_name", "last_name", "email_address",
+                                          "personal_phone_number", "home_phone_number", "street_address", "city",
+                                          "state", "zip", "minor_status"), extra=1
+)
+
+
+class TaskForm(forms.ModelForm):
     model = get_user_model()
     date_time_due = forms.SplitDateTimeField(widget=AdminSplitDateTime())
     staff_netid = forms.ModelChoiceField(queryset=model.objects.all())
+
     class Meta:
         model = Task
         fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required"]
@@ -73,15 +76,15 @@ CountFormSet = forms.modelformset_factory(
 )
 
 
-class ERP_Form(forms.ModelForm):
+class ErpForm(forms.ModelForm):
     class Meta:
         model = Erp
         fields = ["title", "description"]
 
 
-class ERP_Upload_Form(forms.ModelForm):
+class ErpUploadForm(forms.ModelForm):
     class Meta:
-        model = Erp_Upload
+        model = ErpUpload
         fields = ["file"]
 
 

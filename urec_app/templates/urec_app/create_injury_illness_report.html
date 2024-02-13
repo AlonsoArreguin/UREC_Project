@@ -2,21 +2,20 @@
 {% load static %}
 
 {% block title %}
-    Create Accident Ticket
+    Create Injury/Illness Report
 {% endblock title%}
 
 {% block content %}
-    <!-- <a href="{% url 'accident' %}">Return to Accident Home</a> -->
     <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
         <br/>
         <div class="col mx-auto overflow-hidden">
             <div class="card card-glassmorph shadow border-0">
-                <h2 class="card-header text-center maroon-bg">Create Accident Report</h2>
+                <h2 class="card-header text-center maroon-bg">Create Injury/Illness Report</h2>
                 <div class="card-body p-5">
                     <form method="POST" id="form-container">
                         <div class="row">
                             {% csrf_token %}
-                            {% for item in accident_ticket%}
+                            {% for item in injury_illness_report %}
                                 <div class="col">
                                     <div class="me-3 my-2" style="font-size: large; font-weight: bold;">
                                         {{ item.label }}:
@@ -24,12 +23,12 @@
                                     {{ item }}
                                 </div>
                             {% endfor %}
-                                <!-- {{ accident_ticket.as_p }} -->
+                                <!-- {{ injury_illness_report.as_p }} -->
                         </div>
                         <div class="row">
                             <br><h3 class="mt-5 mb-3 sub-maroon-bg">Injury Type</h3>
-                            {{ accident_ticket_injury_formset.management_form }}
-                            <div class="accident-ticket-injury-form" id="injury-form">
+                            {{ injury_illness_report_injury_formset.management_form }}
+                            <div class="injury-illness-report-injury-form" id="injury-form">
 
                                 <div class="col-lg-10 col my-2">
                                     <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Injury Type:</div>
@@ -49,7 +48,7 @@
                                 </div>
                                 
                             </div>
-                            <!-- {% for form in accident_ticket_injury_formset %}
+                            <!-- {% for form in injury_illness_report_injury_formset %}
                                 {% for item in form %}
                                     
                                         <div class="col-lg-10 col my-2">
@@ -83,7 +82,7 @@
                         <div class="row">
                             <br><h3 class="my-4 sub-maroon-bg">Witness Contact Information</h3>
 
-                            {% for form in accident_ticket_witness_formset %}
+                            {% for form in injury_illness_report_witness_formset %}
                             <div class="row" id="witness-form">
                                 {% for item in form %}
                                     {% if item.is_hidden %}
@@ -118,14 +117,14 @@
                         let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
 
                         let addInjuryButton = document.querySelector("#addinjury")
-                        let accidentTicketInjury = document.querySelectorAll("#injury-form")
-                        let injuryFormNum = accidentTicketInjury.length-1
+                        let injuryIllnessReportInjury = document.querySelectorAll("#injury-form")
+                        let injuryFormNum = injuryIllnessReportInjury.length-1
                         addInjuryButton.addEventListener('click', addInjuryForm)
 
                         function addInjuryForm(e){
                             e.preventDefault()
 
-                            let newForm = accidentTicketInjury[0].cloneNode(true)
+                            let newForm = injuryIllnessReportInjury[0].cloneNode(true)
                             let formRegex = RegExp(`form-(\\d){1}-`,'g')
 
                             injuryFormNum++

@@ -124,4 +124,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
 
-AUTH_USER_MODEL = 'urec_app.UREC_User'
+AUTH_USER_MODEL = 'urec_app.UrecUser'

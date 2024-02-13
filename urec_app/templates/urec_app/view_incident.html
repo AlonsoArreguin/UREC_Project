@@ -9,18 +9,18 @@
 
 {% block content %}
 
-<!-- <a href="{% url 'view_incident_tickets' %}">Return to Incident Reports</a> -->
+<!-- <a href="{% url 'view_incident_reports' %}">Return to Incident Reports</a> -->
 <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
     <br/>
     <div class="col mx-auto">
         <div class="card card-glassmorph border-0 mb-3">
             <h2 class="card-header text-center maroon-bg">General Incident Information</h2>
           <div class="card-body p-5">
-            <a class="btn btn-secondary mb-4" href="{% url 'view_accident_tickets' %}">Return to Accident Reports</a>
+            <a class="btn btn-secondary mb-4" href="{% url 'view_incident_reports' %}">Return to Incident Reports</a>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <tr>
-                        <th>Ticket ID</th>
+                        <th>Report ID</th>
                         <th>Date/Time</th>
                         <th>Facility</th>
                         <th>Location in Facility</th>
@@ -29,7 +29,7 @@
                     </tr>
                     {% for item in inc_id %}
                     <tr>
-                        <td>{{ item.ticket_id }}</td>
+                        <td>{{ item.report_id }}</td>
                         <td>{{ item.date_time_submission }}</td>
                         <td>{{ item.urec_facility }}</td>
                         <td>{{ item.location_in_facility }}</td>
@@ -42,14 +42,14 @@
                 <h2 class="mt-5 mb-3 sub-maroon-bg">Specific Incidents</h2>
                 <table class="table table-striped">
                     <tr>
-                        <th>Ticket ID</th>
+                        <th>Report ID</th>
                         <th>Incident Nature</th>
                         <th>Incident Description</th>
                         <th>Action Taken</th>
                     </tr>
                     {% for item in incident_type %}
                     <tr>
-                        <td>{{ item.incident_ticket.ticket_id }}</td>
+                        <td>{{ item.incident_report.report_id }}</td>
                         <td>{{ item.incident_nature }}</td>
                         <td>{{ item.incident_description }}</td>
                         <td>{{ item.action_taken }}</td>
@@ -60,7 +60,7 @@
                 <h2 class="mt-5 mb-3 sub-maroon-bg">Patient Info</h2>
                 <table class="table table-striped">
                     <tr>
-                        <th>Ticket ID</th>
+                        <th>Report ID</th>
                         <th>First Name</th>
                         <th>Middle Name</th>
                         <th>Last Name</th>
@@ -75,7 +75,7 @@
                     </tr>
                     {% for item in patient %}
                     <tr>
-                        <td>{{ item.incident_ticket.ticket_id }}</td>
+                        <td>{{ item.incident_report.report_id }}</td>
                         <td>{{ item.first_name }}</td>
                         <td>{{ item.middle_name }}</td>
                         <td>{{ item.last_name }}</td>
@@ -94,7 +94,7 @@
                 <h2 class="mt-5 mb-3 sub-maroon-bg">Witness Info</h2>
                 <table class="table table-striped">
                     <tr>
-                        <th>Ticket ID</th>
+                        <th>Report ID</th>
                         <th>First Name</th>
                         <th>Middle Name</th>
                         <th>Last Name</th>
@@ -109,7 +109,7 @@
                     </tr>
                     {% for item in witness %}
                     <tr>
-                        <td>{{ item.incident_ticket.ticket_id }}</td>
+                        <td>{{ item.incident_report.report_id }}</td>
                         <td>{{ item.first_name }}</td>
                         <td>{{ item.middle_name }}</td>
                         <td>{{ item.last_name }}</td>
@@ -132,7 +132,7 @@
  <!-- <h2 class="mt-5 mb-3 sub-maroon-bg">General Incident Information</h2>
     <table class="table table-striped">
         <tr>
-            <th>Ticket ID</th>
+            <th>Report ID</th>
             <th>Date/Time</th>
             <th>Facility</th>
             <th>Location in Facility</th>
@@ -141,7 +141,7 @@
         </tr>
         {% for item in inc_id %}
         <tr>
-            <td>{{ item.ticket_id }}</td>
+            <td>{{ item.report_id }}</td>
             <td>{{ item.date_time_submission }}</td>
             <td>{{ item.urec_facility }}</td>
             <td>{{ item.location_in_facility }}</td>
@@ -153,14 +153,14 @@
     <h2 class="mt-5 mb-3 sub-maroon-bg">Specific Incidents</h2>
     <table class="table table-striped">
         <tr>
-            <th>Ticket ID</th>
+            <th>Report ID</th>
             <th>Incident Nature</th>
             <th>Incident Description</th>
             <th>Action Taken</th>
         </tr>
         {% for item in incident_type %}
         <tr>
-            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.incident_report }}</td>
             <td>{{ item.incident_nature }}</td>
             <td>{{ item.incident_description }}</td>
             <td>{{ item.action_taken }}</td>
@@ -170,7 +170,7 @@
     <h2 class="mt-5 mb-3 sub-maroon-bg">Patient Info</h2>
     <table class="table table-striped">
         <tr>
-            <th>Ticket ID</th>
+            <th>Report ID</th>
             <th>First Name</th>
             <th>Middle Name</th>
             <th>Last Name</th>
@@ -185,7 +185,7 @@
         </tr>
         {% for item in patient %}
         <tr>
-            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.incident_report }}</td>
             <td>{{ item.patient_first_name }}</td>
             <td>{{ item.patient_middle_name }}</td>
             <td>{{ item.patient_last_name }}</td>
@@ -203,7 +203,7 @@
     <h2 class="mt-5 mb-3 sub-maroon-bg">Witness Info</h2>
     <table class="table table-striped">
         <tr>
-            <th>Ticket ID</th>
+            <th>Report ID</th>
             <th>First Name</th>
             <th>Middle Name</th>
             <th>Last Name</th>
@@ -218,7 +218,7 @@
         </tr>
         {% for item in witness %}
         <tr>
-            <td>{{ item.incident_ticket }}</td>
+            <td>{{ item.incident_report }}</td>
             <td>{{ item.witness_first_name }}</td>
             <td>{{ item.witness_middle_name }}</td>
             <td>{{ item.witness_last_name }}</td>

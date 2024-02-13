@@ -3,7 +3,7 @@
 
 {% block title %}
     {%for item in var%}
-        Accident Report {{var}}
+        Injury/Illness Report {{var}}
     {%endfor%} 
 {% endblock title %}
 
@@ -16,14 +16,14 @@
     <br/>
     <div class="col mx-auto">
         <div class="card card-glassmorph border-0 mb-3">
-            <h2 class="card-header text-center maroon-bg">Accident Reports</h2>
+            <h2 class="card-header text-center maroon-bg">Injury/Illness Reports</h2>
           <div class="card-body p-5">
-            <a class="btn btn-secondary mb-4" href="{% url 'view_accident_tickets' %}">Return to Accident Reports</a>
+            <a class="btn btn-secondary mb-4" href="{% url 'view_injury_illness_reports' %}">Return to Injury/Illness Reports</a>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Ticket ID</th>
+                            <th>Report ID</th>
                             <th>Date/Time</th>
                             <th>Facility</th>
                             <th>Location in Facility</th>
@@ -32,9 +32,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in acc_id %}
+                        {% for item in ill_id %}
                         <tr>
-                            <td>{{ item.ticket_id }}</td>
+                            <td>{{ item.report_id }}</td>
                             <td>{{ item.date_time_submission }}</td>
                             <td>{{ item.urec_facility }}</td>
                             <td>{{ item.location_in_facility }}</td>
@@ -49,7 +49,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Ticket ID</th>
+                                <th>Report ID</th>
                                 <th>Injury Type</th>
                                 <th>Injury Description</th>
                                 <th>Care Provided</th>
@@ -71,7 +71,7 @@
                     <table class="table table-striped overflow-scroll">
                         <thead>
                             <tr>
-                                <th>Ticket ID</th>
+                                <th>Report ID</th>
                                 <th>First Name</th>
                                 <th>Middle Name</th>
                                 <th>Last Name</th>
