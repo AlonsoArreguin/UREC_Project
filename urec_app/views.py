@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
+import os
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
@@ -358,17 +359,19 @@ def create_erp(request):
         erp_file = ErpUploadForm(request.POST, request.FILES)
         erp_obj = ErpForm(request.POST)
 
-        # extract file information
-        uploadfile = request.FILES['file']  # entire file
-        filelocation = uploadfile.name  # file name from entire file
         if erp_file.is_valid() and erp_obj.is_valid():
-            # make instance of model with files information, then save to database
-            erp = Erp(title=request.POST['title'], filename=filelocation, description=request.POST['description'])
-            erp.save()
+            # extract file information
+            uploadfile = request.FILES['file']  # entire file
+            filelocation = os.path.join(settings.MEDIA_ROOT, uploadfile.name)  # file location in media directory
+            
+            # Save uploaded file to media directory
+            with open(filelocation, 'wb+') as destination:
+                for chunk in uploadfile.chunks():
+                    destination.write(chunk)
 
-            # make instance of media storage, then save the file
-            mediastorage = PublicMediaStorage()
-            mediastorage.save(filelocation, uploadfile)
+            # Create instance of model with file information, then save to database
+            erp = Erp(title=request.POST['title'], filename=uploadfile.name, description=request.POST['description'])
+            erp.save()
 
             # return user to erp home
             return redirect('erp')
