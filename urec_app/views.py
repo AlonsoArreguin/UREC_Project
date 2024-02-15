@@ -364,7 +364,9 @@ def create_erp(request):
         if erp_file.is_valid() and erp_obj.is_valid():
             # extract file information
             uploadfile = request.FILES['file']  # entire file
-            filelocation = os.path.join(settings.MEDIA_ROOT, uploadfile.name)  # file location in media directory
+            custome_directory = os.path.join('appdata','local','urec')
+            os.makedirs(custome_directory,exist_ok=True)
+            filelocation = os.path.join(custome_directory, uploadfile.name)  # file location in media directory
             
             # Save uploaded file to media directory
             with open(filelocation, 'wb+') as destination:
@@ -389,15 +391,23 @@ def create_erp(request):
 @login_required
 # @staff_member_required
 def delete_erp(request, filename):
+
+    # Retrieve the ERP object from the database using the filename
     erp = get_object_or_404(Erp, filename = filename)
 
     if request.method == "POST":
+        # Delete the ERP object from the database
         erp.delete()
 
-        file_path = os.path.join(settings.MEDIA_ROOT, filename)
+        #Construct the file path within the custom directory
+        custom_directory = os.path.join('appdata','local','urec')
+        file_path = os.path.join(custom_directory, filename)
+
+        # Check if the file exists and deletes it
         if os.path.exists(file_path):
             os.remove(file_path)
 
+        # Redirect to the view erp URL after deletion
         return redirect('view_erps')
 
     return redirect('view_erps')
@@ -406,9 +416,13 @@ def delete_erp(request, filename):
 # Download ERP Page/Process
 @login_required
 def download_erp(request, filename):
+
+    # Retrieve the ERP object from the database using the filename
     erp = get_object_or_404(Erp, filename = filename)
 
-    file_path = os.path.join(settings.MEDIA_ROOT, filename)
+    #Construct the file path within the custom directory
+    custom_directory = os.path.join('appdata','local','urec')
+    file_path = os.path.join(custom_directory, filename)
 
     with open(file_path, 'rb') as f:
         response = HttpResponse(f.read(),content_type='application/pdf')
