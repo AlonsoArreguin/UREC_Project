@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
+from django.http import HttpResponse
 import os
+from .models import Erp
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
@@ -387,22 +389,16 @@ def create_erp(request):
 @login_required
 # @staff_member_required
 def delete_erp(request, filename):
-    erp = Erp.objects.get(filename=filename)
+    erp = get_object_or_404(Erp, filename = filename)
+
     if request.method == "POST":
-        # delete from database
         erp.delete()
-        # set variables necessary for S3 connection
-        AWS_REGION = settings.AWS_DEFAULT_REGION
-        S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
-        ACCESS_ID = settings.AWS_ACCESS_KEY_ID
-        ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
-        # initialize S3 connections
-        s3_resource = boto3.resource("s3", aws_access_key_id=ACCESS_ID,
-                                     aws_secret_access_key=ACCESS_KEY, region_name=AWS_REGION)
-        # get instance of S3 object based on filename
-        s3_object = s3_resource.Object(S3_BUCKET_NAME, 'erpfiles/' + str(filename))
-        # delete S3 object
-        s3_object.delete()
+
+        file_path = os.path.join(settings.MEDIA_ROOT, filename)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        return redirect('view_erps')
 
     return redirect('view_erps')
 
@@ -410,22 +406,14 @@ def delete_erp(request, filename):
 # Download ERP Page/Process
 @login_required
 def download_erp(request, filename):
-    # set variables necessary for S3 connection
-    AWS_REGION = settings.AWS_DEFAULT_REGION
-    S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
-    ACCESS_ID = settings.AWS_ACCESS_KEY_ID
-    ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
-    # initialize S3 connection
-    s3_client = boto3.client("s3", aws_access_key_id=ACCESS_ID,
-                             aws_secret_access_key=ACCESS_KEY, region_name=AWS_REGION)
-    # download object in user's browser
-    # s3_client.download_file(S3_BUCKET_NAME, str(filename), 'erpfiles/' + str(filename))
-    erp_url = s3_client.generate_presigned_url('get_object',
-                                               Params={'Bucket': S3_BUCKET_NAME, 'Key': 'erpfiles/' + str(filename)},
-                                               ExpiresIn=300)
+    erp = get_object_or_404(Erp, filename = filename)
 
-    context = {"erp_url": erp_url, "filename": filename}
-    return render(request, 'urec_app/download_erp.html', context)
+    file_path = os.path.join(settings.MEDIA_ROOT, filename)
+
+    with open(file_path, 'rb') as f:
+        response = HttpResponse(f.read(),content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
 
 
 # View all ERPs
