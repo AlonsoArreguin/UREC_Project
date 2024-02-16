@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
+from django.http import HttpResponse
+import os, platform
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
 from .forms import *
+from .models import *
 # from .storage_backends import *
 
 from collections import defaultdict
@@ -415,6 +418,17 @@ def delete_count(request, count_id):
 def erp(request):
     return render(request, 'urec_app/erp.html')
 
+# Used to detect user OS
+def get_user_specific_directory():
+    system = platform.system()
+    if system == 'Windows':
+        appdata_dir = os.environ.get('APPDATA', '')
+        user_specific_dir = os.path.join(appdata_dir, 'Local', 'UREC')
+    elif system == 'Darwin':
+        user_specific_dir = os.path.expanduser('~/Library/Application Support/UREC')
+    else:
+        user_specific_dir = os.path.expanduser('~/.UREC')
+    return user_specific_dir
 
 # Create ERP Page
 @login_required
@@ -425,17 +439,25 @@ def create_erp(request):
         erp_file = ErpUploadForm(request.POST, request.FILES)
         erp_obj = ErpForm(request.POST)
 
-        # extract file information
-        uploadfile = request.FILES['file']  # entire file
-        filelocation = uploadfile.name  # file name from entire file
         if erp_file.is_valid() and erp_obj.is_valid():
-            # make instance of model with files information, then save to database
-            erp = Erp(title=request.POST['title'], filename=filelocation, description=request.POST['description'])
-            erp.save()
+            # extract file information
+            uploadfile = request.FILES['file']
+            
+            # Determine the user-specific directory
+            custom_directory = get_user_specific_directory()
+            # Create the directory if it doesn't exist
+            os.makedirs(custom_directory, exist_ok=True)
+            # Construct the file location within the custom directory
+            filelocation = os.path.join(custom_directory, uploadfile.name)
+            
+            # Save uploaded file to custom directory
+            with open(filelocation, 'wb+') as destination:
+                for chunk in uploadfile.chunks():
+                    destination.write(chunk)
 
-            # make instance of media storage, then save the file
-            mediastorage = PublicMediaStorage()
-            mediastorage.save(filelocation, uploadfile)
+            # Create instance of model with file information, then save to database
+            erp = Erp(title=request.POST['title'], filename=uploadfile.name, description=request.POST['description'])
+            erp.save()
 
             # return user to erp home
             return redirect('erp')
@@ -451,45 +473,42 @@ def create_erp(request):
 @login_required
 # @staff_member_required
 def delete_erp(request, filename):
-    erp = Erp.objects.get(filename=filename)
+    # Retrieve the ERP object from the database using the filename
+    erp = get_object_or_404(Erp, filename=filename)
+
     if request.method == "POST":
-        # delete from database
+        # Delete the ERP object from the database
         erp.delete()
-        # set variables necessary for S3 connection
-        AWS_REGION = settings.AWS_DEFAULT_REGION
-        S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
-        ACCESS_ID = settings.AWS_ACCESS_KEY_ID
-        ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
-        # initialize S3 connections
-        s3_resource = boto3.resource("s3", aws_access_key_id=ACCESS_ID,
-                                     aws_secret_access_key=ACCESS_KEY, region_name=AWS_REGION)
-        # get instance of S3 object based on filename
-        s3_object = s3_resource.Object(S3_BUCKET_NAME, 'erpfiles/' + str(filename))
-        # delete S3 object
-        s3_object.delete()
+
+        # Construct the file path within the custom directory
+        custom_directory = get_user_specific_directory()
+        file_path = os.path.join(custom_directory, filename)
+
+        # Check if the file exists and deletes it
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        # Redirect to the view erps URL after deletion
+        return redirect('view_erps')
 
     return redirect('view_erps')
 
 
-# Download ERP Page/Process
+# Download ERP pdf
 @login_required
 def download_erp(request, filename):
-    # set variables necessary for S3 connection
-    AWS_REGION = settings.AWS_DEFAULT_REGION
-    S3_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
-    ACCESS_ID = settings.AWS_ACCESS_KEY_ID
-    ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
-    # initialize S3 connection
-    s3_client = boto3.client("s3", aws_access_key_id=ACCESS_ID,
-                             aws_secret_access_key=ACCESS_KEY, region_name=AWS_REGION)
-    # download object in user's browser
-    # s3_client.download_file(S3_BUCKET_NAME, str(filename), 'erpfiles/' + str(filename))
-    erp_url = s3_client.generate_presigned_url('get_object',
-                                               Params={'Bucket': S3_BUCKET_NAME, 'Key': 'erpfiles/' + str(filename)},
-                                               ExpiresIn=300)
 
-    context = {"erp_url": erp_url, "filename": filename}
-    return render(request, 'urec_app/download_erp.html', context)
+    # Retrieve the ERP object from the database using the filename
+    erp = get_object_or_404(Erp, filename = filename)
+
+    #Construct the file path within the custom directory
+    custom_directory = get_user_specific_directory()
+    file_path = os.path.join(custom_directory, filename)
+
+    with open(file_path, 'rb') as f:
+        response = HttpResponse(f.read(),content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
 
 
 # View all ERPs
