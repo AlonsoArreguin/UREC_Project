@@ -7,9 +7,13 @@ from django.forms import modelformset_factory
 from django.contrib.auth import get_user_model
 
 
+# Report Forms
+
+
 # Generic Report Form for Injury/Illness and Incident Forms
 class UrecReportForm(forms.ModelForm):
     class Meta:
+        model = UrecReport
         fields = ["urec_facility", "location_in_facility"]
 
 
@@ -20,17 +24,26 @@ class InjuryIllnessReportForm(UrecReportForm):
         fields = UrecReportForm.Meta.fields + ["activity_causing_injury"]
 
 
-# Injury Formset for Injury/Illness Report
-injury_illness_report_injury_formset = modelformset_factory(
-    InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
-)
-
-
 # Incident Report Form
 class IncidentReportForm(UrecReportForm):
     class Meta(UrecReportForm.Meta):
         model = IncidentReport
         fields = UrecReportForm.Meta.fields + ["activity_during_incident"]
+
+
+# Report Specific Formsets
+
+
+# Generic Report Specific Formset for Generic UREC Report
+urec_report_specific_formset = modelformset_factory(
+    UrecReportSpecific, fields=(), extra=1
+)
+
+
+# Injury Formset for Injury/Illness Report
+injury_illness_report_injury_formset = modelformset_factory(
+    InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
+)
 
 
 # Incident Formset for Incident Report
@@ -39,9 +52,13 @@ incident_report_incident_formset = modelformset_factory(
 )
 
 
+# Report Contact Forms
+
+
 # Generic Contact Form for Injury/Illness and Incident Patient Contacts
 class UrecContactForm(forms.ModelForm):
     class Meta:
+        model = UrecContact
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
 
@@ -58,8 +75,11 @@ class IncidentReportContactPatientForm(UrecContactForm):
         model = IncidentReportContactPatient
 
 
+# Report Witness Contact Formsets
+
+
 # Generic Formset Generator Function for Injury/Illness and Incident Witness Contacts
-def create_contact_witness_formset(model):
+def create_urec_contact_formset(model):
     return modelformset_factory(
         model, fields=("first_name", "middle_name", "last_name", "email_address",
                        "personal_phone_number", "home_phone_number", "street_address",
@@ -67,12 +87,16 @@ def create_contact_witness_formset(model):
     )
 
 
+# Generic Contact Information Formset for Generic UREC Report
+urec_contact_formset = create_urec_contact_formset(UrecContact)
+
+
 # Witness Contact Information Formset for Injury/Illness Report
-injury_illness_report_witness_contact_formset = create_contact_witness_formset(InjuryIllnessReportContactWitness)
+injury_illness_report_contact_witness_formset = create_urec_contact_formset(InjuryIllnessReportContactWitness)
 
 
 # Witness Contact Information Formset for Incident Report
-incident_report_witness_formset = create_contact_witness_formset(IncidentReportContactWitness)
+incident_report_contact_witness_formset = create_urec_contact_formset(IncidentReportContactWitness)
 
 
 class TaskForm(forms.ModelForm):

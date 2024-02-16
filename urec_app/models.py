@@ -31,6 +31,9 @@ UREC_FACILITIES = (
     )
 
 
+# Report Models
+
+
 # Generic Report Model for Injury/Illness and Incident Models
 class UrecReport(models.Model):
     report_id = models.AutoField(primary_key=True)
@@ -47,9 +50,24 @@ class InjuryIllnessReport(UrecReport):
     activity_causing_injury = models.CharField(max_length=255)
 
 
+# Incident Report Model
+class IncidentReport(UrecReport):
+    activity_during_incident = models.CharField(max_length=255)
+
+
+# Report Specific Models
+
+
+# Generic Specific Model for Generic UREC Report
+class UrecReportSpecific(models.Model):
+    report = models.ForeignKey(UrecReport, on_delete=models.CASCADE)  # foreign key
+
+    objects = models.Manager()
+
+
 # Injury Model for Injury/Illness Report
 class InjuryIllnessReportInjury(models.Model):
-    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
     injury_type = models.CharField(max_length=255)
     injury_description = models.TextField(max_length=1023)
     care_provided = models.TextField(max_length=1023)
@@ -57,19 +75,17 @@ class InjuryIllnessReportInjury(models.Model):
     objects = models.Manager()
 
 
-# Incident Report Model
-class IncidentReport(UrecReport):
-    activity_during_incident = models.CharField(max_length=255)
-
-
 # Incident Model for Incident Report
 class IncidentReportIncident(models.Model):
-    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
     incident_nature = models.CharField(max_length=255)
     incident_description = models.TextField(max_length=1023)
     action_taken = models.TextField(max_length=1023)
 
     objects = models.Manager()
+
+
+# Report Contact Models
 
 
 # Generic Contact Model for All Injury/Illness and Incident Contacts
@@ -91,25 +107,25 @@ class UrecContact(models.Model):
 
 # Patient Contact Information Model for Injury/Illness Report
 class InjuryIllnessReportContactPatient(UrecContact):
-    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
     injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
 
 
 # Patient Contact Information Model for Incident Report
 class IncidentReportContactPatient(UrecContact):
-    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
 
 
 # Witness Contact Information Model for Injury/Illness Report
 class InjuryIllnessReportContactWitness(UrecContact):
-    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
     injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
     patient = models.ForeignKey(InjuryIllnessReportContactPatient, on_delete=models.CASCADE)
 
 
 # Witness Contact Information Model for Incident Report
 class IncidentReportContactWitness(UrecContact):
-    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
     patient = models.ForeignKey(IncidentReportContactPatient, on_delete=models.CASCADE)  # foreign key
 
 
@@ -139,6 +155,9 @@ class Count(models.Model):
     objects = models.Manager()
 
 
+# Erp Models
+
+
 # Erp Model for Database
 class Erp(models.Model):
     # erp_id = models.AutoField()
@@ -155,5 +174,6 @@ class ErpUpload(models.Model):
     file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
 
 
+# Custom User Model containing Phone Number
 class UrecUser(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)

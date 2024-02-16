@@ -1,0 +1,89 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}
+    Create {{ report_name }} Report
+{% endblock title%}
+
+{% block content %}
+    <form method="POST" id="form_container">
+        {% csrf_token %}
+        <h1>Create {{ report_name }} Report</h1>
+        <div id="report_container">
+            {{ report_form.as_p }}
+        </div>
+        <h1>{{ report_specific_name }}</h1>
+            <div id="specific_container">
+                {{ report_specific_formset.management_form }}
+                {% for form in report_specific_formset %}
+                    <div id="specific_form">
+                        <hr>
+                        {{ form.as_p }}
+                    </div>
+                {% endfor %}
+                <button id="add_specific">Add {{ report_specific_name }}</button>
+            </div>
+        <h1>Patient Contact Information</h1>
+            <div id="patient_container">
+                {{ report_contact_patient.as_p }}
+            </div>
+        <h1>Witness Contact Information</h1>
+            <div id="witness_container">
+                {{ report_contact_witness_formset.management_form }}
+                {% for form in report_contact_witness_formset %}
+                    <div id="witness_form">
+                        <hr>
+                        {{ form.as_p }}
+                    </div>
+                {% endfor %}
+                <button id="add_witness">Add Witness</button>
+            </div>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        let specific_container = document.querySelector("#specific_container")
+        let total_specific_forms = specific_container.querySelector("#id_specific-TOTAL_FORMS")
+
+        let add_specific_button = specific_container.querySelector("#add_specific")
+        add_specific_button.addEventListener('click', add_specific_form)
+
+        let specific_set = specific_container.querySelectorAll("#specific_form")
+        let specific_form_num = specific_set.length-1
+
+        function add_specific_form(e){
+            e.preventDefault()
+
+            let new_form = specific_set[0].cloneNode(true)
+            let form_regex = RegExp(`specific-(\\d){1}-`,'g')
+
+            specific_form_num++
+            new_form.innerHTML = new_form.innerHTML.replace(form_regex, `specific-${specific_form_num}-`)
+            specific_container.insertBefore(new_form, add_specific_button)
+
+            total_specific_forms.setAttribute('value', `${specific_form_num+1}`)
+        }
+    </script>
+    <script>
+        let witness_container = document.querySelector("#witness_container")
+        let total_witness_forms = witness_container.querySelector("#id_witness-TOTAL_FORMS")
+
+        let add_witness_button = witness_container.querySelector("#add_witness")
+        add_witness_button.addEventListener('click', add_witness_form)
+
+        let witness_set = witness_container.querySelectorAll("#witness_form")
+        let witness_form_num = witness_set.length-1
+
+        function add_witness_form(e){
+            e.preventDefault()
+
+            let new_form = witness_set[0].cloneNode(true)
+            let form_regex = RegExp(`witness-(\\d){1}-`,'g')
+
+            witness_form_num++
+            new_form.innerHTML = new_form.innerHTML.replace(form_regex, `witness-${witness_form_num}-`)
+            witness_container.insertBefore(new_form, add_witness_button)
+
+            total_witness_forms.setAttribute('value', `${witness_form_num+1}`)
+        }
+    </script>
+{% endblock content %}
