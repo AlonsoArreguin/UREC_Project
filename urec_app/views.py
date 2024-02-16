@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import HttpResponse
-import os
-from .models import Erp
+import os, platform
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
 from .forms import *
+from .models import *
 # from .storage_backends import *
 
 from collections import defaultdict
@@ -351,6 +351,17 @@ def delete_count(request, count_id):
 def erp(request):
     return render(request, 'urec_app/erp.html')
 
+# Used to detect user OS
+def get_user_specific_directory():
+    system = platform.system()
+    if system == 'Windows':
+        appdata_dir = os.environ.get('APPDATA', '')
+        user_specific_dir = os.path.join(appdata_dir, 'Local', 'UREC')
+    elif system == 'Darwin':
+        user_specific_dir = os.path.expanduser('~/Library/Application Support/UREC')
+    else:
+        user_specific_dir = os.path.expanduser('~/.UREC')
+    return user_specific_dir
 
 # Create ERP Page
 @login_required
@@ -363,12 +374,16 @@ def create_erp(request):
 
         if erp_file.is_valid() and erp_obj.is_valid():
             # extract file information
-            uploadfile = request.FILES['file']  # entire file
-            custome_directory = os.path.join('appdata','local','urec')
-            os.makedirs(custome_directory,exist_ok=True)
-            filelocation = os.path.join(custome_directory, uploadfile.name)  # file location in media directory
+            uploadfile = request.FILES['file']
             
-            # Save uploaded file to media directory
+            # Determine the user-specific directory
+            custom_directory = get_user_specific_directory()
+            # Create the directory if it doesn't exist
+            os.makedirs(custom_directory, exist_ok=True)
+            # Construct the file location within the custom directory
+            filelocation = os.path.join(custom_directory, uploadfile.name)
+            
+            # Save uploaded file to custom directory
             with open(filelocation, 'wb+') as destination:
                 for chunk in uploadfile.chunks():
                     destination.write(chunk)
@@ -391,29 +406,28 @@ def create_erp(request):
 @login_required
 # @staff_member_required
 def delete_erp(request, filename):
-
     # Retrieve the ERP object from the database using the filename
-    erp = get_object_or_404(Erp, filename = filename)
+    erp = get_object_or_404(Erp, filename=filename)
 
     if request.method == "POST":
         # Delete the ERP object from the database
         erp.delete()
 
-        #Construct the file path within the custom directory
-        custom_directory = os.path.join('appdata','local','urec')
+        # Construct the file path within the custom directory
+        custom_directory = get_user_specific_directory()
         file_path = os.path.join(custom_directory, filename)
 
         # Check if the file exists and deletes it
         if os.path.exists(file_path):
             os.remove(file_path)
 
-        # Redirect to the view erp URL after deletion
+        # Redirect to the view erps URL after deletion
         return redirect('view_erps')
 
     return redirect('view_erps')
 
 
-# Download ERP Page/Process
+# Download ERP pdf
 @login_required
 def download_erp(request, filename):
 
@@ -421,7 +435,7 @@ def download_erp(request, filename):
     erp = get_object_or_404(Erp, filename = filename)
 
     #Construct the file path within the custom directory
-    custom_directory = os.path.join('appdata','local','urec')
+    custom_directory = get_user_specific_directory()
     file_path = os.path.join(custom_directory, filename)
 
     with open(file_path, 'rb') as f:
