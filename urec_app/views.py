@@ -4,6 +4,7 @@ from django.http import HttpResponse
 import os, platform
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from django.utils import timezone
 
 from .forms import *
 from .models import *
@@ -323,18 +324,11 @@ def count_view_history(request):
                 '-date_time_submission').first()
             recent_list.append(recent_count)
 
-            # alternative way to append
-            """
-            if recent_count != None:
-                recent_list.append(recent_count)
-            """
-
     context = {'count_item': count_item, 'recent_list': recent_list}
     return render(request, 'urec_app/count_view_history.html', context)
 
 
 # Helper function for count_hourly()
-# TODO probably move somewhere else
 def convert_to_ampm(hour):
     if hour == 0:
         return "12:00 AM"
@@ -347,8 +341,6 @@ def convert_to_ampm(hour):
 
 
 # Helper function for count_hourly()
-# TODO probably move somewhere else
-# TODO change to sort by better hours
 def sort_ampm_key(item):
     hour_str, meridiem = item[0].split(":")[0], item[0].split()[1]
     hour = int(hour_str) if hour_str != "12" else 0
@@ -358,10 +350,6 @@ def sort_ampm_key(item):
 @login_required
 def count_hourly(request):
     counts = Count.objects.all()
-
-    # Filter counts based on today's date
-    # today = datetime.today().date()
-    # today_counts = [count for count in counts if count.date_time_submission.date() == today]
 
     # Filter counts based on datepicker
     # If 'date' is provided in GET params, parse it. Otherwise, use today's date.
@@ -373,27 +361,26 @@ def count_hourly(request):
     else:
         selected_date = datetime.today().date()
 
-    today_counts = [count for count in counts if count.date_time_submission.date() == selected_date]
+    today_counts = [count for count in counts if count.date_time_submission.astimezone(timezone.get_current_timezone()).date() == selected_date]
 
     hourly_counts = defaultdict(list)
 
-    # Initialize all hours in the dictionary
+    # Initialize all hours to the dictionary
     for i in range(24):
-        # hourly_counts[i] = []
         ampm_hour = convert_to_ampm(i)
         hourly_counts[ampm_hour] = []
 
-    # Convert to AM/PM format and append to hourly_counts
+    # Get hour in AM/PM, timezone aware format and append to hourly_counts
     for count in today_counts:
-        hour = count.date_time_submission.hour
+        # Convert UTC formatted datetime to timezone-aware datetime
+        local_dt = count.date_time_submission.astimezone(timezone.get_current_timezone())
+        hour = local_dt.hour
         ampm_hour = convert_to_ampm(hour)
-
         hourly_counts[ampm_hour].append(count)
 
-    # Sorted counts by hour
+    # Sort counts by hour
     sorted_hourly_counts = dict(sorted(hourly_counts.items(), key=sort_ampm_key))
 
-    # context = {'hourly_counts': sorted_hourly_counts, 'today': today}
     context = {'hourly_counts': sorted_hourly_counts, 'selected_date': selected_date}
     return render(request, 'urec_app/count_hourly.html', context)
 
