@@ -354,7 +354,12 @@ def count_hourly(request):
     # Filter counts based on datepicker
     # If 'date' is provided in GET params, parse it. Otherwise, use today's date.
     selected_date_str = request.GET.get('date', None)
-    selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
+    selected_date = datetime.today().date()
+
+    if selected_date_str:
+        selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
+    else:
+        selected_date = datetime.today().date()
 
     today_counts = [count for count in counts if count.date_time_submission.astimezone(timezone.get_current_timezone()).date() == selected_date]
 
