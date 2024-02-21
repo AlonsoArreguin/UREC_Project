@@ -52,25 +52,47 @@ class UrecLocation(models.Model):
 # Report Models
 
 
+# Severity levels for reports
+SEVERITY_LEVELS = (
+    ('Minor', 'Minor'),
+    ('Moderate', 'Moderate')
+)
+
+
 # Generic Report Model for Injury/Illness and Incident Models
 class UrecReport(models.Model):
-    report_id = models.AutoField(primary_key=True)
-    date_time_submission = models.DateTimeField(auto_now_add=True)
+    report_id = models.AutoField("Report ID", primary_key=True)
+    date_time_submission = models.DateTimeField("Date/Time Submitted", auto_now_add=True)
     # models.RESTRICT will prevent the deletion of a location with at least one report associated with it
-    location = models.ForeignKey(UrecLocation, on_delete=models.RESTRICT)
-    staff_netid = models.CharField(max_length=255)
+    location = models.ForeignKey(UrecLocation, verbose_name="Facility / Location", on_delete=models.RESTRICT)
+    severity = models.CharField("Severity Level", max_length=255, choices=SEVERITY_LEVELS)
+    ems_called = models.BooleanField("EMS / Fire Called")
+    police_called = models.BooleanField("Police Called")
+    staff_netid = models.CharField("Staff NetID", max_length=255)
 
     objects = models.Manager()
+
+    def get_labels(self):
+        for field in self._meta.get_fields(include_hidden=False):
+            if hasattr(field, "verbose_name"):
+                if field.name != "urecreport_ptr":
+                    yield field.verbose_name
+
+    def get_values(self):
+        for field in self._meta.get_fields(include_hidden=False):
+            if hasattr(field, "verbose_name"):
+                if field.name != "urecreport_ptr":
+                    yield getattr(self, field.name)
 
 
 # Injury/Illness Report Model
 class InjuryIllnessReport(UrecReport):
-    activity_causing_injury = models.CharField(max_length=255)
+    activity_causing_injury = models.CharField("Activity Causing Injury", max_length=255)
 
 
 # Incident Report Model
 class IncidentReport(UrecReport):
-    activity_during_incident = models.CharField(max_length=255)
+    activity_during_incident = models.CharField("Activity During Incident", max_length=255)
 
 
 # Report Specific Models

@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model
 class UrecReportForm(forms.ModelForm):
     class Meta:
         model = UrecReport
-        fields = ["location"]
+        fields = ["location", "severity", "ems_called", "police_called"]
 
 
 # Injury/Illness Report Form
