@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model
 class UrecReportForm(forms.ModelForm):
     class Meta:
         model = UrecReport
-        fields = ["urec_facility", "location_in_facility"]
+        fields = ["location"]
 
 
 # Injury/Illness Report Form
@@ -114,7 +114,7 @@ class TaskForm(forms.ModelForm):
 
 
 CountFormSet = forms.modelformset_factory(
-    Count, fields=("location_in_facility", "location_count"), extra=4
+    Count, fields=("location", "location_count"), extra=4
 )
 
 

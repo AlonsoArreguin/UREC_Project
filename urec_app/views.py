@@ -194,10 +194,10 @@ class CreateIncidentReport(CreateUrecReport):
 
 # Generic View Function for Injury/Illness and Incident Reports
 def view_report(request, report, report_name, specific_field_names, specific_field_labels):
-    field_names = ['report_id', 'date_time_submission', 'urec_facility', 'location_in_facility', 'staff_netid']
+    field_names = ['report_id', 'date_time_submission', 'location', 'staff_netid']
     field_names.extend(specific_field_names)
 
-    field_labels = ['Report ID', 'Date/Time Submission', 'UREC Facility', 'Location in Facility', 'Staff NetID']
+    field_labels = ['Report ID', 'Date/Time Submission', 'UREC Facility', 'Facility / Location', 'Staff NetID']
     field_labels.extend(specific_field_labels)
 
     raw_reports = report.objects.all()
@@ -315,16 +315,16 @@ def count_update(request):
 @login_required
 # @staff_member_required
 def count_view_history(request):
-    count_item = Count.objects.all().order_by('-count_id').values()
-    recent_list = []
+    count_items = Count.objects.all().order_by('-count_id')
+    recent_counts = []
 
-    for facility, locations in UREC_LOCATIONS:
-        for location_id, location_name in locations:
-            recent_count = Count.objects.filter(location_in_facility=location_id).order_by(
+    for location in UrecLocation.objects.all().values():
+        most_recent_count = Count.objects.filter(location=location['location_id']).order_by(
                 '-date_time_submission').first()
-            recent_list.append(recent_count)
+        if most_recent_count:
+            recent_counts.append(most_recent_count)
 
-    context = {'count_item': count_item, 'recent_list': recent_list}
+    context = {'count_item': count_items, 'recent_list': recent_counts}
     return render(request, 'urec_app/count_view_history.html', context)
 
 

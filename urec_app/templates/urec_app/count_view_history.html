@@ -18,7 +18,7 @@
                 <table id="recent_counts" class="display" width="100%">
                     <thead>
                         <tr>
-                            <th>Location Name</th>
+                            <th>Facility / Location</th>
                             <th>Count</th>
                             <th>Update Time</th>
                         </tr>
@@ -26,7 +26,7 @@
                     <tbody>
                     {% for item in recent_list %}
                     <tr>
-                        <td>{{ item.location_in_facility }}</td>
+                        <td>{{ item.location }}</td>
                         <td>{{ item.location_count }}</td>
                         <td>{{ item.date_time_submission }}</td>
                     </tr>
@@ -41,7 +41,7 @@
                     <thead>
                         <tr>
                             <th>Count ID</th>
-                            <th>Location in Facility</th>
+                            <th>Facility / Location</th>
                             <th>Location Count</th>
                             <th>Update Time</th>
                             <th>Staff</th>
@@ -52,11 +52,11 @@
                     {% for item in count_item %}
                     <tr>
                         <td>{{ item.count_id }}</td>
-                        <td>{{ item.location_in_facility }}</td>
+                        <td>{{ item.location }}</td>
                         <td>{{ item.location_count }}</td>
                         <td>{{ item.date_time_submission }}</td>
                         <td>{{ item.staff_netid }}</td>
-                        <form action="{% url 'delete_count' countid=item.count_id %}" method="post">
+                        <form action="{% url 'delete_count' count_id=item.count_id %}" method="post">
                             {% csrf_token %}
                             <td><input type="submit" value="Delete" /></td>
                         </form>
