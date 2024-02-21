@@ -580,7 +580,7 @@ def complete_task(request, taskid):
     if request.method == "POST":
         # change task status to complete
         task.task_completion = True
-        task.date_time_completion = now()
+        task.date_time_completion = timezone.now()
         task.save()
 
     return redirect('my_tasks')
