@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractUser
 
+
 # List of possible locations within facilities template
 UREC_LOCATIONS = (
         ('Facility 1', (
@@ -21,17 +22,73 @@ UREC_LOCATIONS = (
         )),
     )
 
-# List of possible Facilities
+
+# List of possible facilities
 UREC_FACILITIES = (
         ('Facility 1', 'Facility 1'),
         ('Facility 2', 'Facility 2'),
         ('Facility 3', 'Facility 3'),
     )
 
-# Create your models here.
+
+# Report Models
 
 
-# This model acts as the basis for all other contact related models.
+# Generic Report Model for Injury/Illness and Incident Models
+class UrecReport(models.Model):
+    report_id = models.AutoField(primary_key=True)
+    date_time_submission = models.DateTimeField(auto_now_add=True)
+    urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
+    location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
+    staff_netid = models.CharField(max_length=255)
+
+    objects = models.Manager()
+
+
+# Injury/Illness Report Model
+class InjuryIllnessReport(UrecReport):
+    activity_causing_injury = models.CharField(max_length=255)
+
+
+# Incident Report Model
+class IncidentReport(UrecReport):
+    activity_during_incident = models.CharField(max_length=255)
+
+
+# Report Specific Models
+
+
+# Generic Specific Model for Generic UREC Report
+class UrecReportSpecific(models.Model):
+    report = models.ForeignKey(UrecReport, on_delete=models.CASCADE)  # foreign key
+
+    objects = models.Manager()
+
+
+# Injury Model for Injury/Illness Report
+class InjuryIllnessReportInjury(models.Model):
+    report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
+    injury_type = models.CharField(max_length=255)
+    injury_description = models.TextField(max_length=1023)
+    care_provided = models.TextField(max_length=1023)
+
+    objects = models.Manager()
+
+
+# Incident Model for Incident Report
+class IncidentReportIncident(models.Model):
+    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+    incident_nature = models.CharField(max_length=255)
+    incident_description = models.TextField(max_length=1023)
+    action_taken = models.TextField(max_length=1023)
+
+    objects = models.Manager()
+
+
+# Report Contact Models
+
+
+# Generic Contact Model for All Injury/Illness and Incident Contacts
 class UrecContact(models.Model):
     first_name = models.CharField(max_length=255)
     middle_name = models.CharField(max_length=255, blank=True)
@@ -48,71 +105,27 @@ class UrecContact(models.Model):
     objects = models.Manager()
 
 
-# Primary Injury/Illness Report Model
-class InjuryIllnessReport(models.Model):
-    report_id = models.AutoField(primary_key=True)
-    date_time_submission = models.DateTimeField(auto_now_add=True)
-    urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
-    location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
-    activity_causing_injury = models.CharField(max_length=255)
-    staff_netid = models.CharField(max_length=255)
-
-    objects = models.Manager()
-
-
-# Injury Model for Injury/Illness Report
-class InjuryIllnessReportInjury(models.Model):
-    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
-    injury_type = models.CharField(max_length=255)
-    injury_description = models.TextField(max_length=1023)
-    care_provided = models.TextField(max_length=1023)
-
-    objects = models.Manager()
-
-
 # Patient Contact Information Model for Injury/Illness Report
 class InjuryIllnessReportContactPatient(UrecContact):
-    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
     injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
-
-
-# Witness Contact Information Model for Injury/Illness Report
-class InjuryIllnessReportContactWitness(UrecContact):
-    injury_illness_report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
-    injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
-    patient = models.ForeignKey(InjuryIllnessReportContactPatient, on_delete=models.CASCADE)
-
-
-# Primary Incident Report Model
-class IncidentReport(models.Model):
-    report_id = models.AutoField(primary_key=True)
-    date_time_submission = models.DateTimeField(auto_now_add=True)
-    urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
-    location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
-    activity_during_incident = models.CharField(max_length=255)
-    staff_netid = models.CharField(max_length=255)
-
-    objects = models.Manager()
-
-
-# Incident Sub-Model for Incident Specifics
-class IncidentReportIncident(models.Model):
-    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
-    incident_nature = models.CharField(max_length=255)
-    incident_description = models.TextField(max_length=1023)
-    action_taken = models.TextField(max_length=1023)
-
-    objects = models.Manager()
 
 
 # Patient Contact Information Model for Incident Report
 class IncidentReportContactPatient(UrecContact):
-    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+
+
+# Witness Contact Information Model for Injury/Illness Report
+class InjuryIllnessReportContactWitness(UrecContact):
+    report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
+    injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
+    patient = models.ForeignKey(InjuryIllnessReportContactPatient, on_delete=models.CASCADE)
 
 
 # Witness Contact Information Model for Incident Report
 class IncidentReportContactWitness(UrecContact):
-    incident_report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
     patient = models.ForeignKey(IncidentReportContactPatient, on_delete=models.CASCADE)  # foreign key
 
 
@@ -142,6 +155,9 @@ class Count(models.Model):
     objects = models.Manager()
 
 
+# Erp Models
+
+
 # Erp Model for Database
 class Erp(models.Model):
     # erp_id = models.AutoField()
@@ -158,5 +174,6 @@ class ErpUpload(models.Model):
     file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
 
 
+# Custom User Model containing Phone Number
 class UrecUser(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)

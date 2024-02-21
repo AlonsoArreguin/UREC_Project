@@ -1,0 +1,24 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}
+    View {{ report_name }} Reports
+{% endblock title%}
+
+{% block content %}
+<h1>View {{ report_name }} Reports</h1>
+<p>
+{% for field_label in field_labels %}
+    {{ field_label }}
+    <br>
+{% endfor %}
+</p>
+<p>
+{% for report in reports %}
+    {% for field in report %}
+        {{ field }}
+        <br>
+    {% endfor %}
+{% endfor %}
+</p>
+{% endblock %}
