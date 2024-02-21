@@ -13,8 +13,8 @@
             <div class="col p-2 text-black text-center">
                 {% if user.first_name %}
                     <h1>Welcome to the UREC Risk Management System, {{ user.first_name }}.</h1>
-                {%else%}
-                    <h1>Welcome to the UREC Risk Management System, {{ user.username }}.</h1>
+                {% else %}
+                    <h1>Welcome to the UREC Risk Management System.</h1>
                 {%endif%}
                 <h4 class="p-2">Select an option below to get started.</h4>
                 <a href="{% url 'injury_illness' %}"><button class="basic-nav-btn m-2">Injury/Illness</button></a>
