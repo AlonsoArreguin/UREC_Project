@@ -4,6 +4,9 @@ from .models import *
 # Register your models here.
 admin.site.register(UrecUser)
 
+admin.site.register(UrecFacility)
+admin.site.register(UrecLocation)
+
 admin.site.register(InjuryIllnessReport)
 admin.site.register(InjuryIllnessReportInjury)
 admin.site.register(InjuryIllnessReportContactPatient)

@@ -19,6 +19,12 @@ Windows:
 
 `python manage.py migrate`
 
+## Populate default facilities and locations *(recommended)*
+
+`python manage.py loaddata default_locations`
+
+*Currently set to test data. Skipping this step will require you to manually enter facilities and locations through the admin site.*
+
 ## Create superuser *(recommended)*
 
 `python manage.py createsuperuser`

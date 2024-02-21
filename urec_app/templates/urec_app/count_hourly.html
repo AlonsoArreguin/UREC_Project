@@ -57,7 +57,7 @@
                             <!-- Table structure -->
                             <table class="table table-striped" cellspacing="0" width="100%">
                                 <tr>
-                                    <th>Location</th>
+                                    <th>Facility / Location</th>
                                     <th>Count</th>
                                     <th>Count ID</th>
                                     <th>Timestamp</th>
@@ -66,7 +66,7 @@
                                 </tr>
                                 {% for count in counts_in_hour %}
                                     <tr>
-                                        <td>{{ count.location_in_facility }}</td>
+                                        <td>{{ count.location }}</td>
                                         <td>{{ count.location_count }}</td>
                                         <td>{{ count.count_id }}</td>
                                         <td>{{ count.date_time_submission }}</td>

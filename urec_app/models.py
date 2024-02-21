@@ -3,32 +3,50 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractUser
 
 
-# List of possible locations within facilities template
-UREC_LOCATIONS = (
-        ('Facility 1', (
-            ('Location 1', 'Location 1'),
-            ('Location 2', 'Location 2'),
-            ('Location 3', 'Location 3'),
-        )),
-        ('Facility 2', (
-            ('Location 4', 'Location 4'),
-            ('Location 5', 'Location 5'),
-            ('Location 6', 'Location 6'),
-        )),
-        ('Facility 3', (
-            ('Location 7', 'Location 7'),
-            ('Location 8', 'Location 8'),
-            ('Location 9', 'Location 9'),
-        )),
-    )
+# Facility / Location Models
 
 
-# List of possible facilities
-UREC_FACILITIES = (
-        ('Facility 1', 'Facility 1'),
-        ('Facility 2', 'Facility 2'),
-        ('Facility 3', 'Facility 3'),
-    )
+# Facility Model for Reports and Counts
+class UrecFacility(models.Model):
+    facility_id = models.AutoField(primary_key=True)
+    facility_name = models.CharField(max_length=255)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.facility_name
+
+    # Enforce that facilities must have a unique name
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["facility_name"],
+                name="unique_facility_name",
+            ),
+        ]
+
+
+# Location Model for Reports and Counts
+class UrecLocation(models.Model):
+    location_id = models.AutoField(primary_key=True)
+    # models.RESTRICT will prevent the deletion of a facility with at least one location associated with it
+    facility = models.ForeignKey(UrecFacility, on_delete=models.RESTRICT)
+    location_name = models.CharField(max_length=255)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        facility_name = str(self.facility)
+        return f"{facility_name} / {self.location_name}"
+
+    # Enforce that a facility can't have two locations with the same name
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["facility", "location_name"],
+                name="unique_facility_location_pair",
+            ),
+        ]
 
 
 # Report Models
@@ -38,8 +56,8 @@ UREC_FACILITIES = (
 class UrecReport(models.Model):
     report_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
-    urec_facility = models.CharField(max_length=255, choices=UREC_FACILITIES)
-    location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
+    # models.RESTRICT will prevent the deletion of a location with at least one report associated with it
+    location = models.ForeignKey(UrecLocation, on_delete=models.RESTRICT)
     staff_netid = models.CharField(max_length=255)
 
     objects = models.Manager()
@@ -148,7 +166,8 @@ class Task(models.Model):
 class Count(models.Model):
     count_id = models.AutoField(primary_key=True)
     date_time_submission = models.DateTimeField(auto_now_add=True)
-    location_in_facility = models.CharField(max_length=255, choices=UREC_LOCATIONS)
+    # models.RESTRICT will prevent the deletion of a location with at least one count associated with it
+    location = models.ForeignKey(UrecLocation, on_delete=models.RESTRICT)
     location_count = models.SmallIntegerField()
     staff_netid = models.CharField(max_length=255)
 
