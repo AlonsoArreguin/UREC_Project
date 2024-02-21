@@ -56,7 +56,7 @@
                         <td>{{ item.location_count }}</td>
                         <td>{{ item.date_time_submission }}</td>
                         <td>{{ item.staff_netid }}</td>
-                        <form action="{% url 'delete_count' countid=item.count_id %}" method="post">
+                        <form action="{% url 'delete_count' count_id=item.count_id %}" method="post">
                             {% csrf_token %}
                             <td><input type="submit" value="Delete" /></td>
                         </form>
