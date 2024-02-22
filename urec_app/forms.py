@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 
 #Global Variables
 #lambda functions for different placeholders and possible input widths
-TYPE_WIDGETS = lambda placeholder, max_width = '300px': TextInput(attrs={'class' : 'form-control',
+TYPE_WIDGETS = lambda placeholder, max_width = '400px': TextInput(attrs={'class' : 'form-control',
             'style' : f'max-width:{max_width};',
             'placeholder' : f'{placeholder}'
         })
@@ -20,57 +20,57 @@ TYPE_DESCRIPTION_WIDGETS = lambda placeholder, max_width = '500px': Textarea(att
 CONTACT_WIDGETS = {
             'first_name': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'First Name',
             }),
             'middle_name': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'Middle Name'
             }),
             'last_name': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'Last Name'
             }),
             'email_address': EmailInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'Email Address'
             }),
             'personal_phone_number': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'Personal Phone Number'
             }),
             'home_phone_number': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'Home Phone Number'
             }),
             'street_address': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'Street Address'
             }),
             'city': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'City'
             }),
             'state': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'State'
             }),
             'zip': NumberInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'Zip Code'
             }),
             'minor_status': TextInput(attrs={
                 'class' : 'form-control',
-                'style' : 'max-width: 300px;',
+                'style' : 'max-width: 400px;',
                 'placeholder' : 'Minor Status'
             }),
 }
