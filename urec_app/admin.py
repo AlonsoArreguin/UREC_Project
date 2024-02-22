@@ -1,11 +1,29 @@
 from django.contrib import admin
 from .models import *
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserChangeForm
 
 
 # Register your models here.
 
 
-admin.site.register(UrecUser)
+class UrecUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = UrecUser
+
+
+class UrecUserAdmin(UserAdmin):
+    form = UrecUserChangeForm
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser')}),
+    )
+
+
+admin.site.register(UrecUser, UrecUserAdmin)
+
+
 admin.site.register(UrecFacility)
 admin.site.register(UrecLocation)
 admin.site.register(Count)
