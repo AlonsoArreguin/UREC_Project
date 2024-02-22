@@ -13,8 +13,6 @@ from .models import *
 from collections import defaultdict
 from datetime import datetime
 
-from django.views import generic
-
 
 # Home Page
 @login_required
@@ -202,12 +200,13 @@ def view_report(request, report, report_name, specific_field_names, specific_fie
     field_labels = ['Report ID', 'Date/Time Submission', 'Facility / Location', 'Staff NetID']
     field_labels.extend(specific_field_labels)
 
-def view_reports(request, report, report_name):
     raw_reports = report.objects.all()
     reports = []
-    field_labels = report.get_labels(report)
     for raw_report in raw_reports:
-        reports.append(raw_report.get_values())
+        report = []
+        for field_name in field_names:
+            report.append(getattr(raw_report, field_name))
+        reports.append(report)
     context = {
         'report_name': report_name,
         'field_labels': field_labels,
@@ -219,13 +218,17 @@ def view_reports(request, report, report_name):
 # View all Injury/Illness Reports
 @login_required
 def view_injury_illness_reports(request):
-    return view_reports(request, InjuryIllnessReport, "Injury/Illness")
+    return view_report(request, InjuryIllnessReport, "Injury/Illness",
+                       ['activity_causing_injury'],
+                       ['Activity Causing Injury'])
 
 
 # View all Incident Reports
 @login_required
 def view_incident_reports(request):
-    return view_reports(request, IncidentReport, "Incident")
+    return view_report(request, IncidentReport, "Incident",
+                       ['activity_during_incident'],
+                       ['Activity During Incident'])
 
 
 # Injury/Illness Functions
