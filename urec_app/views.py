@@ -120,6 +120,7 @@ class CreateUrecReport(TemplateView):
         if False not in all_good:
             report_form_instance = report_form.save(commit=False)
             report_form_instance.staff_netid = self.request.user
+            report_form_instance.date_time_submission = timezone.now()
             report_form_instance.save()
 
             report_contact_patient_instance = report_contact_patient.save(commit=False)

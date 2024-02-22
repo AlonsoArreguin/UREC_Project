@@ -24,6 +24,8 @@ class UrecFacility(models.Model):
                 name="unique_facility_name",
             ),
         ]
+        verbose_name = 'Facility'
+        verbose_name_plural = 'Facilities'
 
 
 # Location Model for Reports and Counts
@@ -47,6 +49,7 @@ class UrecLocation(models.Model):
                 name="unique_facility_location_pair",
             ),
         ]
+        verbose_name = 'Location'
 
 
 # Report Models
@@ -62,7 +65,7 @@ SEVERITY_LEVELS = (
 # Generic Report Model for Injury/Illness and Incident Models
 class UrecReport(models.Model):
     report_id = models.AutoField("Report ID", primary_key=True)
-    date_time_submission = models.DateTimeField("Date/Time Submitted", auto_now_add=True)
+    date_time_submission = models.DateTimeField("Date/Time Submitted")
     # models.RESTRICT will prevent the deletion of a location with at least one report associated with it
     location = models.ForeignKey(UrecLocation, verbose_name="Facility / Location", on_delete=models.RESTRICT)
     severity = models.CharField("Severity Level", max_length=255, choices=SEVERITY_LEVELS)
@@ -89,11 +92,22 @@ class UrecReport(models.Model):
 class InjuryIllnessReport(UrecReport):
     activity_causing_injury = models.CharField("Activity Causing Injury", max_length=255)
 
+    def __str__(self):
+        return f"Injury/Illness Report #{self.report_id} - {self.activity_causing_injury}"
+
+    class Meta:
+        verbose_name = 'Injury/Illness Report'
+
 
 # Incident Report Model
 class IncidentReport(UrecReport):
     activity_during_incident = models.CharField("Activity During Incident", max_length=255)
 
+    def __str__(self):
+        return f"Incident Report #{self.report_id} - {self.activity_during_incident}"
+
+    class Meta:
+        verbose_name = 'Incident Report'
 
 # Report Specific Models
 
@@ -114,6 +128,13 @@ class InjuryIllnessReportInjury(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+        return f"Injury/Illness Report Injury - {self.injury_type}"
+
+    class Meta:
+        verbose_name = 'Injury/Illness Report Injury'
+        verbose_name_plural = 'Injury/Illness Report Injuries'
+
 
 # Incident Model for Incident Report
 class IncidentReportIncident(models.Model):
@@ -123,6 +144,12 @@ class IncidentReportIncident(models.Model):
     action_taken = models.TextField(max_length=1023)
 
     objects = models.Manager()
+
+    def __str__(self):
+        return f"Incident Report Incident - {self.incident_nature}"
+
+    class Meta:
+        verbose_name = 'Incident Report Incident'
 
 
 # Report Contact Models
@@ -142,6 +169,11 @@ class UrecContact(models.Model):
     zip = models.CharField(max_length=255, blank=True)
     minor_status = models.CharField(max_length=255)
 
+    def get_full_name(self):
+        return (f"{self.first_name}" +
+                (f" {self.middle_name}" if self.middle_name else "") +
+                (f" {self.last_name}" if self.last_name else ""))
+
     objects = models.Manager()
 
 
@@ -150,10 +182,22 @@ class InjuryIllnessReportContactPatient(UrecContact):
     report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)  # foreign key
     injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
 
+    def __str__(self):
+        return f"Injury/Illness Report Patient Contact - {self.get_full_name()}"
+
+    class Meta:
+        verbose_name = 'Injury/Illness Report Patient Contact'
+
 
 # Patient Contact Information Model for Incident Report
 class IncidentReportContactPatient(UrecContact):
     report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
+
+    def __str__(self):
+        return f"Incident Report Patient Contact - {self.get_full_name()}"
+
+    class Meta:
+        verbose_name = 'Incident Report Patient Contact'
 
 
 # Witness Contact Information Model for Injury/Illness Report
@@ -162,11 +206,23 @@ class InjuryIllnessReportContactWitness(UrecContact):
     injury_illness_relation = models.CharField(max_length=255, default='wip')  # Witness
     patient = models.ForeignKey(InjuryIllnessReportContactPatient, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"Injury/Illness Report Witness Contact - {self.get_full_name()}"
+
+    class Meta:
+        verbose_name = 'Injury/Illness Report Witness Contact'
+
 
 # Witness Contact Information Model for Incident Report
 class IncidentReportContactWitness(UrecContact):
     report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)  # foreign key
     patient = models.ForeignKey(IncidentReportContactPatient, on_delete=models.CASCADE)  # foreign key
+
+    def __str__(self):
+        return f"Incident Report Witness Contact - {self.get_full_name()}"
+
+    class Meta:
+        verbose_name = 'Incident Report Witness Contact'
 
 
 # Task Model
