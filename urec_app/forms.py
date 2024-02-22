@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
 from django.contrib.auth.forms import UserChangeForm
 from .models import *
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, TextInput, EmailInput, NumberInput, Textarea, SelectMultiple
 
 from django.contrib.auth import get_user_model
 
@@ -22,6 +22,12 @@ class InjuryIllnessReportForm(UrecReportForm):
     class Meta(UrecReportForm.Meta):
         model = InjuryIllnessReport
         fields = UrecReportForm.Meta.fields + ["activity_causing_injury"]
+        widgets={
+        'activity_causing_injury' : TextInput(attrs={
+            'class' : 'form-control',
+            'style' : 'max-width: 300px;',
+            'placeholder' : 'How did the injury occur?'
+        })}
 
 
 # Incident Report Form
@@ -29,6 +35,12 @@ class IncidentReportForm(UrecReportForm):
     class Meta(UrecReportForm.Meta):
         model = IncidentReport
         fields = UrecReportForm.Meta.fields + ["activity_during_incident"]
+        widgets={
+        'activity_during_incident' : TextInput(attrs={
+            'class' : 'form-control',
+            'style' : 'max-width: 300px;',
+            'placeholder' : 'How did the incident occur?'
+        })}
 
 
 # Report Specific Formsets
@@ -42,13 +54,49 @@ urec_report_specific_formset = modelformset_factory(
 
 # Injury Formset for Injury/Illness Report
 injury_illness_report_injury_formset = modelformset_factory(
-    InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
+    InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1,
+    widgets={
+        'injury_type' : TextInput(attrs={
+            'class' : 'form-control',
+            'style' : 'max-width: 300px;',
+            'placeholder' : 'Injury Type',
+        }),
+        'injury_description' : Textarea(attrs={
+            'class' : 'form-control',
+            'style' : 'max-width: 500px;',
+            'placeholder' : 'Describe the Injury',
+        }),
+        'care_provided' : TextInput(attrs={
+            'class' : 'form-control',
+            'style' : 'max-width: 300px;',
+            'placeholder' : 'Care Provided',
+    }),
+    }
+    
 )
 
 
 # Incident Formset for Incident Report
 incident_report_incident_formset = modelformset_factory(
-    IncidentReportIncident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1
+    IncidentReportIncident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1,
+    widgets={
+        'incident_nature' : TextInput(attrs={
+            'class' : 'form-control',
+            'style' : 'max-width: 300px;',
+            'placeholder' : 'Incident',
+        }),
+        'incident_description' : Textarea(attrs={
+            'class' : 'form-control',
+            'style' : 'max-width: 500px;',
+            'placeholder' : 'Describe the Incident',
+        }),
+        'action_taken' : TextInput(attrs={
+            'class' : 'form-control',
+            'style' : 'max-width: 300px;',
+            'placeholder' : 'Actions Taken',
+    }),
+    }
+    
 )
 
 
@@ -61,6 +109,64 @@ class UrecContactForm(forms.ModelForm):
         model = UrecContact
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+        widgets={
+            'first_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'First Name',
+            }),
+            'middle_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Middle Name'
+            }),
+            'last_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Last Name'
+            }),
+            'email_address': EmailInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Email Address'
+            }),
+            'personal_phone_number': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Personal Phone Number'
+            }),
+            'home_phone_number': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Home Phone Number'
+            }),
+            'street_address': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Street Address'
+            }),
+            'city': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'City'
+            }),
+            'state': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'State'
+            }),
+            'zip': NumberInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Zip Code'
+            }),
+            'minor_status': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Minor Status'
+            }),
+
+        }
 
 
 # Patient Contact Information Form for Injury/Illness Report
@@ -83,7 +189,65 @@ def create_urec_contact_formset(model):
     return modelformset_factory(
         model, fields=("first_name", "middle_name", "last_name", "email_address",
                        "personal_phone_number", "home_phone_number", "street_address",
-                       "city", "state", "zip", "minor_status"), extra=1
+                       "city", "state", "zip", "minor_status"), extra=1,
+        widgets={
+            'first_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'First Name',
+            }),
+            'middle_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Middle Name'
+            }),
+            'last_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Last Name'
+            }),
+            'email_address': EmailInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Email Address'
+            }),
+            'personal_phone_number': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Personal Phone Number'
+            }),
+            'home_phone_number': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Home Phone Number'
+            }),
+            'street_address': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Street Address'
+            }),
+            'city': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'City'
+            }),
+            'state': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'State'
+            }),
+            'zip': NumberInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Zip Code'
+            }),
+            'minor_status': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 300px;',
+                'placeholder' : 'Minor Status'
+            }),
+
+        }
     )
 
 

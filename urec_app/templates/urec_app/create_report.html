@@ -6,40 +6,51 @@
 {% endblock title%}
 
 {% block content %}
-    <form method="POST" id="form_container">
-        {% csrf_token %}
-        <h1>Create {{ report_name }} Report</h1>
-        <div id="report_container">
-            {{ report_form.as_p }}
+<div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
+    <br/>
+    <div class="col mx-auto overflow-hidden">
+        <div class="card card-glassmorph border-0 mb-3">
+            <h2 class="card-header text-center maroon-bg">Create {{ report_name }} Report</h2>
+          <div class="card-body p-5">
+            <form method="POST" id="form_container">
+                {% csrf_token %}
+                <!-- <h1>Create {{ report_name }} Report</h1> -->
+                <div id="report_container">
+                    {{ report_form.as_p }}
+                </div>
+                <h3 class="mt-5 mb-3 sub-maroon-bg">{{ report_specific_name }}</h3>
+                    <div id="specific_container">
+                        {{ report_specific_formset.management_form }}
+                        {% for form in report_specific_formset %}
+                            <div id="specific_form">
+                                <hr>
+                                {{ form.as_p }}
+                            </div>
+                        {% endfor %}
+                        <button id="add_specific" class="form-btn">Add {{ report_specific_name }}</button>
+                    </div>
+                <h3 class="mt-5 mb-3 sub-maroon-bg">Patient Contact Information</h3>
+                    <div id="patient_container">
+                        {{ report_contact_patient.as_p }}
+                    </div>
+                <h3 class="mt-5 mb-3 sub-maroon-bg">Witness Contact Information</h3>
+                    <div id="witness_container">
+                        {{ report_contact_witness_formset.management_form }}
+                        {% for form in report_contact_witness_formset %}
+                            <div id="witness_form">
+                                <hr>
+                                {{ form.as_p }}
+                            </div>
+                        {% endfor %}
+                        <button id="add_witness" class="form-btn">Add Witness</button>
+                    </div>
+                <button type="submit" class="form-btn-submit">Submit</button>
+            </form>
+            </div>
         </div>
-        <h1>{{ report_specific_name }}</h1>
-            <div id="specific_container">
-                {{ report_specific_formset.management_form }}
-                {% for form in report_specific_formset %}
-                    <div id="specific_form">
-                        <hr>
-                        {{ form.as_p }}
-                    </div>
-                {% endfor %}
-                <button id="add_specific">Add {{ report_specific_name }}</button>
-            </div>
-        <h1>Patient Contact Information</h1>
-            <div id="patient_container">
-                {{ report_contact_patient.as_p }}
-            </div>
-        <h1>Witness Contact Information</h1>
-            <div id="witness_container">
-                {{ report_contact_witness_formset.management_form }}
-                {% for form in report_contact_witness_formset %}
-                    <div id="witness_form">
-                        <hr>
-                        {{ form.as_p }}
-                    </div>
-                {% endfor %}
-                <button id="add_witness">Add Witness</button>
-            </div>
-        <button type="submit">Submit</button>
-    </form>
+    </div>
+</div>
+    
     <script>
         let specific_container = document.querySelector("#specific_container")
         let total_specific_forms = specific_container.querySelector("#id_specific-TOTAL_FORMS")
@@ -85,64 +96,5 @@
 
             total_witness_forms.setAttribute('value', `${witness_form_num+1}`)
         }
-    </script>
-    <script>
-        var location_select = document.getElementById('id_report-location');
-
-        var facilities = {};
-
-        var all_locations = location_select.getElementsByTagName('option');
-        for (var i = 0; i < all_locations.length; i++) {
-            var location_label = all_locations[i].label;
-
-            if (location_label.includes(" / ")){
-                var names = location_label.split(" / ");
-                var facility_name = names[0];
-                var location_name = names[1];
-                var location_id = all_locations[i].value;
-
-                if (!(facility_name in facilities)) {
-                    facilities[facility_name] = [];
-                }
-
-                facilities[facility_name].push([location_id, location_name]);
-            }
-        }
-
-        var facility_select = document.createElement('select');
-        Object.keys(facilities).forEach(function (facility) {
-            var option = document.createElement('option');
-            option.value = facility;
-            option.label = facility;
-            facility_select.appendChild(option);
-        });
-
-        facility_select.addEventListener('change', function () {
-            // Get the selected facility
-            var selected_facility = facility_select.value;
-
-            // Clear the current options in id_report-location
-            location_select.innerHTML = '';
-
-            // Populate id_report-location with the locations of the selected facility
-            facilities[selected_facility].forEach(function (location) {
-                var option = document.createElement('option');
-                option.value = location[0];
-                option.label = location[1];
-                location_select.appendChild(option);
-            });
-        });
-
-        var location_p = location_select.parentElement;
-        location_p.insertBefore(facility_select, location_select);
-
-        location_select.innerHTML = '';
-
-        facilities[Object.keys(facilities)[0]].forEach(function (location) {
-            var option = document.createElement('option');
-            option.value = location[0];
-            option.label = location[1];
-            location_select.appendChild(option);
-        });
     </script>
 {% endblock content %}
