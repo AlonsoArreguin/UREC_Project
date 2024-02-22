@@ -13,6 +13,8 @@ from .models import *
 from collections import defaultdict
 from datetime import datetime
 
+from django.views import generic
+
 
 # Home Page
 @login_required
@@ -193,20 +195,12 @@ class CreateIncidentReport(CreateUrecReport):
 
 
 # Generic View Function for Injury/Illness and Incident Reports
-def view_report(request, report, report_name, specific_field_names, specific_field_labels):
-    field_names = ['report_id', 'date_time_submission', 'location', 'staff_netid']
-    field_names.extend(specific_field_names)
-
-    field_labels = ['Report ID', 'Date/Time Submission', 'UREC Facility', 'Facility / Location', 'Staff NetID']
-    field_labels.extend(specific_field_labels)
-
+def view_reports(request, report, report_name):
     raw_reports = report.objects.all()
     reports = []
+    field_labels = report.get_labels(report)
     for raw_report in raw_reports:
-        report = []
-        for field_name in field_names:
-            report.append(getattr(raw_report, field_name))
-        reports.append(report)
+        reports.append(raw_report.get_values())
     context = {
         'report_name': report_name,
         'field_labels': field_labels,
@@ -218,17 +212,13 @@ def view_report(request, report, report_name, specific_field_names, specific_fie
 # View all Injury/Illness Reports
 @login_required
 def view_injury_illness_reports(request):
-    return view_report(request, InjuryIllnessReport, "Injury/Illness",
-                       ['activity_causing_injury'],
-                       ['Activity Causing Injury'])
+    return view_reports(request, InjuryIllnessReport, "Injury/Illness")
 
 
 # View all Incident Reports
 @login_required
 def view_incident_reports(request):
-    return view_report(request, IncidentReport, "Incident",
-                       ['activity_during_incident'],
-                       ['Activity During Incident'])
+    return view_reports(request, IncidentReport, "Incident")
 
 
 # Injury/Illness Functions
