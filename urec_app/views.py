@@ -197,7 +197,7 @@ def view_report(request, report, report_name, specific_field_names, specific_fie
     field_names = ['report_id', 'date_time_submission', 'location', 'staff_netid']
     field_names.extend(specific_field_names)
 
-    field_labels = ['Report ID', 'Date/Time Submission', 'UREC Facility', 'Facility / Location', 'Staff NetID']
+    field_labels = ['Report ID', 'Date/Time Submission', 'Facility / Location', 'Staff NetID']
     field_labels.extend(specific_field_labels)
 
     raw_reports = report.objects.all()

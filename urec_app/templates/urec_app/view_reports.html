@@ -6,19 +6,35 @@
 {% endblock title%}
 
 {% block content %}
-<h1>View {{ report_name }} Reports</h1>
-<p>
-{% for field_label in field_labels %}
-    {{ field_label }}
-    <br>
-{% endfor %}
-</p>
-<p>
-{% for report in reports %}
-    {% for field in report %}
-        {{ field }}
-        <br>
-    {% endfor %}
-{% endfor %}
-</p>
+<div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
+    <br/>
+    <div class="col mx-auto overflow-hidden">
+        <div class="card card-glassmorph border-0 mb-3">
+            <h2 class="card-header text-center maroon-bg">View {{ report_name }} Reports</h2>
+          <div class="card-body p-5">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover" >
+                    <thead>
+                        <tr>
+                            {% for field_label in field_labels %}
+                                <th>{{ field_label }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for report in reports %}
+                                {% for field in report %}
+                                    <td>{{ field }}</td>
+                                {% endfor %}
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
