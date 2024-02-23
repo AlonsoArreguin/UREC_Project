@@ -6,17 +6,7 @@ from django.forms import modelformset_factory, TextInput, EmailInput, NumberInpu
 
 from django.contrib.auth import get_user_model
 
-#Global Variables
-#lambda functions for different placeholders and possible input widths
-TYPE_WIDGETS = lambda placeholder, max_width = '400px': TextInput(attrs={'class' : 'form-control',
-            'style' : f'max-width:{max_width};',
-            'placeholder' : f'{placeholder}'
-        })
-TYPE_DESCRIPTION_WIDGETS = lambda placeholder, max_width = '500px': Textarea(attrs={'class' : 'form-control',
-            'style' : f'max-width:{max_width};',
-            'placeholder' : f'{placeholder}'
-        })
-
+#Global Variable for contact widgets
 CONTACT_WIDGETS = {
             'first_name': TextInput(attrs={
                 'class' : 'form-control',
@@ -75,14 +65,27 @@ CONTACT_WIDGETS = {
             }),
 }
 
-# Report Forms
+#widget function for different injury/illness/incident fields
+def type_widget(placeholder: str, max_width: str = '400px') -> TextInput:
+    return TextInput(attrs={'class' : 'form-control',
+            'style' : f'max-width:{max_width};',
+            'placeholder' : f'{placeholder}'
+        })
+
+#widget function for different description fields
+def type_description_widgets(placeholder: str, max_width: str = '500px') -> Textarea:
+    return Textarea(attrs={'class' : 'form-control',
+            'style' : f'max-width:{max_width};',
+            'placeholder' : f'{placeholder}'
+        })
+
 
 
 # Generic Report Form for Injury/Illness and Incident Forms
 class UrecReportForm(forms.ModelForm):
     class Meta:
         model = UrecReport
-        fields = ["location"]
+        fields = ["location", "severity", "ems_called", "police_called"]
 
 
 # Injury/Illness Report Form
@@ -91,7 +94,7 @@ class InjuryIllnessReportForm(UrecReportForm):
         model = InjuryIllnessReport
         fields = UrecReportForm.Meta.fields + ["activity_causing_injury"]
         widgets={
-        'activity_causing_injury' : TYPE_WIDGETS('How did the injury occur?')
+        'activity_causing_injury' : type_widget('How did the injury occur?')
         }
 
 
@@ -101,7 +104,7 @@ class IncidentReportForm(UrecReportForm):
         model = IncidentReport
         fields = UrecReportForm.Meta.fields + ["activity_during_incident"]
         widgets={
-        'activity_during_incident' : TYPE_WIDGETS('How did the incident occur?')
+        'activity_during_incident' : type_widget('How did the incident occur?')
         }
 
 
@@ -118,9 +121,9 @@ urec_report_specific_formset = modelformset_factory(
 injury_illness_report_injury_formset = modelformset_factory(
     InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1,
     widgets={
-        'injury_type' : TYPE_WIDGETS('Injury Type'),
-        'injury_description' : TYPE_DESCRIPTION_WIDGETS('Describe the Injury'),
-        'care_provided' : TYPE_WIDGETS('Care Provided'),
+        'injury_type' : type_widget('Injury Type'),
+        'injury_description' : type_description_widgets('Describe the Injury'),
+        'care_provided' : type_widget('Care Provided'),
     }
     
 )
@@ -130,9 +133,9 @@ injury_illness_report_injury_formset = modelformset_factory(
 incident_report_incident_formset = modelformset_factory(
     IncidentReportIncident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1,
     widgets={
-        'incident_nature' : TYPE_WIDGETS('Incident'),
-        'incident_description' : TYPE_DESCRIPTION_WIDGETS('Describe the Incident'),
-        'action_taken' : TYPE_WIDGETS('Actions Taken'),
+        'incident_nature' : type_widget('Incident'),
+        'incident_description' : type_description_widgets('Describe the Incident'),
+        'action_taken' : type_widget('Actions Taken'),
     }
     
 )
