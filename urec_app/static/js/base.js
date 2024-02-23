@@ -47,35 +47,3 @@ $(document).ready( function () {
     });
 } );
 
-// view injury/illness reports
-$(document).ready( function () {
-    $('#injury_illness_report_info').DataTable({
-        responsive: true,
-        "scrollX": true,
-    });
-} );
-
-// view injury/illness reports
-$(document).ready( function () {
-    $('#injury_illness_report_injury').DataTable({
-        responsive: true,
-        "scrollX": true,
-    });
-} );
-
-// view injury/illness reports
-$(document).ready( function () {
-    $('#injury_illness_report_contact').DataTable({
-        responsive: true,
-        "scrollX": true,
-    });
-} );
-
-// view incident reports
-$(document).ready( function () {
-    $('#incident_report_info').DataTable({
-        responsive: true,
-        "scrollX": true,
-    });
-} );
-

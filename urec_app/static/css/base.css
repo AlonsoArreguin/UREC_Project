@@ -8,7 +8,7 @@
 /* variables */
 
 :root{
-    --clr-primary-1: #5d1725;
+    --clr-primary-1: hsl(348, 60%, 23%);
     --clr-primary-2: hsl(347, 61%, 12%);
     --clr-grey-1: rgb(117, 120, 123);
     --clr-grey-2: rgb(193, 198, 200);
@@ -60,6 +60,35 @@ nav, header {
 
 .text-bg-maroon-light{
     background-color: rgba(94, 23, 38, 0.2);
+}
+
+.form-btn{
+    border: none;
+    border-radius: 10px;
+    background-color: var(--clr-primary-1);
+    color: var(--clr-white);
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.form-btn:hover{
+    background-color: var(--clr-primary-2);
+    transition: all .5s;
+}
+
+.form-btn-submit{
+    font-size: large;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--clr-primary-2);
+    color: var(--clr-white);
+    padding: 10px 40px;
+    margin-top: 50px;
+}
+
+.form-btn-submit:hover{
+    background-color: var(--clr-grey-1);
+    transition: all .5s;
 }
 
 .simple-submit-btn{
@@ -116,6 +145,10 @@ nav, header {
 }
 .f-larger{
     font-size: 100px;
+}
+
+.table-grey-1{
+    background-color: var(--clr-grey-1);
 }
 
 
@@ -386,6 +419,13 @@ classes below @media function will be used instead of above*/
                 transform: translateX(-30%);
             }
           }
+      }
+
+
+      /* Begin Form CSS*/
+      .form-control:focus{
+        border: 1px solid var(--clr-primary-1) !important;
+        box-shadow: 0 0 8px var(--clr-primary-1) !important;
       }
 
 }
