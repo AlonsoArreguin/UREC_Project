@@ -22,13 +22,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
                             {% for report in reports %}
+                            <tr>
                                 {% for field in report %}
                                     <td>{{ field }}</td>
                                 {% endfor %}
+                            </tr>
                             {% endfor %}
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
