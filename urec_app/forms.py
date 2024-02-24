@@ -112,6 +112,8 @@ class TaskForm(forms.ModelForm):
             "time": AdminTimeWidget()
         }
 
+class TaskCompletionForm(forms.Form):
+    optional_text = forms.CharField(label='Optional Text', max_length=255)
 
 CountFormSet = forms.modelformset_factory(
     Count, fields=("location", "location_count"), extra=4
