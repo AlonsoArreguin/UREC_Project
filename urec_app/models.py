@@ -154,7 +154,7 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255, blank=True)
     date_time_due = models.DateTimeField()
     text_input_required = models.BooleanField(default=False)
-    optional_text = models.CharField(max_length=255, blank=True)
+    completion_text = models.CharField(max_length=255, blank=True)
     task_completion = models.BooleanField(default=False)
     date_time_completion = models.DateTimeField(null=True)
     staff_netid = models.CharField(max_length=255, blank=True)

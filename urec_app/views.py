@@ -583,7 +583,7 @@ def complete_task(request, taskid):
         if form.is_valid():
             task.task_completion = True
             task.date_time_completion = timezone.now()
-            task.optional_text = form.cleaned_data['optional_text']
+            task.completion_text = form.cleaned_data['completion_text']
             task.save()
             return redirect('my_tasks')
     elif task.text_input_required:
@@ -596,8 +596,6 @@ def complete_task(request, taskid):
         return redirect('my_tasks')
     
     return redirect('my_tasks')
-
-
 # Delete Task
 @login_required
 # @staff_member_required
