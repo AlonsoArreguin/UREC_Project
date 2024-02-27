@@ -19,17 +19,18 @@
                             {% for field_label in field_labels %}
                                 <th>{{ field_label }}</th>
                             {% endfor %}
+                            <th>View Report Details</th>
                         </tr>
                     </thead>
                     <tbody>
                             {% for report in reports %}
                             <tr>
-                                {% for field in report %}
-                                    <td>{{ field }}</td>
+                                {% for value in report.values %}
+                                    <td>{{ value }}</td>
                                 {% endfor %}
+                                <td><a href="{% url view_url report_id=report.id %}">View Report Details</a></td>
                             </tr>
                             {% endfor %}
-                        
                     </tbody>
                 </table>
             </div>
