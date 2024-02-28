@@ -23,8 +23,8 @@
                             <th>Task Description</th>
                             <th>Assigned To</th>
                             <th>Date/Time Due</th>
-                            <th>Options</th>
-                            <th></th>
+                            <th>Expand Task</th>
+                            <th>Complete Task</th>
                         </tr>
                         {% for item in uncompleted %}
                         <tr>
@@ -35,12 +35,12 @@
                                 <td>{{ item.task_description }}</td>
                                 <td>{{ item.staff_netid }}</td>
                                 <td>{{ item.date_time_due }}</td>
-                                <td><button class="btn btn-secondary" type="submit">Expand Task</button></td>
+                                <td><button class="form-btn" type="submit">Expand</button></td>
                             </form>
 
                         <td><form action="{% url 'complete_task' taskid=item.task_id %}" method="post">
                             {% csrf_token %}
-                            <input class="btn btn-danger" type="submit" value="Complete Task" />
+                            <input class="form-btn-submit-task" type="submit" value="Complete" />
                         </form></td>
                         </tr>
                         {% endfor %}
