@@ -442,6 +442,11 @@ classes below @media function will be used instead of above*/
         box-shadow: 0 0 8px var(--clr-primary-1) !important;
       }
 
+      .password-text-label{
+        font-size:large;
+        font-weight: 600;
+      }
+
 }
 
 
