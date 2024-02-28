@@ -63,6 +63,7 @@ nav, header {
 }
 
 .form-btn{
+    text-decoration: none !important;
     border: none;
     border-radius: 10px;
     background-color: var(--clr-primary-1);
@@ -442,7 +443,7 @@ classes below @media function will be used instead of above*/
         box-shadow: 0 0 8px var(--clr-primary-1) !important;
       }
 
-      .password-text-label{
+      .basic-text-label{
         font-size:large;
         font-weight: 600;
       }
