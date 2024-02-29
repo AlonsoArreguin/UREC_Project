@@ -2,19 +2,90 @@ from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
 from django.contrib.auth.forms import UserChangeForm
 from .models import *
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, TextInput, EmailInput, NumberInput, Textarea, SelectMultiple
 
 from django.contrib.auth import get_user_model
 
+#Global Variable for contact widgets
+CONTACT_WIDGETS = {
+            'first_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'First Name',
+            }),
+            'middle_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'Middle Name'
+            }),
+            'last_name': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'Last Name'
+            }),
+            'email_address': EmailInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'Email Address'
+            }),
+            'personal_phone_number': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'Personal Phone Number'
+            }),
+            'home_phone_number': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'Home Phone Number'
+            }),
+            'street_address': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'Street Address'
+            }),
+            'city': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'City'
+            }),
+            'state': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'State'
+            }),
+            'zip': NumberInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'Zip Code'
+            }),
+            'minor_status': TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'Minor Status'
+            }),
+}
 
-# Report Forms
+#widget function for different injury/illness/incident fields
+def type_widget(placeholder: str, max_width: str = '400px') -> TextInput:
+    return TextInput(attrs={'class' : 'form-control',
+            'style' : f'max-width:{max_width};',
+            'placeholder' : f'{placeholder}'
+        })
+
+#widget function for different description fields
+def type_description_widgets(placeholder: str, max_width: str = '500px') -> Textarea:
+    return Textarea(attrs={'class' : 'form-control',
+            'style' : f'max-width:{max_width};',
+            'placeholder' : f'{placeholder}'
+        })
+
 
 
 # Generic Report Form for Injury/Illness and Incident Forms
 class UrecReportForm(forms.ModelForm):
     class Meta:
         model = UrecReport
-        fields = ["location"]
+        fields = ["location", "severity", "ems_called", "police_called"]
 
 
 # Injury/Illness Report Form
@@ -22,6 +93,9 @@ class InjuryIllnessReportForm(UrecReportForm):
     class Meta(UrecReportForm.Meta):
         model = InjuryIllnessReport
         fields = UrecReportForm.Meta.fields + ["activity_causing_injury"]
+        widgets={
+        'activity_causing_injury' : type_widget('How did the injury occur?')
+        }
 
 
 # Incident Report Form
@@ -29,6 +103,9 @@ class IncidentReportForm(UrecReportForm):
     class Meta(UrecReportForm.Meta):
         model = IncidentReport
         fields = UrecReportForm.Meta.fields + ["activity_during_incident"]
+        widgets={
+        'activity_during_incident' : type_widget('How did the incident occur?')
+        }
 
 
 # Report Specific Formsets
@@ -42,13 +119,25 @@ urec_report_specific_formset = modelformset_factory(
 
 # Injury Formset for Injury/Illness Report
 injury_illness_report_injury_formset = modelformset_factory(
-    InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1
+    InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1,
+    widgets={
+        'injury_type' : type_widget('Injury Type'),
+        'injury_description' : type_description_widgets('Describe the Injury'),
+        'care_provided' : type_widget('Care Provided'),
+    }
+    
 )
 
 
 # Incident Formset for Incident Report
 incident_report_incident_formset = modelformset_factory(
-    IncidentReportIncident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1
+    IncidentReportIncident, fields=('incident_nature', 'incident_description', 'action_taken'), extra=1,
+    widgets={
+        'incident_nature' : type_widget('Incident'),
+        'incident_description' : type_description_widgets('Describe the Incident'),
+        'action_taken' : type_widget('Actions Taken'),
+    }
+    
 )
 
 
@@ -61,6 +150,7 @@ class UrecContactForm(forms.ModelForm):
         model = UrecContact
         fields = ["first_name", "middle_name", "last_name", "email_address", "personal_phone_number",
                   "home_phone_number", "street_address", "city", "state", "zip", "minor_status"]
+        widgets= CONTACT_WIDGETS
 
 
 # Patient Contact Information Form for Injury/Illness Report
@@ -83,7 +173,8 @@ def create_urec_contact_formset(model):
     return modelformset_factory(
         model, fields=("first_name", "middle_name", "last_name", "email_address",
                        "personal_phone_number", "home_phone_number", "street_address",
-                       "city", "state", "zip", "minor_status"), extra=1
+                       "city", "state", "zip", "minor_status"), extra=1,
+        widgets= CONTACT_WIDGETS
     )
 
 

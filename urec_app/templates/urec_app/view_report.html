@@ -1,0 +1,106 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ report_name }}
+{% endblock title%}
+
+{% block content %}
+<div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
+    <br/>
+    <div class="col mx-auto overflow-hidden">
+        <div class="card card-glassmorph border-0 mb-3">
+            <h2 class="card-header text-center maroon-bg">{{ report_name }}</h2>
+          <div class="card-body p-5">
+            <div class="table-responsive">
+                <h3>Report Details</h3>
+                <table class="table table-striped table-hover table-bordered" >
+                    <thead class="table-grey-1">
+                        <tr>
+                            {% for label in report_labels %}
+                                <th>{{ label }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                {% for field in report %}
+                                    <td>{{ field }}</td>
+                                {% endfor %}
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+          <div class="card-body p-5">
+            <div class="table-responsive">
+                <h3>Report {{ special_name }}</h3>
+                <table class="table table-striped table-hover table-bordered" >
+                    <thead class="table-grey-1">
+                        <tr>
+                            {% for label in special_labels %}
+                                <th>{{ label }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for special in specials %}
+                            <tr>
+                                {% for field in special %}
+                                    <td>{{ field }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+          </div>
+          <div class="card-body p-5">
+            <div class="table-responsive">
+                <h3>Patient Details</h3>
+                <table class="table table-striped table-hover table-bordered" >
+                    <thead class="table-grey-1">
+                        <tr>
+                            {% for label in patient_labels %}
+                                <th>{{ label }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                {% for field in patient %}
+                                    <td>{{ field }}</td>
+                                {% endfor %}
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+          <div class="card-body p-5">
+            <div class="table-responsive">
+                <h3>Report Witnesses</h3>
+                <table class="table table-striped table-hover table-bordered" >
+                    <thead class="table-grey-1">
+                        <tr>
+                            {% for label in witness_labels %}
+                                <th>{{ label }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for witness in witnesses %}
+                            <tr>
+                                {% for field in witness %}
+                                    <td>{{ field }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

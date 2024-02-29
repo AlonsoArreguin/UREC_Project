@@ -6,40 +6,53 @@
 {% endblock title%}
 
 {% block content %}
-    <form method="POST" id="form_container">
-        {% csrf_token %}
-        <h1>Create {{ report_name }} Report</h1>
-        <div id="report_container">
-            {{ report_form.as_p }}
+<div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
+    <br/>
+    <div class="col mx-auto overflow-hidden">
+        <div class="card card-glassmorph border-0 mb-3">
+            <h2 class="card-header text-center maroon-bg">Create {{ report_name }} Report</h2>
+          <div class="card-body p-5">
+            <form method="POST" id="form_container" class="p-sm-4">
+                {% csrf_token %}
+                <!-- <h1>Create {{ report_name }} Report</h1> -->
+                <div id="report_container">
+                    {{ report_form.as_p }}
+                </div>
+                <h3 class="mt-5 mb-3 sub-maroon-bg">{{ report_specific_name }}</h3>
+                    <div id="specific_container">
+                        {{ report_specific_formset.management_form }}
+                        {% for form in report_specific_formset %}
+                            <div id="specific_form">
+                               {{ form.as_p }}
+                            </div>
+                        {% endfor %}
+
+                        <button id="add_specific" class="form-btn">Add {{ report_specific_name }}</button>
+                    </div>
+                <h3 class="mt-5 mb-3 sub-maroon-bg">Patient Contact Information</h3>
+                    <div id="patient_container">
+                        {{ report_contact_patient.as_p }}
+                    </div>
+                <h3 class="mt-5 mb-3 sub-maroon-bg">Witness Contact Information</h3>
+                    <div id="witness_container">
+                        {{ report_contact_witness_formset.management_form }}
+                        <div class="row">
+                            {% for form in report_contact_witness_formset %}
+                            <div id="witness_form">
+                                    {{ form.as_p }}
+                            </div>
+                        {% endfor %}
+                        </div>
+                        
+                        <button id="add_witness" class="form-btn">Add Witness</button>
+                    </div>
+                <button type="submit" class="form-btn-submit">Submit</button>
+            </form>
+            </div>
         </div>
-        <h1>{{ report_specific_name }}</h1>
-            <div id="specific_container">
-                {{ report_specific_formset.management_form }}
-                {% for form in report_specific_formset %}
-                    <div id="specific_form">
-                        <hr>
-                        {{ form.as_p }}
-                    </div>
-                {% endfor %}
-                <button id="add_specific">Add {{ report_specific_name }}</button>
-            </div>
-        <h1>Patient Contact Information</h1>
-            <div id="patient_container">
-                {{ report_contact_patient.as_p }}
-            </div>
-        <h1>Witness Contact Information</h1>
-            <div id="witness_container">
-                {{ report_contact_witness_formset.management_form }}
-                {% for form in report_contact_witness_formset %}
-                    <div id="witness_form">
-                        <hr>
-                        {{ form.as_p }}
-                    </div>
-                {% endfor %}
-                <button id="add_witness">Add Witness</button>
-            </div>
-        <button type="submit">Submit</button>
-    </form>
+    </div>
+</div>
+    
     <script>
         let specific_container = document.querySelector("#specific_container")
         let total_specific_forms = specific_container.querySelector("#id_specific-TOTAL_FORMS")

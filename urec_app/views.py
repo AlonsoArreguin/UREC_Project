@@ -13,6 +13,8 @@ from .models import *
 from collections import defaultdict
 from datetime import datetime
 
+from django.views import generic
+
 
 # Home Page
 @login_required
@@ -120,6 +122,7 @@ class CreateUrecReport(TemplateView):
         if False not in all_good:
             report_form_instance = report_form.save(commit=False)
             report_form_instance.staff_netid = self.request.user
+            report_form_instance.date_time_submission = timezone.now()
             report_form_instance.save()
 
             report_contact_patient_instance = report_contact_patient.save(commit=False)
@@ -193,22 +196,19 @@ class CreateIncidentReport(CreateUrecReport):
 
 
 # Generic View Function for Injury/Illness and Incident Reports
-def view_report(request, report, report_name, specific_field_names, specific_field_labels):
-    field_names = ['report_id', 'date_time_submission', 'location', 'staff_netid']
-    field_names.extend(specific_field_names)
-
-    field_labels = ['Report ID', 'Date/Time Submission', 'UREC Facility', 'Facility / Location', 'Staff NetID']
-    field_labels.extend(specific_field_labels)
-
-    raw_reports = report.objects.all()
+def view_reports(request, report_model, report_name, view_url):
+    raw_reports = report_model.objects.all()
     reports = []
+    field_labels = report_model.get_labels(report_model)
     for raw_report in raw_reports:
-        report = []
-        for field_name in field_names:
-            report.append(getattr(raw_report, field_name))
+        report = {
+            'id': raw_report.report_id,
+            'values': raw_report.get_values()
+        }
         reports.append(report)
     context = {
         'report_name': report_name,
+        'view_url': view_url,
         'field_labels': field_labels,
         'reports': reports
     }
@@ -218,31 +218,61 @@ def view_report(request, report, report_name, specific_field_names, specific_fie
 # View all Injury/Illness Reports
 @login_required
 def view_injury_illness_reports(request):
-    return view_report(request, InjuryIllnessReport, "Injury/Illness",
-                       ['activity_causing_injury'],
-                       ['Activity Causing Injury'])
+    return view_reports(request, InjuryIllnessReport, "Injury/Illness", "view_injury_illness")
 
 
 # View all Incident Reports
 @login_required
 def view_incident_reports(request):
-    return view_report(request, IncidentReport, "Incident",
-                       ['activity_during_incident'],
-                       ['Activity During Incident'])
+    return view_reports(request, IncidentReport, "Incident", "view_incident")
 
 
-# Injury/Illness Functions
+# View Report
 
 
+def view_report(request, report_model, special_model, patient_model, witness_model, report_id, special_name):
+    raw_report = get_object_or_404(report_model, report_id=report_id)
+    raw_patient = patient_model.objects.filter(report=report_id).first()
+
+    context = {
+        'report_name': str(raw_report),
+        'report_labels': report_model.get_labels(report_model),
+        'report': raw_report.get_values(),
+        'special_name': special_name,
+        'special_labels': special_model.get_labels(special_model),
+        'specials': [],
+        'patient_labels': patient_model.get_labels(patient_model),
+        'patient': raw_patient.get_values(),
+        'witness_labels': witness_model.get_labels(witness_model),
+        'witnesses': [],
+    }
+
+    raw_specials = special_model.objects.filter(report=report_id)
+    for raw_special in raw_specials:
+        context['specials'].append(raw_special.get_values())
+
+    raw_witnesses = witness_model.objects.filter(report=report_id)
+    for raw_witness in raw_witnesses:
+        context['witnesses'].append(raw_witness.get_values())
+
+    return render(request, 'urec_app/view_report.html', context)
+
+
+# View Single Incident Report by ID
 @login_required
-def edit_injury_illness(request):
-    if request.method == 'POST':
-        var = request.POST['id']
-        ill_id = InjuryIllnessReport.objects.filter(report_id=var)
-        injury_type = InjuryIllnessReportInjury.objects.filter(report=ill_id[0])
-        patient = InjuryIllnessReportContactPatient.objects.filter(report=ill_id[0])
-        context = {'var': var, 'ill_id': ill_id, 'injury_type': injury_type, 'contact_info': patient}
-    return render(request, 'urec_app/view_injury_illness.html', context)
+def view_incident_report(request, report_id):
+    return view_report(request, IncidentReport, IncidentReportIncident, IncidentReportContactPatient,
+                       IncidentReportContactWitness, report_id, "Incidents")
+
+
+# View Single Injury/Illness Report by ID
+@login_required
+def view_injury_illness_report(request, report_id):
+    return view_report(request, InjuryIllnessReport, InjuryIllnessReportInjury, InjuryIllnessReportContactPatient,
+                       InjuryIllnessReportContactWitness, report_id, "Injuries")
+
+
+# Delete Report TODO: Ask client if these are necessary (should non-admins be allowed to delete reports)
 
 
 @login_required
@@ -253,23 +283,6 @@ def delete_injury_illness(request, injury_illness_id):
         injury_illness.delete()
 
     return redirect('view_injury_illness_reports')
-
-
-# Incident Functions
-
-
-# View/Edit an individual Incident Reports
-@login_required
-# @staff_member_required
-def view_incident_id(request):
-    if request.method == 'POST':
-        var = request.POST['id']
-        inc_id = IncidentReport.objects.filter(report_id=var)
-        incident_type = IncidentReportIncident.objects.filter(report=inc_id[0])
-        patient = IncidentReportContactPatient.objects.filter(report=inc_id[0])
-        witness = IncidentReportContactWitness.objects.filter(report=inc_id[0])
-        context = {'var': var, 'inc_id': inc_id, 'incident_type': incident_type, 'patient': patient, 'witness': witness}
-    return render(request, 'urec_app/view_incident.html', context)
 
 
 # Delete Incident Report
