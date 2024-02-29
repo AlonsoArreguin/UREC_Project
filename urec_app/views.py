@@ -288,15 +288,16 @@ def count(request):
 @login_required
 def count_update(request):
     if request.method == 'POST':
-        count_form = CountFormSet(data=request.POST)
+        count_form = CountForm(request.POST)
         if count_form.is_valid():
             for count in count_form:
-                count_instance = count.save(commit=False)
-                count_instance.staff_netid = request.user
+                count_instance = count_form.save(commit=False)
+                count_instance.staff_netid = request.user.username
                 count_instance.save()
-
-            return redirect('count')
-    count_form = CountFormSet(queryset=Count.objects.none())
+                return redirect('count_update')
+    else:
+        # fresh form for non-POST requests
+        count_form = CountForm()
 
     context = {'count_form': count_form}
     return render(request, 'urec_app/count_update.html', context)

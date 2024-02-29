@@ -203,11 +203,12 @@ class TaskForm(forms.ModelForm):
             "time": AdminTimeWidget()
         }
 
-
-CountFormSet = forms.modelformset_factory(
-    Count, fields=("location", "location_count"), extra=4
-)
-
+class CountForm(forms.ModelForm):
+    location = forms.ModelChoiceField(queryset=UrecLocation.objects.all())
+ 
+    class Meta:
+        model = Count
+        fields = ('location', 'location_count')
 
 class ErpForm(forms.ModelForm):
     class Meta:
