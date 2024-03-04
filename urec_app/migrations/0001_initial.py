@@ -103,7 +103,7 @@ class Migration(migrations.Migration):
                 ('task_description', models.CharField(blank=True, max_length=255)),
                 ('date_time_due', models.DateTimeField()),
                 ('text_input_required', models.BooleanField(default=False)),
-                ('optional_text', models.CharField(blank=True, max_length=255)),
+                ('completion_text', models.CharField(blank=True, max_length=255)),
                 ('task_completion', models.BooleanField(default=False)),
                 ('date_time_completion', models.DateTimeField(null=True)),
                 ('staff_netid', models.CharField(blank=True, max_length=255)),
