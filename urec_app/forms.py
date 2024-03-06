@@ -197,7 +197,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required"]
+        fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required", "is_recurring", "recurrence_pattern", "recurrence_frequency"]
         widgets = {
             "date": AdminDateWidget(),
             "time": AdminTimeWidget()

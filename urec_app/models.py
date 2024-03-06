@@ -242,7 +242,16 @@ class Task(models.Model):
     task_completion = models.BooleanField(default=False)
     date_time_completion = models.DateTimeField(null=True)
     staff_netid = models.CharField(max_length=255, blank=True)
-
+    RECURRENCE_CHOICES = (
+        ('daily', 'Daily'),
+        ('weekly', 'Weekly'),
+        ('monthly', 'Monthly'),
+        ('yearly', 'Yearly'),
+    )
+    is_recurring = models.BooleanField(default=False)
+    recurrence_pattern = models.CharField(max_length=20, choices=RECURRENCE_CHOICES, blank=True)
+    recurrence_frequency = models.IntegerField(default=1)
+    
     objects = models.Manager()
 
 

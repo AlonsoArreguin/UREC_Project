@@ -5,6 +5,8 @@ import os, platform
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.utils import timezone
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 from .forms import *
 from .models import *
@@ -535,12 +537,45 @@ def create_task(request):
     if request.method == "POST":
         task_obj = TaskForm(request.POST)
         if task_obj.is_valid():
-            task_obj.pk = None
-            task_obj.save()
+            # Check if the task is recurring
+            is_recurring = task_obj.cleaned_data['is_recurring']
+            recurrence_pattern = task_obj.cleaned_data['recurrence_pattern']
+            recurrence_frequency = task_obj.cleaned_data['recurrence_frequency']
+
+            # Save the initial task
+            initial_task = task_obj.save()
+
+            if is_recurring:
+                # Determine the relativedelta based on the recurrence pattern
+                if recurrence_pattern == 'daily':
+                    delta = relativedelta(days=1)
+                elif recurrence_pattern == 'weekly':
+                    delta = relativedelta(weeks=1)
+                elif recurrence_pattern == 'monthly':
+                    delta = relativedelta(months=1)
+                elif recurrence_pattern == 'yearly':
+                    delta = relativedelta(years=1)
+
+                # Create additional tasks based on the recurrence frequency
+                for i in range(1, recurrence_frequency):
+                    new_due_date = initial_task.date_time_due + delta * i
+                    Task.objects.create(
+                        task_name=initial_task.task_name,
+                        task_description=initial_task.task_description,
+                        date_time_due=new_due_date,
+                        text_input_required=initial_task.text_input_required,
+                        completion_text=initial_task.completion_text,
+                        staff_netid=initial_task.staff_netid,
+                        is_recurring=True,
+                        recurrence_pattern=recurrence_pattern,
+                        recurrence_frequency=recurrence_frequency
+                    )
 
             return redirect('task')
+
     else:
         task_obj = TaskForm()
+
     context = {'task_obj': task_obj}
     return render(request, 'urec_app/create_task.html', context)
 
