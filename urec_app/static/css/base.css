@@ -63,6 +63,7 @@ nav, header {
 }
 
 .form-btn{
+    text-decoration: none !important;
     border: none;
     border-radius: 10px;
     background-color: var(--clr-primary-1);
@@ -88,6 +89,20 @@ nav, header {
 
 .form-btn-submit:hover{
     background-color: var(--clr-grey-1);
+    transition: all .5s;
+}
+
+.form-btn-submit-task{
+    border: none;
+    border-radius: 10px;
+    background-color: var(--clr-primary-2);
+    color: var(--clr-white);
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.form-btn-submit-task:hover{
+    background-color: var(--clr-primary-1);
     transition: all .5s;
 }
 
@@ -426,6 +441,11 @@ classes below @media function will be used instead of above*/
       .form-control:focus{
         border: 1px solid var(--clr-primary-1) !important;
         box-shadow: 0 0 8px var(--clr-primary-1) !important;
+      }
+
+      .basic-text-label{
+        font-size:large;
+        font-weight: 600;
       }
 
 }

@@ -236,3 +236,14 @@ class EditAccountForm(UserChangeForm):
             'last_name',
             'phone_number'
         )
+
+        widgets = {
+            'email': type_widget('Email'),
+            'username': type_widget('Username'),
+            'first_name': type_widget('First Name'),
+            'last_name': type_widget('Last Name'),
+            'phone_number': NumberInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+            }),
+        }
