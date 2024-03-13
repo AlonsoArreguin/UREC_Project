@@ -37,11 +37,15 @@
                                 <td>{{ item.date_time_due }}</td>
                                 <td><button class="form-btn" type="submit">Expand</button></td>
                             </form>
-
-                        <td><form action="{% url 'complete_task' taskid=item.task_id %}" method="post">
-                            {% csrf_token %}
-                            <input class="form-btn-submit-task" type="submit" value="Complete" />
-                        </form></td>
+                        <td>
+                            <form action="{% url 'complete_task' taskid=item.task_id %}" method="post">
+                                {% csrf_token %}
+                                {% if item.text_input_required %}
+                                    <input type="text" name="completion_text" placeholder="Completion Text">
+                                {% endif %}
+                                <input class="btn btn-danger" type="submit" value="Complete Task" />
+                            </form>
+                        </td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -53,6 +57,7 @@
                             <th>Task Name</th>
                             <th>Task Description</th>
                             <th>Assigned To</th>
+                            <th>Completion Text</th>
                             <th>Date/Time Due</th>
                             <th>Task Complete?</th>
                             <th>Date/Time Completion</th>
@@ -65,6 +70,7 @@
                                 <td>{{ item.task_name }}</td>
                                 <td>{{ item.task_description }}</td>
                                 <td>{{ item.staff_netid }}</td>
+                                <td>{{ item.completion_text}}</td>
                                 <td>{{ item.date_time_due }}</td>
                                 <td>{{ item.task_completion }}</td>
                                 <td>{{ item.date_time_completion }}</td>

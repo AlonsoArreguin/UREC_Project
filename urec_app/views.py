@@ -590,15 +590,25 @@ def view_my_task(request):
 @login_required
 def complete_task(request, taskid):
     task = Task.objects.get(task_id=taskid)
-    if request.method == "POST":
-        # change task status to complete
+    
+    if task.text_input_required and request.method == "POST":
+        form = TaskCompletionForm(request.POST)
+        if form.is_valid():
+            task.task_completion = True
+            task.date_time_completion = timezone.now()
+            task.completion_text = form.cleaned_data['completion_text']
+            task.save()
+            return redirect('my_tasks')
+    elif task.text_input_required:
+        form = TaskCompletionForm()
+    else:
+        # For tasks that don't require text input, directly mark them as completed
         task.task_completion = True
-        task.date_time_completion = now()
+        task.date_time_completion = timezone.now()
         task.save()
-
+        return redirect('my_tasks')
+    
     return redirect('my_tasks')
-
-
 # Delete Task
 @login_required
 # @staff_member_required
