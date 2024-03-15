@@ -250,7 +250,6 @@ class Task(models.Model):
     )
     is_recurring = models.BooleanField(default=False)
     recurrence_pattern = models.CharField(max_length=20, choices=RECURRENCE_CHOICES, blank=True)
-    recurrence_frequency = models.IntegerField(default=1)
     
     objects = models.Manager()
 
