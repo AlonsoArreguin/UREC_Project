@@ -5,6 +5,8 @@ import os, platform
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.utils import timezone
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 from .forms import *
 from .models import *
@@ -535,12 +537,11 @@ def create_task(request):
     if request.method == "POST":
         task_obj = TaskForm(request.POST)
         if task_obj.is_valid():
-            task_obj.pk = None
             task_obj.save()
-
-            return redirect('task')
+        return redirect('task')
     else:
         task_obj = TaskForm()
+
     context = {'task_obj': task_obj}
     return render(request, 'urec_app/create_task.html', context)
 
@@ -598,7 +599,13 @@ def complete_task(request, taskid):
             task.date_time_completion = timezone.now()
             task.completion_text = form.cleaned_data['completion_text']
             task.save()
-            return redirect('my_tasks')
+            
+            if task.is_recurring:
+                # Create a new recurring task
+                new_task = create_recurring_task(task)
+                return redirect('my_tasks')
+            else:
+                return redirect('my_tasks')
     elif task.text_input_required:
         form = TaskCompletionForm()
     else:
@@ -606,9 +613,46 @@ def complete_task(request, taskid):
         task.task_completion = True
         task.date_time_completion = timezone.now()
         task.save()
-        return redirect('my_tasks')
+        
+        if task.is_recurring:
+            # Create a new recurring task
+            new_task = create_recurring_task(task)
+            return redirect('my_tasks')
+        else:
+            return redirect('my_tasks')
     
     return redirect('my_tasks')
+
+def create_recurring_task(task):
+    
+    # Creates new task with same information and new due date
+    new_task = Task.objects.create(
+        task_name=task.task_name,
+        task_description=task.task_description,
+        date_time_due=calculate_next_due_date(task.date_time_due, task.recurrence_pattern),
+        text_input_required=task.text_input_required,
+        staff_netid=task.staff_netid,
+        is_recurring=task.is_recurring,
+        recurrence_pattern=task.recurrence_pattern
+    )
+    return new_task
+
+def calculate_next_due_date(current_due_date, recurrence_pattern):
+    
+    #Calculates next due date depending on pattern
+
+    if recurrence_pattern == 'daily':
+        return current_due_date + timedelta(days=1)
+    elif recurrence_pattern == 'weekly':
+        return current_due_date + timedelta(weeks=1)
+    elif recurrence_pattern == 'monthly':
+        return current_due_date + relativedelta(months=1)
+    elif recurrence_pattern == 'yearly':
+        return current_due_date + relativedelta(years=1)
+    else:
+        # Default to returning the same date if recurrence pattern is not recognized
+        return current_due_date
+
 # Delete Task
 @login_required
 # @staff_member_required
