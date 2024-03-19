@@ -14,8 +14,8 @@
           <div class="card-body p-5">
             <div class="table-responsive">
                 <h3>Report Details</h3>
-                <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-1">
+                <table class="table table-striped table-hover" >
+                    <thead class="table-maroon-1">
                         <tr>
                             {% for label in report_labels %}
                                 <th>{{ label }}</th>
@@ -36,7 +36,7 @@
             <div class="table-responsive">
                 <h3>Report {{ special_name }}</h3>
                 <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-1">
+                    <thead class="table-maroon-1">
                         <tr>
                             {% for label in special_labels %}
                                 <th>{{ label }}</th>
@@ -59,7 +59,7 @@
             <div class="table-responsive">
                 <h3>Patient Details</h3>
                 <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-1">
+                    <thead class="table-maroon-1">
                         <tr>
                             {% for label in patient_labels %}
                                 <th>{{ label }}</th>
@@ -80,7 +80,7 @@
             <div class="table-responsive">
                 <h3>Report Witnesses</h3>
                 <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-1">
+                    <thead class="table-maroon-1">
                         <tr>
                             {% for label in witness_labels %}
                                 <th>{{ label }}</th>
@@ -89,7 +89,7 @@
                     </thead>
                     <tbody>
                         {% for witness in witnesses %}
-                            <tr>
+                            <tr class="table-grey-1">
                                 {% for field in witness %}
                                     <td>{{ field }}</td>
                                 {% endfor %}

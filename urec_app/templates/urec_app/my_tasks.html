@@ -15,66 +15,68 @@
           <div class="card-body p-5">
             <div class="table-responsive">
                 {% if uncompleted or completed %}
-                    <h3>Uncompleted Tasks</h3>
+                <h2 class="mt-5 mb-3 sub-maroon-bg">Uncompleted Tasks</h2>
                     <table class="table table-striped">
-                        <tr>
+                        <tr class="table-maroon-1">
                             <th>Task ID</th>
                             <th>Task Name</th>
                             <th>Task Description</th>
-                            <th>Assigned To</th>
                             <th>Date/Time Due</th>
                             <th>Expand Task</th>
+                            <th>Completion Text</th>
                             <th>Complete Task</th>
                         </tr>
                         {% for item in uncompleted %}
-                        <tr>
+                        <tr class="table-grey-1">
                             <form action="{% url 'view_my_task' %}" method="POST">
                                 {% csrf_token %}
                                 <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
                                 <td>{{ item.task_name }}</td>
                                 <td>{{ item.task_description }}</td>
-                                <td>{{ item.staff_netid }}</td>
                                 <td>{{ item.date_time_due }}</td>
                                 <td><button class="form-btn" type="submit">Expand</button></td>
                             </form>
-                        <td>
-                            <form action="{% url 'complete_task' taskid=item.task_id %}" method="post">
-                                {% csrf_token %}
-                                {% if item.text_input_required %}
-                                    <input type="text" name="completion_text" placeholder="Completion Text">
-                                {% endif %}
-                                <input class="btn btn-danger" type="submit" value="Complete Task" />
-                            </form>
-                        </td>
+                            <td>
+                                <form action="{% url 'complete_task' taskid=item.task_id %}" method="post">
+                                    {% csrf_token %}
+                                    {% if item.text_input_required %}
+                                        <input class="form-control" type="text" name="completion_text" placeholder="Completion Text">
+                                    {% else %}
+                                        Not Applicable
+                                    {% endif %}
+                            </td>
+                            <td><input class="form-btn-submit-task" type="submit" value="Complete Task" /></td>
+                        </form>
                         </tr>
                         {% endfor %}
                     </table>
 
-                    <h3>Completed Tasks</h3>
+                    <h2 class="mt-5 mb-3 sub-maroon-bg">Completed Tasks</h2>
                     <table class="table table-striped">
-                        <tr>
+                        <tr class="table-maroon-1">
                             <th>Task ID</th>
                             <th>Task Name</th>
                             <th>Task Description</th>
-                            <th>Assigned To</th>
                             <th>Completion Text</th>
                             <th>Date/Time Due</th>
-                            <th>Task Complete?</th>
                             <th>Date/Time Completion</th>
+                            <th>Options</th>
                         </tr>
                         {% for item in completed %}
-                        <tr>
+                        <tr class="table-grey-1">
                             <form action="{% url 'view_my_task' %}" method="POST">
                                 {% csrf_token %}
                                 <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
                                 <td>{{ item.task_name }}</td>
                                 <td>{{ item.task_description }}</td>
-                                <td>{{ item.staff_netid }}</td>
-                                <td>{{ item.completion_text}}</td>
+                                {% if item.completion_text%}
+                                    <td>{{ item.completion_text }}</td>
+                                {% else %}
+                                    <td>Not Applicable</td>
+                                {% endif %}
                                 <td>{{ item.date_time_due }}</td>
-                                <td>{{ item.task_completion }}</td>
                                 <td>{{ item.date_time_completion }}</td>
-                                <td><button type="submit">Expand Task</button></td>
+                                <td><button class="form-btn" type="submit">Expand Task</button></td>
                             </form>
                         </tr>
                         {% endfor %}
