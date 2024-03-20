@@ -12,7 +12,7 @@
     <div class="col mx-auto overflow-hidden">
         <div class="card card-glassmorph border-0 mb-3">
             <h2 class="card-header text-center maroon-bg">My Tasks</h2>
-          <div class="card-body p-5">
+          <div class="card-body p-sm-4 p-2">
             <div class="table-responsive">
                 {% if uncompleted or completed %}
                 <h2 class="mt-5 mb-3 sub-maroon-bg">Uncompleted Tasks</h2>
@@ -72,7 +72,7 @@
                                 {% if item.completion_text%}
                                     <td>{{ item.completion_text }}</td>
                                 {% else %}
-                                    <td>Not Applicable</td>
+                                    <td style="color: rgb(117, 120, 123);"><i>Not Applicable</i></td>
                                 {% endif %}
                                 <td>{{ item.date_time_due }}</td>
                                 <td>{{ item.date_time_completion }}</td>
