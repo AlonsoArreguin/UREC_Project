@@ -6,65 +6,74 @@
 {% endblock title%}
 
 {% block content %}
-    <!-- <a href="{% url 'count' %}">Return to Counts Home</a> -->
-
     <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
         <br/>
         <div class="col mx-auto overflow-hidden">
             <div class="card card-glassmorph border-0">
                 <h2 class="card-header text-center maroon-bg">Update Count</h2>
+
+                <!-- TODO make class different so it doesn't take so much space-->
                 <div class="card-body p-5">
-                    <form method="POST">
+                    <button type="button" class="btn btn-primary" id="add-form">Add count</button>
+                    <button type="button" class="btn btn-primary" id="remove-form">Remove count</button>
+                </div>
+
+                <div class="card-body p-5" id="formset-container">
+                    <form method="POST" id="countForm">
                         {% csrf_token %}
-                    
-                        {{ count_form.as_p }}
-                         <!--<div class="row">
-                                
-                            <div class="col-12">
-                                Location in Facility:
-                                <select name="location_in_facility" required id="id_location_in_facility">
-                                    <option value="" selected="">---------</option>
-                                
-                                    <optgroup label="Facility 1">
-                                    <option value="Location 1">Location 1</option>
-                                
-                                    <option value="Location 2">Location 2</option>
-                                
-                                    <option value="Location 3">Location 3</option>
-                                
-                                    </optgroup>
-                                    <optgroup label="Facility 2">
-                                    <option value="Location 4">Location 4</option>
-                                
-                                    <option value="Location 5">Location 5</option>
-                                
-                                    <option value="Location 6">Location 6</option>
-                                
-                                    </optgroup>
-                                    <optgroup label="Facility 3">
-                                    <option value="Location 7">Location 7</option>
-                                
-                                    <option value="Location 8">Location 8</option>
-                                
-                                    <option value="Location 9">Location 9</option>
-                                
-                                    </optgroup>
-                                </select>
-                            </div>
-                            
-
-                            <div class="col-12 my-3">
-                                Location Count:
-                              <input class="col-sm-4 col-8" type="number" name="location_count" id="id_location_count">  
-                            </div>
-                            
-                        </div> -->
+                        {{ formset.management_form }}
                         
-
-                            <!---<input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />--->
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        {% for form in formset %}
+                        <div class="formset-form">
+                            {{ form.as_p }}
+                        </div>
+                        {% endfor %}
                         
+                        <!-- TODO needs to be somewhere else?-->
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
+                </div>
+
+                    <script>
+                        // Handles adding/removing forms
+                        document.addEventListener('DOMContentLoaded', function()
+                        {
+                            //const container = document.querySelector('#formset-container');
+                            const container = document.getElementById('countForm')
+                            const addBtn = document.getElementById('add-form')
+                            const removeBtn = document.getElementById('remove-form')
+                            let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
+                            let formNum = container.getElementsByClassName('formset-form').length-1; // Get # of the last form on the page
+
+                            addBtn.addEventListener('click', addForm);
+                            removeBtn.addEventListener('click', removeForm);
+                    
+                            function addForm(e) 
+                            {
+                                if (e) {e.preventDefault();}
+                                let newForm = container.querySelector('.formset-form').cloneNode(true); // Clone form
+                                let formRegex = RegExp(`form-(\\d){1}-`,'g'); // Find all instances of the form #
+                                formNum++; // Increment the form number
+                                newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`); // Update new form to correct form #
+                                container.appendChild(newForm, addBtn); // Append new form
+                                totalForms.setAttribute('value', `${formNum+1}`); // Increment total forms in management form
+                    
+                            }
+
+                            function removeForm(e) 
+                            {
+                                if (e) {e.preventDefault();}
+                                if (formNum > 0)
+                                {
+                                    container.removeChild(container.lastElementChild);
+                                    formNum--;
+                                    totalForms.setAttribute('value', `${formNum+1}`); // Decrement total forms in management form
+                                }
+                            }
+                        });
+
+                    </script>
+
                 </div>
             </div>
         </div>

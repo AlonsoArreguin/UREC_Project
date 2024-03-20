@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
 from django.contrib.auth.forms import UserChangeForm
 from .models import *
-from django.forms import modelformset_factory, TextInput, EmailInput, NumberInput, Textarea, SelectMultiple
+from django.forms import modelformset_factory, formset_factory, TextInput, EmailInput, NumberInput, Textarea, SelectMultiple
 
 from django.contrib.auth import get_user_model
 
@@ -190,6 +190,17 @@ injury_illness_report_contact_witness_formset = create_urec_contact_formset(Inju
 incident_report_contact_witness_formset = create_urec_contact_formset(IncidentReportContactWitness)
 
 
+class CountForm(forms.ModelForm):
+    location = forms.ModelChoiceField(queryset=UrecLocation.objects.all())
+ 
+    class Meta:
+        model = Count
+        fields = ('location', 'location_count')
+
+
+CountFormSet = formset_factory(CountForm, extra=1)        
+
+
 class TaskForm(forms.ModelForm):
     model = get_user_model()
     date_time_due = forms.SplitDateTimeField(widget=AdminSplitDateTime())
@@ -203,12 +214,9 @@ class TaskForm(forms.ModelForm):
             "time": AdminTimeWidget()
         }
 
+
 class TaskCompletionForm(forms.Form):
     completion_text = forms.CharField(label='Completion Text', max_length=255)
-
-CountFormSet = forms.modelformset_factory(
-    Count, fields=("location", "location_count"), extra=4
-)
 
 
 class ErpForm(forms.ModelForm):
