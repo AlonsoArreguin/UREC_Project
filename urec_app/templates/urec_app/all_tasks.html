@@ -13,44 +13,81 @@
     <div class="col mx-auto overflow-hidden">
         <div class="card card-glassmorph border-0 mb-3">
             <h2 class="card-header text-center maroon-bg">All Tasks</h2>
-          <div class="card-body p-5">
+          <div class="card-body p-sm-4 p-2">
             <div class="table-responsive">
+                <h2 class="mt-5 mb-3 sub-maroon-bg">Uncompleted Tasks</h2>
                 <table id="" class="table table-striped" cellspacing="0" width="100%">
-
-                    <tr>
+                    <tr class="table-maroon-1">
                         <form action="{% url 'view_task_id' %}" method="POST"></form>
                         <th>Task ID</th>
                         <th>Task Name</th>
                         <th>Task Description</th>
                         <th>Assigned To</th>
                         <th>Text Input Required</th>
-                        <th>Optional Text</th>
-                        <th>Task Complete?</th>
+                        <th>Date/Time Due</th>
+                        <th>Options</th>
+                        <th></th>
+                    </tr>
+                    {% for item in task_item %}
+                        {%if item.task_completion is not True%}
+                            <tr class="table-grey-1">
+                                <form action="{% url 'view_task_id' %}" method="POST">
+                                    {% csrf_token %}
+                                    <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
+                                    <td>{{ item.task_name }}</td>
+                                    <td>{{ item.task_description }}</td>
+                                    <td>{{ item.staff_netid }}</td>
+                                    <td>{{ item.text_input_required }}</td>
+                                    <td>{{ item.date_time_due }}</td>
+                                    <td><button class="form-btn" type="submit">Expand Task</button></td>
+                                </form>
+                                <form action="{% url 'delete_task' taskid=item.task_id %}" method="post">
+                                    {% csrf_token %}
+                                    <td><input class="form-btn-submit-task" type="submit" value="Delete" /></td>
+                                </form>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+
+                </table>
+                <h2 class="mt-5 mb-3 sub-maroon-bg">Completed Tasks</h2>
+                <table id="" class="table table-striped" cellspacing="0" width="100%">
+                    <tr class="table-maroon-1">
+                        <form action="{% url 'view_task_id' %}" method="POST"></form>
+                        <th>Task ID</th>
+                        <th>Task Name</th>
+                        <th>Task Description</th>
+                        <th>Assigned To</th>
+                        <th>Completion Text</th>
                         <th>Date/Time Due</th>
                         <th>Date/Time Completion</th>
                         <th>Options</th>
                         <th></th>
                     </tr>
                     {% for item in task_item %}
-                    <tr>
-                        <form action="{% url 'view_task_id' %}" method="POST">
-                            {% csrf_token %}
-                            <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
-                            <td>{{ item.task_name }}</td>
-                            <td>{{ item.task_description }}</td>
-                            <td>{{ item.staff_netid }}</td>
-                            <td>{{ item.text_input_required }}</td>
-                            <td>{{ item.optional_text }}</td>
-                            <td>{{ item.task_completion }}</td>
-                            <td>{{ item.date_time_due }}</td>
-                            <td>{{ item.date_time_completion }}</td>
-                            <td><button class="btn btn-secondary" type="submit">Expand Task</button></td>
-                        </form>
-                        <form action="{% url 'delete_task' taskid=item.task_id %}" method="post">
-                            {% csrf_token %}
-                            <td><input class="btn btn-danger" type="submit" value="Delete" /></td>
-                        </form>
-                    </tr>
+                        {%if item.task_completion is True%}
+                            <tr class="table-grey-1">
+                                <form action="{% url 'view_task_id' %}" method="POST">
+                                    {% csrf_token %}
+                                    <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
+                                    <td>{{ item.task_name }}</td>
+                                    <td>{{ item.task_description }}</td>
+                                    <td>{{ item.staff_netid }}</td>
+                                    {% if item.completion_text%}
+                                            <td>{{ item.completion_text }}</td>
+                                        {% else %}
+                                            <td style="color: rgb(117, 120, 123);"><i>Not Applicable</i></td>
+                                        {% endif %}
+                                    <td>{{ item.date_time_due }}</td>
+                                    <td>{{ item.date_time_completion }}</td>
+                                    <td><button class="form-btn" type="submit">Expand Task</button></td>
+                                </form>
+                                <form action="{% url 'delete_task' taskid=item.task_id %}" method="post">
+                                    {% csrf_token %}
+                                    <td><input class="form-btn-submit-task" type="submit" value="Delete" /></td>
+                                </form>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
 
                 </table>

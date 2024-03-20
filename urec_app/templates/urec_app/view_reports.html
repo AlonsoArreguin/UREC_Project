@@ -13,23 +13,24 @@
             <h2 class="card-header text-center maroon-bg">View {{ report_name }} Reports</h2>
           <div class="card-body p-5">
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-1">
+                <table class="table table-striped table-hover" >
+                    <thead class="table-maroon-1">
                         <tr>
                             {% for field_label in field_labels %}
                                 <th>{{ field_label }}</th>
                             {% endfor %}
+                            <th>View Report Details</th>
                         </tr>
                     </thead>
                     <tbody>
                             {% for report in reports %}
-                            <tr>
-                                {% for field in report %}
-                                    <td>{{ field }}</td>
+                            <tr class="table-grey-1">
+                                {% for value in report.values %}
+                                    <td>{{ value }}</td>
                                 {% endfor %}
+                                <td><a href="{% url view_url report_id=report.id %}">View Report Details</a></td>
                             </tr>
                             {% endfor %}
-                        
                     </tbody>
                 </table>
             </div>

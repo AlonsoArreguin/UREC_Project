@@ -17,49 +17,51 @@
               {% csrf_token %}
               <div class="row">
                 <div class="col-lg-10 col-11 my-2">
-                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.email.label}}:</div>
+                    <div class="basic-text-label me-3 my-2">{{form.email.label}}:</div>
                   {{form.email}}
                 </div>
               </div>
 
               <div class="row">
                 <div class="col-lg-10 col-11 my-2">
-                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.username.label}}:</div>
+                    <div class="basic-text-label me-3 my-2">{{form.username.label}}:</div>
                   {{form.username}}
                 </div>
               </div>
 
               <div class="row">
                 <div class="col-lg-10 col-11 my-2">
-                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.first_name.label}}:</div>
+                    <div class="basic-text-label me-3 my-2">{{form.first_name.label}}:</div>
                   {{form.first_name}}
                 </div>
               </div>
 
               <div class="row">
                 <div class="col-lg-10 col-11 my-2">
-                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.last_name.label}}:</div>
+                    <div class="basic-text-label me-3 my-2">{{form.last_name.label}}:</div>
                   {{form.last_name}}
                 </div>
               </div>
 
               <div class="row">
                 <div class="col-lg-10 col-11 my-2">
-                    <div class="me-3 my-2" style="font-size: large; font-weight: bold;">{{form.phone_number.label}}:</div>
+                    <div class="basic-text-label me-3 my-2" >{{form.phone_number.label}}:</div>
                   {{form.phone_number}}
                 </div>
               </div>
 
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <p style="color: red"> {{error}} </p>
-                    {% endfor %}
+              {% for field in form %}
+                {% for error in field.errors %}
+                    <p style="color: rgb(255, 0, 0); font-size: medium; font-weight: bold;"> {{error}} </p>
                 {% endfor %}
+              {% endfor %}
 
-                <p><a href="{% url 'password_change' %}">Change Password</a></p>
+                <div class="mt-3">
+                  <button href="{% url 'password_change' %}" class="form-btn">Change Password</button>
+                </div>
               
               <!-- {{ erp_obj.as_p }} {{ erp_file.as_p }} -->
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="form-btn-submit">Submit</button>
               </form>
             </div>
         </div>

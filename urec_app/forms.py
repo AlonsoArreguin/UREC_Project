@@ -190,19 +190,6 @@ injury_illness_report_contact_witness_formset = create_urec_contact_formset(Inju
 incident_report_contact_witness_formset = create_urec_contact_formset(IncidentReportContactWitness)
 
 
-class TaskForm(forms.ModelForm):
-    model = get_user_model()
-    date_time_due = forms.SplitDateTimeField(widget=AdminSplitDateTime())
-    staff_netid = forms.ModelChoiceField(queryset=model.objects.all())
-
-    class Meta:
-        model = Task
-        fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required"]
-        widgets = {
-            "date": AdminDateWidget(),
-            "time": AdminTimeWidget()
-        }
-
 class CountForm(forms.ModelForm):
     location = forms.ModelChoiceField(queryset=UrecLocation.objects.all())
  
@@ -210,7 +197,27 @@ class CountForm(forms.ModelForm):
         model = Count
         fields = ('location', 'location_count')
 
-CountFormSet = formset_factory(CountForm, extra=1)
+
+CountFormSet = formset_factory(CountForm, extra=1)        
+
+
+class TaskForm(forms.ModelForm):
+    model = get_user_model()
+    date_time_due = forms.SplitDateTimeField(widget=AdminSplitDateTime())
+    staff_netid = forms.ModelChoiceField(queryset=model.objects.all())
+
+    class Meta:
+        model = Task
+        fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required", "is_recurring", "recurrence_pattern"]
+        widgets = {
+            "date": AdminDateWidget(),
+            "time": AdminTimeWidget()
+        }
+
+
+class TaskCompletionForm(forms.Form):
+    completion_text = forms.CharField(label='Completion Text', max_length=255)
+
 
 class ErpForm(forms.ModelForm):
     class Meta:
@@ -237,3 +244,14 @@ class EditAccountForm(UserChangeForm):
             'last_name',
             'phone_number'
         )
+
+        widgets = {
+            'email': type_widget('Email'),
+            'username': type_widget('Username'),
+            'first_name': type_widget('First Name'),
+            'last_name': type_widget('Last Name'),
+            'phone_number': NumberInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+            }),
+        }
