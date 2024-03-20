@@ -36,15 +36,15 @@
                                 <td>{{ item.date_time_due }}</td>
                                 <td><button class="form-btn" type="submit">Expand</button></td>
                             </form>
-                            <td>
+                            
                                 <form action="{% url 'complete_task' taskid=item.task_id %}" method="post">
                                     {% csrf_token %}
                                     {% if item.text_input_required %}
-                                        <input class="form-control" type="text" name="completion_text" placeholder="Completion Text">
+                                        <td><input class="form-control" type="text" name="completion_text" placeholder="Completion Text"></td>
                                     {% else %}
-                                        Not Applicable
+                                         <td style="color: rgb(117, 120, 123);"><i>Not Applicable</i> </td>
                                     {% endif %}
-                            </td>
+                            
                             <td><input class="form-btn-submit-task" type="submit" value="Complete Task" /></td>
                         </form>
                         </tr>
