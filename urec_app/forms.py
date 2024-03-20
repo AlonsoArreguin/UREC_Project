@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
 from django.contrib.auth.forms import UserChangeForm
 from .models import *
-from django.forms import modelformset_factory, TextInput, EmailInput, NumberInput, Textarea, SelectMultiple
+from django.forms import modelformset_factory, formset_factory, TextInput, EmailInput, NumberInput, Textarea, SelectMultiple
 
 from django.contrib.auth import get_user_model
 
@@ -209,6 +209,8 @@ class CountForm(forms.ModelForm):
     class Meta:
         model = Count
         fields = ('location', 'location_count')
+
+CountFormSet = formset_factory(CountForm, extra=1)
 
 class ErpForm(forms.ModelForm):
     class Meta:

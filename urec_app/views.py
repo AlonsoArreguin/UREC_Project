@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import os, platform
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
@@ -277,30 +277,31 @@ def delete_incident(request, incident_id):
 
 # Count Functions
 
-
 # Counts Page
 @login_required
 def count(request):
     return render(request, 'urec_app/count.html')
 
-
 # Update Count in Facilities
 @login_required
 def count_update(request):
+    CountFormSet = formset_factory(CountForm, extra=1)
     if request.method == 'POST':
-        count_form = CountForm(request.POST)
-        if count_form.is_valid():
-            for count in count_form:
-                count_instance = count_form.save(commit=False)
-                count_instance.staff_netid = request.user.username
-                count_instance.save()
-                return redirect('count_update')
+        formset = CountFormSet(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                if form.cleaned_data:
+                    count_instance = form.save(commit=False)
+                    count_instance.staff_netid = request.user.username
+                    count_instance.save()
+            return redirect('count')
     else:
         # fresh form for non-POST requests
-        count_form = CountForm()
+        formset = CountFormSet()
 
-    context = {'count_form': count_form}
+    context = {'formset': formset}
     return render(request, 'urec_app/count_update.html', context)
+
 
 
 # View All Count History

@@ -6,23 +6,74 @@
 {% endblock title%}
 
 {% block content %}
-    <!-- <a href="{% url 'count' %}">Return to Counts Home</a> -->
-
     <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
         <br/>
         <div class="col mx-auto overflow-hidden">
             <div class="card card-glassmorph border-0">
                 <h2 class="card-header text-center maroon-bg">Update Count</h2>
-                <div class="card-body p-5">
-                    <form method="POST">
-                        {% csrf_token %}
-                    
-                        {{ count_form.as_p }}
 
-                        <!---<input type="button" class="btn btn-lg btn-block" id="addrow2" value="Add Contact (not implemented)" />-->
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                <!-- TODO make class different so it doesn't take so much space-->
+                <div class="card-body p-5">
+                    <button type="button" class="btn btn-primary" id="add-form">Add count</button>
+                    <button type="button" class="btn btn-primary" id="remove-form">Remove count</button>
+                </div>
+
+                <div class="card-body p-5" id="formset-container">
+                    <form method="POST" id="countForm">
+                        {% csrf_token %}
+                        {{ formset.management_form }}
                         
+                        {% for form in formset %}
+                        <div class="formset-form">
+                            {{ form.as_p }}
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- TODO needs to be somewhere else?-->
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
+                </div>
+
+                    <script>
+                        // Handles adding/removing forms
+                        document.addEventListener('DOMContentLoaded', function()
+                        {
+                            //const container = document.querySelector('#formset-container');
+                            const container = document.getElementById('countForm')
+                            const addBtn = document.getElementById('add-form')
+                            const removeBtn = document.getElementById('remove-form')
+                            let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
+                            let formNum = container.getElementsByClassName('formset-form').length-1; // Get # of the last form on the page
+
+                            addBtn.addEventListener('click', addForm);
+                            removeBtn.addEventListener('click', removeForm);
+                    
+                            function addForm(e) 
+                            {
+                                if (e) {e.preventDefault();}
+                                let newForm = container.querySelector('.formset-form').cloneNode(true); // Clone form
+                                let formRegex = RegExp(`form-(\\d){1}-`,'g'); // Find all instances of the form #
+                                formNum++; // Increment the form number
+                                newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`); // Update new form to correct form #
+                                container.appendChild(newForm, addBtn); // Append new form
+                                totalForms.setAttribute('value', `${formNum+1}`); // Increment total forms in management form
+                    
+                            }
+
+                            function removeForm(e) 
+                            {
+                                if (e) {e.preventDefault();}
+                                if (formNum > 0)
+                                {
+                                    container.removeChild(container.lastElementChild);
+                                    formNum--;
+                                    totalForms.setAttribute('value', `${formNum+1}`); // Decrement total forms in management form
+                                }
+                            }
+                        });
+
+                    </script>
+
                 </div>
             </div>
         </div>
