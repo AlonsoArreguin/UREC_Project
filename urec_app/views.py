@@ -602,7 +602,7 @@ def complete_task(request, taskid):
             task.completion_text = form.cleaned_data['completion_text']
             task.save()
             
-            if task.is_recurring:
+            if task.recurrence_pattern:  # Check if a recurrence pattern is selected
                 # Create a new recurring task
                 new_task = create_recurring_task(task)
                 return redirect('my_tasks')
@@ -616,7 +616,7 @@ def complete_task(request, taskid):
         task.date_time_completion = timezone.now()
         task.save()
         
-        if task.is_recurring:
+        if task.recurrence_pattern:  # Check if a recurrence pattern is selected
             # Create a new recurring task
             new_task = create_recurring_task(task)
             return redirect('my_tasks')
@@ -634,7 +634,6 @@ def create_recurring_task(task):
         date_time_due=calculate_next_due_date(task.date_time_due, task.recurrence_pattern),
         text_input_required=task.text_input_required,
         staff_netid=task.staff_netid,
-        is_recurring=task.is_recurring,
         recurrence_pattern=task.recurrence_pattern
     )
     return new_task

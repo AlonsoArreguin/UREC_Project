@@ -231,6 +231,14 @@ class IncidentReportContactWitness(UrecContact):
         verbose_name = 'Incident Report Witness Contact'
 
 
+RECURRENCE_CHOICES = (
+    (None, 'None'),  # Default option
+    ('daily', 'Daily'),
+    ('weekly', 'Weekly'),
+    ('monthly', 'Monthly'),
+    ('yearly', 'Yearly'),
+)
+
 # Task Model
 class Task(models.Model):
     task_id = models.AutoField(primary_key=True)
@@ -242,13 +250,6 @@ class Task(models.Model):
     task_completion = models.BooleanField(default=False)
     date_time_completion = models.DateTimeField(null=True)
     staff_netid = models.CharField(max_length=255, blank=True)
-    RECURRENCE_CHOICES = (
-        ('daily', 'Daily'),
-        ('weekly', 'Weekly'),
-        ('monthly', 'Monthly'),
-        ('yearly', 'Yearly'),
-    )
-    is_recurring = models.BooleanField(default=False)
     recurrence_pattern = models.CharField(max_length=20, choices=RECURRENCE_CHOICES, blank=True)
     
     objects = models.Manager()
