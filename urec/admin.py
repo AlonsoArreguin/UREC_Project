@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-
 class UrecAdminSite(admin.AdminSite):
     site_header = 'UREC Risk Management System'
     site_title = 'UREC Risk Management System'
