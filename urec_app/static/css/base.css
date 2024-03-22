@@ -8,9 +8,9 @@
 /* variables */
 
 :root{
-    --clr-primary-1: hsl(347, 61%, 23%);
-    --clr-primary-2: hsl(347, 61%, 12%);
-    --clr-grey-1: rgb(117, 120, 123);
+    --clr-primary-1: #5e1726;
+    --clr-primary-2: #310c14;
+    --clr-grey-1: #75787b;
     --clr-grey-2: rgb(193, 198, 200);
     --clr-white: rgb(255, 255, 255);
 }
