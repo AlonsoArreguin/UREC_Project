@@ -20,14 +20,13 @@
 
                     <h3>Hourly Counts</h3>
 
-                    <p>Choose date:</p>
+                    <p>Date shown:</p>
 
                     <div class="row">
                         <div class="col-5">
                             <input class="col-sm-6 col-9" type="text" id="datepicker"> 
                         </div>
                     </div>
-                    
                     
                     <script>
                         $( function() {
@@ -49,12 +48,10 @@
                         });
                         </script>
                     <!-- End Date picking functionality -->
-
-                    <p> Selected Date: {{ selected_date }} <p>
-                    {% for hour, counts_in_hour in hourly_counts.items %}
+                    
+                    {% for hour, locations in hourly_counts.items %}
                     <h3 class="mb-1 mt-4 sub-maroon-bg-count">{{hour}}</h3>
                         <div class="table-responsive">
-                            <!-- Table structure -->
                             <table class="table table-striped" cellspacing="0" width="100%">
                                 <tr>
                                     <th>Facility / Location</th>
@@ -64,7 +61,7 @@
                                     <th>Staff</th>
                                     
                                 </tr>
-                                {% for count in counts_in_hour %}
+                                {% for location, count in locations.items %}
                                     <tr>
                                         <td>{{ count.location }}</td>
                                         <td>{{ count.location_count }}</td>
@@ -76,6 +73,7 @@
                             </table>
                         </div>
                     {% endfor %}
+
                 </div>
             </div>
         </div>
