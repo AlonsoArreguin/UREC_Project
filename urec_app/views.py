@@ -326,8 +326,6 @@ def count_update(request):
     context = {'formset': formset}
     return render(request, 'urec_app/count_update.html', context)
 
-
-
 # View All Count History
 @login_required
 # @staff_member_required
@@ -344,7 +342,6 @@ def count_view_history(request):
     context = {'count_item': count_items, 'recent_list': recent_counts}
     return render(request, 'urec_app/count_view_history.html', context)
 
-
 # Helper function for count_hourly()
 def convert_to_ampm(hour):
     if hour == 0:
@@ -356,14 +353,7 @@ def convert_to_ampm(hour):
     else:
         return f"{hour - 12}:00 PM"
 
-
-# Helper function for count_hourly()
-def sort_ampm_key(item):
-    hour_str, meridiem = item[0].split(":")[0], item[0].split()[1]
-    hour = int(hour_str) if hour_str != "12" else 0
-    return (1 if meridiem == "PM" else 0, hour)
-
-
+# View Hourly Counts
 @login_required
 def count_hourly(request):
     counts = Count.objects.all()
@@ -378,25 +368,27 @@ def count_hourly(request):
     else:
         selected_date = datetime.today().date()
 
-    today_counts = [count for count in counts if count.date_time_submission.astimezone(timezone.get_current_timezone()).date() == selected_date]
+    today_counts = [count for count in counts 
+    if count.date_time_submission.astimezone(timezone.get_current_timezone()).date() == selected_date]
 
-    hourly_counts = defaultdict(list)
+    hourly_counts = defaultdict(dict)
 
-    # Initialize all hours to the dictionary
-    for i in range(24):
-        ampm_hour = convert_to_ampm(i)
-        hourly_counts[ampm_hour] = []
-
-    # Get hour in AM/PM, timezone aware format and append to hourly_counts
     for count in today_counts:
         # Convert UTC formatted datetime to timezone-aware datetime
         local_dt = count.date_time_submission.astimezone(timezone.get_current_timezone())
         hour = local_dt.hour
         ampm_hour = convert_to_ampm(hour)
-        hourly_counts[ampm_hour].append(count)
 
-    # Sort counts by hour
-    sorted_hourly_counts = dict(sorted(hourly_counts.items(), key=sort_ampm_key))
+        # If the location isn't already in the hour or if the current count is more recent
+        if (count.location not in hourly_counts[ampm_hour] or
+            local_dt > hourly_counts[ampm_hour][count.location].date_time_submission):
+            # Update this count object to most recent count object
+            hourly_counts[ampm_hour][count.location] = count
+    
+    # Sort by the hours first, then by the most recent count within each hour
+    sorted_hourly_counts = {
+        hour: dict(sorted(locations.items(), key=lambda item: item[1].date_time_submission, reverse=True))
+        for hour, locations in hourly_counts.items()}
 
     context = {'hourly_counts': sorted_hourly_counts, 'selected_date': selected_date}
     return render(request, 'urec_app/count_hourly.html', context)
