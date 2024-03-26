@@ -21,6 +21,7 @@
                             <th>Task ID</th>
                             <th>Task Name</th>
                             <th>Task Description</th>
+                            <th>Recurrence Pattern</th>
                             <th>Date/Time Due</th>
                             <th>Expand Task</th>
                             <th>Completion Text</th>
@@ -33,6 +34,7 @@
                                 <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
                                 <td>{{ item.task_name }}</td>
                                 <td>{{ item.task_description }}</td>
+                                <td>{{ item.recurrence_pattern }}</td>
                                 <td>{{ item.date_time_due }}</td>
                                 <td><button class="form-btn" type="submit">Expand</button></td>
                             </form>
@@ -57,6 +59,7 @@
                             <th>Task ID</th>
                             <th>Task Name</th>
                             <th>Task Description</th>
+                            <th>Recurrence Pattern</th>
                             <th>Completion Text</th>
                             <th>Date/Time Due</th>
                             <th>Date/Time Completion</th>
@@ -69,6 +72,7 @@
                                 <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
                                 <td>{{ item.task_name }}</td>
                                 <td>{{ item.task_description }}</td>
+                                <td>{{ item.recurrence_pattern }}</td>
                                 {% if item.completion_text%}
                                     <td>{{ item.completion_text }}</td>
                                 {% else %}

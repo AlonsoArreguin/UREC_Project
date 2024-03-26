@@ -22,6 +22,7 @@
                         <th>Task ID</th>
                         <th>Task Name</th>
                         <th>Task Description</th>
+                        <th>Recurrence Pattern</th>
                         <th>Assigned To</th>
                         <th>Text Input Required</th>
                         <th>Date/Time Due</th>
@@ -36,6 +37,7 @@
                                     <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
                                     <td>{{ item.task_name }}</td>
                                     <td>{{ item.task_description }}</td>
+                                    <td>{{ item.recurrence_pattern }}</td>
                                     <td>{{ item.staff_netid }}</td>
                                     <td>{{ item.text_input_required }}</td>
                                     <td>{{ item.date_time_due }}</td>
@@ -57,6 +59,7 @@
                         <th>Task ID</th>
                         <th>Task Name</th>
                         <th>Task Description</th>
+                        <th>Recurrence Pattern</th>
                         <th>Assigned To</th>
                         <th>Completion Text</th>
                         <th>Date/Time Due</th>
@@ -72,6 +75,7 @@
                                     <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
                                     <td>{{ item.task_name }}</td>
                                     <td>{{ item.task_description }}</td>
+                                    <td>{{ item.recurrence_pattern }}</td>
                                     <td>{{ item.staff_netid }}</td>
                                     {% if item.completion_text%}
                                             <td>{{ item.completion_text }}</td>
