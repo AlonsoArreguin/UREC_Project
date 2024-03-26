@@ -11,26 +11,27 @@
         <div class="col mx-auto overflow-hidden">
             <div class="card card-glassmorph border-0">
                 <h2 class="card-header text-center maroon-bg">Update Count</h2>
-
-                <!-- TODO make class different so it doesn't take so much space-->
-                <div class="card-body p-5">
-                    <button type="button" class="btn btn-primary" id="add-form">Add count</button>
-                    <button type="button" class="btn btn-primary" id="remove-form">Remove count</button>
-                </div>
-
+                
                 <div class="card-body p-5" id="formset-container">
+<!-- TODO make class different so it doesn't take so much space-->
+                    <div class="my-4">
+                        <button type="button" class="form-btn me-2 my-2" id="add-form">Add count</button>
+                        <button type="button" class="form-btn" id="remove-form">Remove count</button>
+                    </div>
                     <form method="POST" id="countForm">
                         {% csrf_token %}
+
+                        <!-- TODO needs to be somewhere else?-->
+                        <button type="submit" class="form-btn-submit-task mb-3">Submit</button>
                         {{ formset.management_form }}
                         
                         {% for form in formset %}
-                        <div class="formset-form">
+                        <div class="formset-form my-3">
                             {{ form.as_p }}
                         </div>
                         {% endfor %}
                         
-                        <!-- TODO needs to be somewhere else?-->
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        
                     </form>
                 </div>
 
@@ -57,6 +58,7 @@
                                 newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`); // Update new form to correct form #
                                 container.appendChild(newForm, addBtn); // Append new form
                                 totalForms.setAttribute('value', `${formNum+1}`); // Increment total forms in management form
+                                // container.appendChild(sBtn)
                     
                             }
 
