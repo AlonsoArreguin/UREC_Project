@@ -139,6 +139,14 @@ nav, header {
     transition: all .8s;
 }
 
+.logout-btn{
+    background-color: transparent;
+    border: none;
+    margin-right: none;
+    color: white;
+    font-size: x-large;
+}
+
 .bg-tb-view{
     position: absolute;
     background:rgb(0, 0, 0) url('../images/VERTICAL_WEB_maroon.svg') no-repeat center center fixed;
@@ -377,6 +385,14 @@ classes below @media function will be used instead of above*/
         transform: translateZ(0) scale(1);
         transition: transform .2s;
       }
+
+      .logout-btn{
+        background-color: transparent;
+        border: none;
+        margin-right: 40px;
+        color: white;
+        font-size: medium;
+    }
 
       .nav-items-toggle ul li a.maroon-button{
         font-size: medium;

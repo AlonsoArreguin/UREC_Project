@@ -37,8 +37,13 @@ also stores links for all pages -->
             {% if user.is_staff %}
               <li class="action-toggle ms-3 mb-2"><a href="{% url 'admin:index' %}" class="nav-link text-light" >Admin</a></li>
             {% endif %}
-
-            <li class="action-toggle ms-3 mb-2 me-3"><a href="{% url 'logout' %}" class="nav-link text-light" >Logout</a></li>
+            
+            <li class="action-toggle ms-3 mb-2 me-3">
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+            </li>
           {% else %}
 
             <li class="action-toggle float- ms-4"><a href="{% url 'login' %}" class="nav-link text-light mx-2" >Login</a></li>
@@ -111,7 +116,10 @@ also stores links for all pages -->
                   </li>
                 {% endif %}
                   <li  class="mx-2 mx-md-4">
-                    <a class="nav-link text-light maroon-button" href="{% url 'logout' %}">Logout</a>
+                    <form method="post" action="{% url 'logout' %}">
+                      {% csrf_token %}
+                      <button type="submit" class="logout-btn">Logout</button>
+                  </form>
                   </li>
                 {% else %}
                   <li  class="mx-2 mx-md-4">
