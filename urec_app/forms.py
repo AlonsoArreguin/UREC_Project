@@ -196,6 +196,13 @@ class CountForm(forms.ModelForm):
     class Meta:
         model = Count
         fields = ('location', 'location_count')
+        widgets ={
+            'location_count': NumberInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 200px;',
+                'placeholder' : 'Count'
+                })
+            }
 
 
 CountFormSet = formset_factory(CountForm, extra=1)        
