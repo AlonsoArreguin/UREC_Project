@@ -394,7 +394,7 @@ def count_hourly(request):
     return render(request, 'urec_app/count_hourly.html', context)
 
 
-# Delete Task
+# Delete Count
 @login_required
 # @staff_member_required
 def delete_count(request, count_id):
@@ -559,26 +559,6 @@ def my_tasks(request):
 
     context = {'uncompleted': uncompleted_tasks, 'completed': completed_tasks}
     return render(request, 'urec_app/my_tasks.html', context)
-
-
-# View an Individual Task
-@login_required
-def view_task_id(request):
-    if request.method == 'POST':
-        var = request.POST['id']
-        task_id = Task.objects.filter(task_id=var)
-        context = {'var': var, 'task_id': task_id}
-    return render(request, 'urec_app/task_id.html', context)
-
-
-# View an Individual Task
-@login_required
-def view_my_task(request):
-    if request.method == 'POST':
-        var = request.POST['id']
-        task_id = Task.objects.filter(task_id=var)
-        context = {'var': var, 'task_id': task_id}
-    return render(request, 'urec_app/view_my_task.html', context)
 
 
 # Complete Task
