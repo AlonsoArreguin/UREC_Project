@@ -73,7 +73,7 @@
                                 <td>{{ item.task_id }}<input type="hidden" name="id" value="{{ item.task_id }}"></td>
                                 <td>{{ item.task_name }}</td>
                                 <td>{{ item.task_description }}</td>
-                                <td>{{ item.recurrence_pattern }}</td>
+                                <td>{{ item.recurrence_pattern|display_recurrence }}</td>
                                 {% if item.completion_text%}
                                     <td>{{ item.completion_text }}</td>
                                 {% else %}

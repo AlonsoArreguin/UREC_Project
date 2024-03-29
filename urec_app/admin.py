@@ -27,6 +27,7 @@ admin.site.register(UrecUser, UrecUserAdmin)
 admin.site.register(UrecFacility)
 admin.site.register(UrecLocation)
 admin.site.register(Count)
+admin.site.register(Task)
 
 
 class InjuryIllnessReportContactPatientInline(admin.StackedInline):

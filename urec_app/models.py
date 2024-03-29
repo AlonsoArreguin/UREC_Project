@@ -1,7 +1,8 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractUser
-
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 # Facility / Location Models
 
@@ -239,20 +240,39 @@ RECURRENCE_CHOICES = (
     ('yearly', 'Yearly'),
 )
 
+
 # Task Model
 class Task(models.Model):
-    task_id = models.AutoField(primary_key=True)
-    task_name = models.CharField(max_length=255)
-    task_description = models.CharField(max_length=255, blank=True)
-    date_time_due = models.DateTimeField()
-    text_input_required = models.BooleanField(default=False)
-    completion_text = models.CharField(max_length=255, blank=True)
-    task_completion = models.BooleanField(default=False)
-    date_time_completion = models.DateTimeField(null=True)
-    staff_netid = models.CharField(max_length=255, blank=True)
-    recurrence_pattern = models.CharField(max_length=20, choices=RECURRENCE_CHOICES, blank=True)
+    task_id = models.AutoField("Task ID", primary_key=True)
+    task_name = models.CharField("Task Name", max_length=255)
+    task_description = models.CharField("Task Description", max_length=255, blank=True)
+    date_time_due = models.DateTimeField("Date/Time Due")
+    text_input_required = models.BooleanField("Text Input Required", default=False)
+    completion_text = models.CharField("Completion Text", max_length=255, blank=True)
+    task_completion = models.BooleanField("Task Completed", default=False)
+    date_time_completion = models.DateTimeField("Date/Time Completed", blank=True)
+    staff_netid = models.CharField("Staff NetID", max_length=255, blank=True)
+    recurrence_pattern = models.CharField("Recurrence Pattern", max_length=20, choices=RECURRENCE_CHOICES, blank=True)
     
     objects = models.Manager()
+
+    def __str__(self):
+        human_date = self.date_time_due.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%d %I:%M %p")
+        done = 'done' if self.task_completion else ''
+        return f"{human_date} {self.recurrence_pattern} {done} - {self.staff_netid} - {self.task_name}"
+
+    def clean(self):
+        if self.task_completion and not self.date_time_completion:
+            raise ValidationError("Date/Time Completed is required if task is completed.")
+
+        if self.date_time_completion and not self.task_completion:
+            raise ValidationError("Date/Time Completed cannot be set if task is not completed.")
+
+        if self.completion_text and not self.text_input_required:
+            raise ValidationError("Completion text cannot be set if text input is not required.")
+
+        if (self.text_input_required and self.task_completion) and not self.completion_text:
+            raise ValidationError("Completion text is required if text input is required and task is completed.")
 
 
 # Count Model
