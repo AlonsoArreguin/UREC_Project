@@ -34,7 +34,91 @@
                         
                     </form>
                 </div>
+                    <script>
+                        var location_select = document.getElementById('id_form-0-location');
 
+                        var facilities = {};
+
+                        var all_locations = location_select.getElementsByTagName('option');
+                        for (var i = 0; i < all_locations.length; i++) {
+                            var location_label = all_locations[i].label;
+
+                            if (location_label.includes(" / ")){
+                                var names = location_label.split(" / ");
+                                var facility_name = names[0];
+                                var location_name = names[1];
+                                var location_id = all_locations[i].value;
+
+                                if (!(facility_name in facilities)) {
+                                    facilities[facility_name] = [];
+                                }
+
+                                facilities[facility_name].push([location_id, location_name]);
+                            }
+                        }
+
+                        var facility_select = document.createElement('select');
+                        facility_select.setAttribute("id", "facility_select-0")
+                        Object.keys(facilities).forEach(function (facility) {
+                            var option = document.createElement('option');
+                            option.value = facility;
+                            option.label = facility;
+                            facility_select.appendChild(option);
+                        });
+
+                        facility_select.addEventListener('change', function () {
+                            // Get the selected facility
+                            var selected_facility = facility_select.value;
+
+                            // Clear the current options in id_report-location
+                            location_select.innerHTML = '';
+
+                            // Populate id_report-location with the locations of the selected facility
+                            facilities[selected_facility].forEach(function (location) {
+                                var option = document.createElement('option');
+                                option.value = location[0];
+                                option.label = location[1];
+                                location_select.appendChild(option);
+                            });
+                        });
+
+                        var location_p = location_select.parentElement;
+                        location_p.insertBefore(facility_select, location_select);
+
+                        location_select.innerHTML = '';
+
+                        facilities[Object.keys(facilities)[0]].forEach(function (location) {
+                            var option = document.createElement('option');
+                            option.value = location[0];
+                            option.label = location[1];
+                            location_select.appendChild(option);
+                        });
+
+
+
+                        function add_location_selector(selector_id)
+                        {
+                            var location_select = document.getElementById('id_form-' + selector_id + '-location');
+
+                            var facility_select = document.getElementById('facility_select-' + selector_id);
+
+                            facility_select.addEventListener('change', function () {
+                                // Get the selected facility
+                                var selected_facility = facility_select.value;
+
+                                // Clear the current options in id_report-location
+                                location_select.innerHTML = '';
+
+                                // Populate id_report-location with the locations of the selected facility
+                                facilities[selected_facility].forEach(function (location) {
+                                    var option = document.createElement('option');
+                                    option.value = location[0];
+                                    option.label = location[1];
+                                    location_select.appendChild(option);
+                                });
+                            });
+                        }
+                    </script>
                     <script>
                         // Handles adding/removing forms
                         document.addEventListener('DOMContentLoaded', function()
@@ -54,10 +138,13 @@
                                 if (e) {e.preventDefault();}
                                 let newForm = container.querySelector('.formset-form').cloneNode(true); // Clone form
                                 let formRegex = RegExp(`form-(\\d){1}-`,'g'); // Find all instances of the form #
+                                let selectRegex = RegExp(`facility_select-(\\d){1}`,'g'); // Find all instances of the form #
                                 formNum++; // Increment the form number
                                 newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`); // Update new form to correct form #
+                                newForm.innerHTML = newForm.innerHTML.replace(selectRegex, `facility_select-${formNum}`); // Update new form to correct form #
                                 container.appendChild(newForm, addBtn); // Append new form
                                 totalForms.setAttribute('value', `${formNum+1}`); // Increment total forms in management form
+                                add_location_selector(formNum);
                                 // container.appendChild(sBtn)
                     
                             }
@@ -73,9 +160,7 @@
                                 }
                             }
                         });
-
                     </script>
-
                 </div>
             </div>
         </div>
