@@ -128,5 +128,37 @@
         84
       ]
     }
+  },
+  {
+    "model": "auth.group",
+    "pk": 7,
+    "fields": {
+      "name": "EMS / Fire Called Notifications",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 8,
+    "fields": {
+      "name": "Police Called Notifications",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 9,
+    "fields": {
+      "name": "Minor Severity Notifications",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 10,
+    "fields": {
+      "name": "Moderate Severity Notifications",
+      "permissions": []
+    }
   }
 ]

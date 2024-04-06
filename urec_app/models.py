@@ -3,6 +3,11 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # Facility / Location Models
 
@@ -56,13 +61,6 @@ class UrecLocation(models.Model):
 # Report Models
 
 
-# Severity levels for reports
-SEVERITY_LEVELS = (
-    ('Minor', 'Minor'),
-    ('Moderate', 'Moderate')
-)
-
-
 # Inheritable helper functions for grabbing field labels and values from a model
 class ModelHelpers:
     def get_labels(self):
@@ -76,6 +74,13 @@ class ModelHelpers:
             if hasattr(field, "verbose_name"):
                 if ("_ptr" not in field.name) and (field.name not in ["report", "patient"]):
                     yield getattr(self, field.name)
+
+
+# Severity levels for reports
+SEVERITY_LEVELS = (
+    ('Minor', 'Minor'),
+    ('Moderate', 'Moderate')
+)
 
 
 # Generic Report Model for Injury/Illness and Incident Models
@@ -112,6 +117,58 @@ class IncidentReport(UrecReport):
 
     class Meta:
         verbose_name = 'Incident Report'
+
+
+# Report Notifications
+
+
+def find_applicable_users(users_to_notify, group_name):
+    applicable_users = UrecUser.objects.filter(groups__name=group_name)
+    for applicable_user in applicable_users:
+        if applicable_user not in users_to_notify:
+            users_to_notify[applicable_user] = []
+        users_to_notify[applicable_user].append(group_name)
+
+
+def send_notifications(instance, view_name, created):
+    users_to_notify = {}
+
+    if instance.ems_called:
+        find_applicable_users(users_to_notify, 'EMS / Fire Called Notifications')
+    if instance.police_called:
+        find_applicable_users(users_to_notify, 'Police Called Notifications')
+    if instance.severity == "Minor":
+        find_applicable_users(users_to_notify, 'Minor Severity Notifications')
+    if instance.severity == "Moderate":
+        find_applicable_users(users_to_notify, 'Moderate Severity Notifications')
+
+    for user_to_notify in users_to_notify:
+        if user_to_notify.email:
+            report_url_partial = reverse(view_name, kwargs={'report_id': instance.report_id})
+            reasons = ', '.join(users_to_notify[user_to_notify])
+            reasons_condensed = reasons.replace(" Notifications", "")
+            send_mail(
+                f"Report Alert: {reasons_condensed}",
+                f"A report has been {'created that matches' if created else 'edited to match'}"""
+                " your notification settings.\n"
+                f"You can view this report here: {report_url_partial}\n"
+                "You are receiving this message because you are signed up for the following notifications: "
+                f"{reasons}.",
+                "from@example.com",
+                [user_to_notify.email],
+                fail_silently=True,
+            )
+
+
+@receiver(post_save, sender=InjuryIllnessReport)
+def injury_illness_post_save_receiver(sender, instance, created, **kwargs):
+    send_notifications(instance, 'view_injury_illness', created)
+
+
+@receiver(post_save, sender=IncidentReport)
+def incident_post_save_receiver(sender, instance, created, **kwargs):
+    send_notifications(instance, 'view_incident', created)
+
 
 # Report Specific Models
 
