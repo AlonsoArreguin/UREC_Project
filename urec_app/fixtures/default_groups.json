@@ -1,0 +1,132 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "View Content",
+      "permissions": [
+        4,
+        8,
+        12,
+        52,
+        60,
+        64,
+        24,
+        56,
+        68,
+        72,
+        28,
+        32,
+        20,
+        36,
+        40,
+        16,
+        44
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Add Content",
+      "permissions": [
+        1,
+        5,
+        9,
+        49,
+        57,
+        61,
+        21,
+        53,
+        65,
+        69,
+        25,
+        29,
+        17,
+        33,
+        37,
+        13,
+        41
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "Change Content",
+      "permissions": [
+        2,
+        6,
+        10,
+        50,
+        58,
+        62,
+        22,
+        54,
+        66,
+        70,
+        26,
+        30,
+        18,
+        34,
+        38,
+        14,
+        42
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+      "name": "Delete Content",
+      "permissions": [
+        3,
+        7,
+        11,
+        51,
+        59,
+        63,
+        23,
+        55,
+        67,
+        71,
+        27,
+        31,
+        19,
+        35,
+        39,
+        15,
+        43
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 5,
+    "fields": {
+      "name": "User Management",
+      "permissions": [
+        45,
+        46,
+        47,
+        48
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 6,
+    "fields": {
+      "name": "Group Management",
+      "permissions": [
+        81,
+        82,
+        83,
+        84
+      ]
+    }
+  }
+]

@@ -25,6 +25,12 @@ Windows:
 
 *Currently set to test data. Skipping this step will require you to manually enter facilities and locations through the admin site.*
 
+## Populate default groups *(recommended)*
+
+`python manage.py loaddata default_groups`
+
+*New staff users will default to having no permissions, making them effectively useless on the admin site. Skipping this step will require manual group creation to give new staff permissions.*
+
 ## Create superuser *(recommended)*
 
 `python manage.py createsuperuser`
