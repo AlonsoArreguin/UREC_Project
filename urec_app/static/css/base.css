@@ -120,6 +120,26 @@ nav, header {
     
 }
 
+.simple-submit-btn:hover{
+    background-color: rgba(94, 23, 38, 0.3);
+    transition: all .8s;
+}
+
+.view-report-btn{
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--clr-primary-2);
+    color: var(--clr-white);
+    padding: 4px;
+}
+
+.view-report-btn:hover{
+    color:white;
+    background-color: rgba(59, 15, 24, 0.801);
+    transition: all .8s;
+}
+
 .basic-nav-btn{
     background-color: var(--clr-primary-1);
     border: none;
@@ -134,10 +154,7 @@ nav, header {
     transition: all .5s;
 }
 
-.simple-submit-btn:hover{
-    background-color: rgba(94, 23, 38, 0.3);
-    transition: all .8s;
-}
+
 
 .logout-btn{
     background-color: transparent;
@@ -182,6 +199,14 @@ nav, header {
 
 .table-grey-1{
     background-color: rgba(117, 120, 123, .1);
+}
+
+.table-grey-2{
+    background-color: rgba(161, 161, 161, 0.445);
+}
+
+.table-clear-1{
+    background-color: rgba(255, 255, 255, 0);
 }
 
 
