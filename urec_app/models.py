@@ -1,6 +1,12 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Facility / Location Models
@@ -55,13 +61,6 @@ class UrecLocation(models.Model):
 # Report Models
 
 
-# Severity levels for reports
-SEVERITY_LEVELS = (
-    ('Minor', 'Minor'),
-    ('Moderate', 'Moderate')
-)
-
-
 # Inheritable helper functions for grabbing field labels and values from a model
 class ModelHelpers:
     def get_labels(self):
@@ -75,6 +74,13 @@ class ModelHelpers:
             if hasattr(field, "verbose_name"):
                 if ("_ptr" not in field.name) and (field.name not in ["report", "patient"]):
                     yield getattr(self, field.name)
+
+
+# Severity levels for reports
+SEVERITY_LEVELS = (
+    ('Minor', 'Minor'),
+    ('Moderate', 'Moderate')
+)
 
 
 # Generic Report Model for Injury/Illness and Incident Models
@@ -111,6 +117,58 @@ class IncidentReport(UrecReport):
 
     class Meta:
         verbose_name = 'Incident Report'
+
+
+# Report Notifications
+
+
+def find_applicable_users(users_to_notify, group_name):
+    applicable_users = UrecUser.objects.filter(groups__name=group_name)
+    for applicable_user in applicable_users:
+        if applicable_user not in users_to_notify:
+            users_to_notify[applicable_user] = []
+        users_to_notify[applicable_user].append(group_name)
+
+
+def send_notifications(instance, view_name, created):
+    users_to_notify = {}
+
+    if instance.ems_called:
+        find_applicable_users(users_to_notify, 'EMS / Fire Called Notifications')
+    if instance.police_called:
+        find_applicable_users(users_to_notify, 'Police Called Notifications')
+    if instance.severity == "Minor":
+        find_applicable_users(users_to_notify, 'Minor Severity Notifications')
+    if instance.severity == "Moderate":
+        find_applicable_users(users_to_notify, 'Moderate Severity Notifications')
+
+    for user_to_notify in users_to_notify:
+        if user_to_notify.email:
+            report_url_partial = reverse(view_name, kwargs={'report_id': instance.report_id})
+            reasons = ', '.join(users_to_notify[user_to_notify])
+            reasons_condensed = reasons.replace(" Notifications", "")
+            send_mail(
+                f"Report Alert: {reasons_condensed}",
+                f"A report has been {'created that matches' if created else 'edited to match'}"""
+                " your notification settings.\n"
+                f"You can view this report here: {report_url_partial}\n"
+                "You are receiving this message because you are signed up for the following notifications: "
+                f"{reasons}.",
+                "from@example.com",
+                [user_to_notify.email],
+                fail_silently=True,
+            )
+
+
+@receiver(post_save, sender=InjuryIllnessReport)
+def injury_illness_post_save_receiver(sender, instance, created, **kwargs):
+    send_notifications(instance, 'view_injury_illness', created)
+
+
+@receiver(post_save, sender=IncidentReport)
+def incident_post_save_receiver(sender, instance, created, **kwargs):
+    send_notifications(instance, 'view_incident', created)
+
 
 # Report Specific Models
 
@@ -239,20 +297,39 @@ RECURRENCE_CHOICES = (
     ('yearly', 'Yearly'),
 )
 
+
 # Task Model
 class Task(models.Model):
-    task_id = models.AutoField(primary_key=True)
-    task_name = models.CharField(max_length=255)
-    task_description = models.CharField(max_length=255, blank=True)
-    date_time_due = models.DateTimeField()
-    text_input_required = models.BooleanField(default=False)
-    completion_text = models.CharField(max_length=255, blank=True)
-    task_completion = models.BooleanField(default=False)
-    date_time_completion = models.DateTimeField(null=True)
-    staff_netid = models.CharField(max_length=255, blank=True)
-    recurrence_pattern = models.CharField(max_length=20, choices=RECURRENCE_CHOICES, blank=True)
+    task_id = models.AutoField("Task ID", primary_key=True)
+    task_name = models.CharField("Task Name", max_length=255)
+    task_description = models.CharField("Task Description", max_length=255, blank=True)
+    date_time_due = models.DateTimeField("Date/Time Due")
+    text_input_required = models.BooleanField("Text Input Required", default=False)
+    completion_text = models.CharField("Completion Text", max_length=255, blank=True)
+    task_completion = models.BooleanField("Task Completed", default=False)
+    date_time_completion = models.DateTimeField("Date/Time Completed", blank=True)
+    staff_netid = models.CharField("Staff NetID", max_length=255, blank=True)
+    recurrence_pattern = models.CharField("Recurrence Pattern", max_length=20, choices=RECURRENCE_CHOICES, blank=True)
     
     objects = models.Manager()
+
+    def __str__(self):
+        human_date = self.date_time_due.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%d %I:%M %p")
+        done = 'done' if self.task_completion else ''
+        return f"{human_date} {self.recurrence_pattern} {done} - {self.staff_netid} - {self.task_name}"
+
+    def clean(self):
+        if self.task_completion and not self.date_time_completion:
+            raise ValidationError("Date/Time Completed is required if task is completed.")
+
+        if self.date_time_completion and not self.task_completion:
+            raise ValidationError("Date/Time Completed cannot be set if task is not completed.")
+
+        if self.completion_text and not self.text_input_required:
+            raise ValidationError("Completion text cannot be set if text input is not required.")
+
+        if (self.text_input_required and self.task_completion) and not self.completion_text:
+            raise ValidationError("Completion text is required if text input is required and task is completed.")
 
 
 # Count Model

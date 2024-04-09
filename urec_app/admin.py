@@ -17,8 +17,16 @@ class UrecUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal Info', {'fields': ('first_name', 'last_name', 'email', 'phone_number')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups')}),
     )
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        field = super(UrecUserAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        user = kwargs['request'].user
+        if not user.is_superuser:
+            if db_field.name == 'is_superuser':
+                field.widget.attrs = {'disabled': 'disabled'}
+        return field
 
 
 admin.site.register(UrecUser, UrecUserAdmin)
@@ -27,6 +35,7 @@ admin.site.register(UrecUser, UrecUserAdmin)
 admin.site.register(UrecFacility)
 admin.site.register(UrecLocation)
 admin.site.register(Count)
+admin.site.register(Task)
 
 
 class InjuryIllnessReportContactPatientInline(admin.StackedInline):
