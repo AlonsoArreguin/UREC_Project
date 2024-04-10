@@ -103,9 +103,7 @@
             <script>
                 window.jsPDF = window.jspdf.jsPDF;
                 function downloadTablesAsPDF() {
-                    const doc = new jsPDF({
-                        orientation: 'landscape'
-                    });
+                    const doc = new jsPDF('l', 'in', 'letter');
 
                     const tables = document.querySelectorAll('table');
                     const reportName = document.getElementById('reportName').innerHTML;
