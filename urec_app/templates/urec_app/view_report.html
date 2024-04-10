@@ -11,7 +11,7 @@
         <div class="card card-glassmorph border-0 mb-3" >
             <h2 class="card-header text-center maroon-bg" id="reportName">{{ report_name }}</h2>
           <div class="card-body px-4 py-4">
-            <div class="table-responsive print-table" id="reportDetailsTable">
+            <div class="table-responsive print-table" id="tableReportDetailsTable">
                 <h3>Report Details</h3>
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-grey-2">
@@ -31,7 +31,7 @@
                 </table>
             </div>
 
-            <div class="table-responsive print-table" id="reportInjuryIllnessTable">
+            <div class="table-responsive print-table" id="tableReportInjuryIllnessTable">
                 <h3>Report {{ special_name }}</h3>
                 <table class="table table-striped table-hover table-bordered" >
                     <thead class="table-grey-2">
@@ -54,7 +54,7 @@
             </div>
 
 
-            <div class="table-responsive print-table" id="patientDetails">
+            <div class="table-responsive print-table" id="tablePatientDetails">
                 <h3>Patient Details</h3>
                 <table class="table table-striped table-hover table-bordered" >
                     <thead class="table-grey-2">
@@ -75,7 +75,7 @@
             </div>
 
 
-            <div class="table-responsive print-table" id="reportWitnesses">
+            <div class="table-responsive print-table" id="tableReportWitnesses">
                 <h3>Report Witnesses</h3>
                 <table class="table table-striped table-hover table-bordered" >
                     <thead class="table-grey-2">
@@ -98,45 +98,31 @@
                 
             </div>
 
-            <button class="form-btn-submit" id="generate-pdf">Download PDF</button>
+            <button class="form-btn-submit" onclick="downloadTablesAsPDF()">Download PDF</button>
 
             <script>
-                document.getElementById('generate-pdf').addEventListener('click', function(){
-                    const fileName = document.getElementById('reportName').innerHTML;
-                    const element0 = document.getElementById('reportName').outerHTML;            
-                    const element1 = document.getElementById('reportDetailsTable').outerHTML;
-                    const element2 = document.getElementById('reportInjuryIllnessTable').outerHTML;
-                    const element3 = document.getElementById('patientDetails').outerHTML;
-                    const element4 = document.getElementById('reportWitnesses').outerHTML;
-                    const combinedHtml = `
-                        <html>
-                        <head>
-                            <title>Tables</title>
-                        </head>
-                        <style>
-                            .print-table {
-                                page-break-inside: avoid;
-                            }
-                        </style>
-                        <body>
-                            ${element0}
-                            ${element1}
-                            ${element2}
-                            ${element3}
-                            ${element4}
-                        </body>
-                        </html>
-                    `;
-                    const opt = {
-                        margin:       [0,.05,0,.05],
-                        filename:     `MSU-Report-${fileName}.pdf`,
-                        image:        { type: 'jpeg', quality: 1 },
-                        html2canvas:  { scale: 2 },
-                        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
-                    };
+                window.jsPDF = window.jspdf.jsPDF;
+                function downloadTablesAsPDF() {
+                    const doc = new jsPDF({
+                        orientation: 'landscape'
+                    });
 
-                    html2pdf().from(combinedHtml).set(opt).save();
-                });
+                    const tables = document.querySelectorAll('table');
+                    const reportName = document.getElementById('reportName').innerHTML;
+
+                    tables.forEach((table, index) => {
+                        const tableId ="Mississippi State University - UREC - " + reportName;
+                        doc.text(10, 10, tableId);
+                        doc.autoTable({
+                            html: table,
+                            styles: {
+                                fillColor: [94, 23, 38]
+                            }
+                        });
+                    });
+
+                    doc.save(`MSU - ${reportName}.pdf`);
+                }
                 
             </script>
             
