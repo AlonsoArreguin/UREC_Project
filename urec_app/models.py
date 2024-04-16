@@ -7,6 +7,9 @@ from django.core.mail import send_mail
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.sites.models import Site
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 # Facility / Location Models
@@ -142,20 +145,27 @@ def send_notifications(instance, view_name, created):
     if instance.severity == "Moderate":
         find_applicable_users(users_to_notify, 'Moderate Severity Notifications')
 
+    domain = Site.objects.get_current().domain
+
     for user_to_notify in users_to_notify:
         if user_to_notify.email:
-            report_url_partial = reverse(view_name, kwargs={'report_id': instance.report_id})
+            view_url = domain + reverse(view_name, kwargs={'report_id': instance.report_id})
             reasons = ', '.join(users_to_notify[user_to_notify])
             reasons_condensed = reasons.replace(" Notifications", "")
+            subject = f"Report Alert: {reasons_condensed}"
+            html_message = render_to_string('urec_app/report_email.html', {
+                "subject": subject,
+                "created": created,
+                "view_url": view_url,
+                "reasons": reasons
+            })
+            plain_message = strip_tags(html_message)
             send_mail(
-                f"Report Alert: {reasons_condensed}",
-                f"A report has been {'created that matches' if created else 'edited to match'}"""
-                " your notification settings.\n"
-                f"You can view this report here: {report_url_partial}\n"
-                "You are receiving this message because you are signed up for the following notifications: "
-                f"{reasons}.",
+                subject,
+                plain_message,
                 "from@example.com",
                 [user_to_notify.email],
+                html_message=html_message,
                 fail_silently=True,
             )
 
