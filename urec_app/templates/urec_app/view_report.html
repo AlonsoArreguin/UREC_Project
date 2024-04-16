@@ -4,25 +4,24 @@
 {% block title %}
     {{ report_name }}
 {% endblock title%}
-
 {% block content %}
 <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
     <br/>
     <div class="col mx-auto overflow-hidden">
-        <div class="card card-glassmorph border-0 mb-3">
-            <h2 class="card-header text-center maroon-bg">{{ report_name }}</h2>
-          <div class="card-body p-5">
-            <div class="table-responsive">
+        <div class="card card-glassmorph border-0 mb-3" >
+            <h2 class="card-header text-center maroon-bg" id="reportName">{{ report_name }}</h2>
+          <div class="card-body px-4 py-4">
+            <div class="table-responsive print-table" id="tableReportDetailsTable">
                 <h3>Report Details</h3>
-                <table class="table table-striped table-hover" >
-                    <thead class="table-maroon-1">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead class="table-grey-2">
                         <tr>
                             {% for label in report_labels %}
                                 <th>{{ label }}</th>
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-clear-1">
                             <tr>
                                 {% for field in report %}
                                     <td>{{ field }}</td>
@@ -31,19 +30,18 @@
                     </tbody>
                 </table>
             </div>
-          </div>
-          <div class="card-body p-5">
-            <div class="table-responsive">
+
+            <div class="table-responsive print-table" id="tableReportInjuryIllnessTable">
                 <h3>Report {{ special_name }}</h3>
                 <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-maroon-1">
+                    <thead class="table-grey-2">
                         <tr>
                             {% for label in special_labels %}
                                 <th>{{ label }}</th>
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-clear-1">
                         {% for special in specials %}
                             <tr>
                                 {% for field in special %}
@@ -54,19 +52,19 @@
                     </tbody>
                 </table>
             </div>
-          </div>
-          <div class="card-body p-5">
-            <div class="table-responsive">
+
+
+            <div class="table-responsive print-table" id="tablePatientDetails">
                 <h3>Patient Details</h3>
                 <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-maroon-1">
+                    <thead class="table-grey-2">
                         <tr>
                             {% for label in patient_labels %}
                                 <th>{{ label }}</th>
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-clear-1">
                             <tr>
                                 {% for field in patient %}
                                     <td>{{ field }}</td>
@@ -75,21 +73,21 @@
                     </tbody>
                 </table>
             </div>
-          </div>
-          <div class="card-body p-5">
-            <div class="table-responsive">
+
+
+            <div class="table-responsive print-table" id="tableReportWitnesses">
                 <h3>Report Witnesses</h3>
                 <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-maroon-1">
+                    <thead class="table-grey-2">
                         <tr>
                             {% for label in witness_labels %}
                                 <th>{{ label }}</th>
                             {% endfor %}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-clear-1">
                         {% for witness in witnesses %}
-                            <tr class="table-grey-1">
+                            <tr>
                                 {% for field in witness %}
                                     <td>{{ field }}</td>
                                 {% endfor %}
@@ -97,9 +95,38 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                
             </div>
+
+            <button class="form-btn-submit" onclick="downloadTablesAsPDF()">Download PDF</button>
+
+            <script>
+                window.jsPDF = window.jspdf.jsPDF;
+                function downloadTablesAsPDF() {
+                    const doc = new jsPDF('l', 'in', 'letter');
+
+                    const tables = document.querySelectorAll('table');
+                    const reportName = document.getElementById('reportName').innerHTML;
+
+                    tables.forEach((table, index) => {
+                        const tableId ="Mississippi State University - UREC - " + reportName;
+                        doc.text(10, 10, tableId);
+                        doc.autoTable({
+                            html: table,
+                            styles: {
+                                fillColor: [94, 23, 38]
+                            }
+                        });
+                    });
+
+                    doc.save(`MSU - ${reportName}.pdf`);
+                }
+                
+            </script>
+            
+
           </div>
-        </div>
+        </div>        
     </div>
 </div>
 

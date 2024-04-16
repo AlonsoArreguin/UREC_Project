@@ -28,7 +28,7 @@
                                 {% for value in report.values %}
                                     <td>{{ value }}</td>
                                 {% endfor %}
-                                <td><a href="{% url view_url report_id=report.id %}">View Report Details</a></td>
+                                <td><a class="view-report-btn" href="{% url view_url report_id=report.id %}">View Report Details</a></td>
                             </tr>
                             {% endfor %}
                     </tbody>
