@@ -18,11 +18,21 @@
 html,
 body {
   margin: 0;
+  font-family:Arial, Helvetica, sans-serif;
 }
 
 nav, header {
     background: var(--clr-primary-2);
     background: linear-gradient(90deg, var(--clr-primary-2) 0%, var(--clr-primary-1) 30%, var(--clr-primary-1) 70%, var(--clr-primary-2) 100%);
+}
+
+th {
+    font-size: small;
+}
+
+td {
+    font-size: small;
+    font-weight: 500;
 }
 
 .home-bg {
