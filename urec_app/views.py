@@ -338,8 +338,25 @@ def count_view_history(request):
                 '-date_time_submission').first()
         if most_recent_count:
             recent_counts.append(most_recent_count)
+    
 
-    context = {'count_item': count_items, 'recent_list': recent_counts}
+    facilities = UrecFacility.objects.all().values()
+    facility_totals = []
+    # calculate total # of people counted in each facility
+    for facility in facilities:
+        facility_id = facility['facility_id']
+        facility_total = 0
+        for count in recent_counts:
+            if facility_id == count.location.facility.facility_id:
+                facility_total += count.location_count
+        facility_totals.append(facility_total)
+        print(facility_id, " ", facility_total)
+
+    # zip the facility object and the total together
+    facilities_zip = zip(facilities, facility_totals)
+
+    context = {'count_item': count_items, 'recent_list': recent_counts,
+    'facilities': facilities_zip}
     return render(request, 'urec_app/count_view_history.html', context)
 
 # Helper function for count_hourly()
