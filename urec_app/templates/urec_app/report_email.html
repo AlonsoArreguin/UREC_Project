@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ subject }}</title>
+</head>
+<body>
+<p>A report has been {% if created %}created that matches{% else %}edited to match{% endif %} your notification settings.</p>
+<p>You can view this report here: <a href="{{ view_url }}">{{ view_url }}</a></p>
+<p>You are receiving this message because you are signed up for the following notifications: {{ reasons }}.</p>
+</body>
+</html>
