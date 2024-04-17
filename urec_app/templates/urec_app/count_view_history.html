@@ -63,6 +63,26 @@
                     </tr>
                     {% endfor %}
                     </tbody>
+                
+                </table>
+                <br><br>
+                    
+                <h3>Total Counts by Facility</h3>
+                <table id="fac_pop" class="display" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Facility</th>
+                            <th>Facility Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for facility, total in facilities %}
+                          <tr>
+                            <td>{{ facility.facility_name }}</td>
+                            <td>{{ total }}</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
                     
                 </table>
 
