@@ -31,6 +31,10 @@ Windows:
 
 *New staff users will default to having no permissions, making them effectively useless on the admin site. Skipping this step will require manual group creation to give new staff permissions.*
 
+## Manually populate site domain *(required for deployment)*
+
+On the admin site, go to Sites and change the default `example.com` site to whatever the domain name of the site will be. For testing purposes, the domain can be set to `http://127.0.0.1:8000`. *Failing to set this value will result in incorrect links inside email notifications.*
+
 ## Create superuser *(recommended)*
 
 `python manage.py createsuperuser`

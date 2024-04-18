@@ -1,3 +1,4 @@
 Django
 pip
 python-dateutil
+django-etc

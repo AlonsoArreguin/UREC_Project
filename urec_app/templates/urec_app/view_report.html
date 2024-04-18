@@ -1,57 +1,49 @@
 {% extends './base.html' %}
 {% load static %}
+{% load model_field %}
 
 {% block title %}
     {{ report_name }}
 {% endblock title%}
+
 {% block content %}
 <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
     <br/>
     <div class="col mx-auto overflow-hidden">
         <div class="card card-glassmorph border-0 mb-3" >
-            <h2 class="card-header text-center maroon-bg" id="reportName">{{ report_name }}</h2>
+            <h2 class="card-header text-center maroon-bg" id="reportName">{{ report }}</h2>
           <div class="card-body px-4 py-4">
             <div class="table-responsive print-table" id="tableReportDetailsTable">
                 <h3>Report Details</h3>
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-grey-2">
                         <tr>
-                            {% for label in report_labels %}
-                                <th>{{ label }}</th>
-                            {% endfor %}
+                            <th>{% model_field_verbose_name from report.report_id %}</th>
+                            <th>{% model_field_verbose_name from report.date_time_submission %}</th>
+                            <th>{% model_field_verbose_name from report.location %}</th>
+                            <th>{% model_field_verbose_name from report.severity %}</th>
+                            <th>{% model_field_verbose_name from report.ems_called %}</th>
+                            <th>{% model_field_verbose_name from report.police_called %}</th>
+                            <th>{% model_field_verbose_name from report.staff_netid %}</th>
+                            {% block unique_label %} {% endblock unique_label %}
                         </tr>
                     </thead>
                     <tbody class="table-clear-1">
                             <tr>
-                                {% for field in report %}
-                                    <td>{{ field }}</td>
-                                {% endfor %}
+                                <td>{{ report.report_id }}</td>
+                                <td>{{ report.date_time_submission }}</td>
+                                <td>{{ report.location }}</td>
+                                <td>{{ report.severity }}</td>
+                                <td>{{ report.ems_called }}</td>
+                                <td>{{ report.police_called }}</td>
+                                <td>{{ report.staff_netid }}</td>
+                                {% block unique %} {% endblock unique%}
                             </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="table-responsive print-table" id="tableReportInjuryIllnessTable">
-                <h3>Report {{ special_name }}</h3>
-                <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-2">
-                        <tr>
-                            {% for label in special_labels %}
-                                <th>{{ label }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody class="table-clear-1">
-                        {% for special in specials %}
-                            <tr>
-                                {% for field in special %}
-                                    <td>{{ field }}</td>
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            {% block specials %}{% endblock specials %}
 
 
             <div class="table-responsive print-table" id="tablePatientDetails">
@@ -59,16 +51,36 @@
                 <table class="table table-striped table-hover table-bordered" >
                     <thead class="table-grey-2">
                         <tr>
-                            {% for label in patient_labels %}
-                                <th>{{ label }}</th>
-                            {% endfor %}
+                            <th>{% model_field_verbose_name from patient.contact_id %}</th>
+                            <th>{% model_field_verbose_name from patient.first_name %}</th>
+                            <th>{% model_field_verbose_name from patient.middle_name %}</th>
+                            <th>{% model_field_verbose_name from patient.last_name %}</th>
+                            <th>{% model_field_verbose_name from patient.email_address %}</th>
+                            <th>{% model_field_verbose_name from patient.personal_phone_number %}</th>
+                            <th>{% model_field_verbose_name from patient.home_phone_number %}</th>
+                            <th>{% model_field_verbose_name from patient.street_address %}</th>
+                            <th>{% model_field_verbose_name from patient.city %}</th>
+                            <th>{% model_field_verbose_name from patient.state %}</th>
+                            <th>{% model_field_verbose_name from patient.zip %}</th>
+                            <th>{% model_field_verbose_name from patient.minor_status %}</th>
+                            <th>{% model_field_verbose_name from patient.relation %}</th>
                         </tr>
                     </thead>
                     <tbody class="table-clear-1">
                             <tr>
-                                {% for field in patient %}
-                                    <td>{{ field }}</td>
-                                {% endfor %}
+                                <td>{{ patient.contact_id }}</td>
+                                <td>{{ patient.first_name }}</td>
+                                <td>{{ patient.middle_name }}</td>
+                                <td>{{ patient.last_name }}</td>
+                                <td>{{ patient.email_address }}</td>
+                                <td>{{ patient.personal_phone_number }}</td>
+                                <td>{{ patient.home_phone_number }}</td>
+                                <td>{{ patient.street_address }}</td>
+                                <td>{{ patient.city }}</td>
+                                <td>{{ patient.state }}</td>
+                                <td>{{ patient.zip }}</td>
+                                <td>{{ patient.minor_status }}</td>
+                                <td>{{ patient.relation }}</td>
                             </tr>
                     </tbody>
                 </table>
@@ -80,17 +92,37 @@
                 <table class="table table-striped table-hover table-bordered" >
                     <thead class="table-grey-2">
                         <tr>
-                            {% for label in witness_labels %}
-                                <th>{{ label }}</th>
-                            {% endfor %}
+                            <th>{% model_field_verbose_name from witness_model.contact_id %}</th>
+                            <th>{% model_field_verbose_name from witness_model.first_name %}</th>
+                            <th>{% model_field_verbose_name from witness_model.middle_name %}</th>
+                            <th>{% model_field_verbose_name from witness_model.last_name %}</th>
+                            <th>{% model_field_verbose_name from witness_model.email_address %}</th>
+                            <th>{% model_field_verbose_name from witness_model.personal_phone_number %}</th>
+                            <th>{% model_field_verbose_name from witness_model.home_phone_number %}</th>
+                            <th>{% model_field_verbose_name from witness_model.street_address %}</th>
+                            <th>{% model_field_verbose_name from witness_model.city %}</th>
+                            <th>{% model_field_verbose_name from witness_model.state %}</th>
+                            <th>{% model_field_verbose_name from witness_model.zip %}</th>
+                            <th>{% model_field_verbose_name from witness_model.minor_status %}</th>
+                            <th>{% model_field_verbose_name from witness_model.relation %}</th>
                         </tr>
                     </thead>
                     <tbody class="table-clear-1">
                         {% for witness in witnesses %}
                             <tr>
-                                {% for field in witness %}
-                                    <td>{{ field }}</td>
-                                {% endfor %}
+                                <td>{{ witness.contact_id }}</td>
+                                <td>{{ witness.first_name }}</td>
+                                <td>{{ witness.middle_name }}</td>
+                                <td>{{ witness.last_name }}</td>
+                                <td>{{ witness.email_address }}</td>
+                                <td>{{ witness.personal_phone_number }}</td>
+                                <td>{{ witness.home_phone_number }}</td>
+                                <td>{{ witness.street_address }}</td>
+                                <td>{{ witness.city }}</td>
+                                <td>{{ witness.state }}</td>
+                                <td>{{ witness.zip }}</td>
+                                <td>{{ witness.minor_status }}</td>
+                                <td>{{ witness.relation }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -130,4 +162,4 @@
     </div>
 </div>
 
-{% endblock %}
+{% endblock content %}

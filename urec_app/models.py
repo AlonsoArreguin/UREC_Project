@@ -64,21 +64,6 @@ class UrecLocation(models.Model):
 # Report Models
 
 
-# Inheritable helper functions for grabbing field labels and values from a model
-class ModelHelpers:
-    def get_labels(self):
-        for field in self._meta.get_fields(include_hidden=False):
-            if hasattr(field, "verbose_name"):
-                if ("_ptr" not in field.name) and (field.name not in ["report", "patient"]):
-                    yield field.verbose_name
-
-    def get_values(self):
-        for field in self._meta.get_fields(include_hidden=False):
-            if hasattr(field, "verbose_name"):
-                if ("_ptr" not in field.name) and (field.name not in ["report", "patient"]):
-                    yield getattr(self, field.name)
-
-
 # Severity levels for reports
 SEVERITY_LEVELS = (
     ('Minor', 'Minor'),
@@ -87,7 +72,7 @@ SEVERITY_LEVELS = (
 
 
 # Generic Report Model for Injury/Illness and Incident Models
-class UrecReport(models.Model, ModelHelpers):
+class UrecReport(models.Model):
     report_id = models.AutoField("Report ID", primary_key=True)
     date_time_submission = models.DateTimeField("Date/Time Submitted")
     # models.RESTRICT will prevent the deletion of a location with at least one report associated with it
@@ -183,15 +168,8 @@ def incident_post_save_receiver(sender, instance, created, **kwargs):
 # Report Specific Models
 
 
-# Generic Specific Model for Generic UREC Report
-class UrecReportSpecific(models.Model, ModelHelpers):
-    report = models.ForeignKey(UrecReport, on_delete=models.CASCADE) 
-
-    objects = models.Manager()
-
-
 # Injury Model for Injury/Illness Report
-class InjuryIllnessReportInjury(models.Model, ModelHelpers):
+class InjuryIllnessReportInjury(models.Model):
     report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE)
     injury_id = models.AutoField("Injury ID", primary_key=True)
     injury_type = models.CharField("Injury Type", max_length=255)
@@ -209,7 +187,7 @@ class InjuryIllnessReportInjury(models.Model, ModelHelpers):
 
 
 # Incident Model for Incident Report
-class IncidentReportIncident(models.Model, ModelHelpers):
+class IncidentReportIncident(models.Model):
     report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)
     incident_id = models.AutoField("Incident ID", primary_key=True)
     incident_nature = models.CharField("Incident Nature", max_length=255)
@@ -229,7 +207,7 @@ class IncidentReportIncident(models.Model, ModelHelpers):
 
 
 # Generic Contact Model for All Injury/Illness and Incident Contacts
-class UrecContact(models.Model, ModelHelpers):
+class UrecContact(models.Model):
     contact_id = models.AutoField("Contact ID", primary_key=True)
     first_name = models.CharField("First Name", max_length=255)
     middle_name = models.CharField("Middle Name", max_length=255, blank=True)
@@ -254,7 +232,7 @@ class UrecContact(models.Model, ModelHelpers):
 # Patient Contact Information Model for Injury/Illness Report
 class InjuryIllnessReportContactPatient(UrecContact):
     report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE) 
-    injury_illness_relation = models.CharField("Relation to Witnesses", max_length=255, default='wip')  # Witness
+    relation = models.CharField("Relation to Witnesses", max_length=255, default='wip')  # Witness
 
     def __str__(self):
         return f"Injury/Illness Report Patient Contact - {self.get_full_name()}"
@@ -265,7 +243,8 @@ class InjuryIllnessReportContactPatient(UrecContact):
 
 # Patient Contact Information Model for Incident Report
 class IncidentReportContactPatient(UrecContact):
-    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE) 
+    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)
+    relation = models.CharField("Relation to Witnesses", max_length=255, default='wip')  # Witness
 
     def __str__(self):
         return f"Incident Report Patient Contact - {self.get_full_name()}"
@@ -277,7 +256,7 @@ class IncidentReportContactPatient(UrecContact):
 # Witness Contact Information Model for Injury/Illness Report
 class InjuryIllnessReportContactWitness(UrecContact):
     report = models.ForeignKey(InjuryIllnessReport, on_delete=models.CASCADE) 
-    injury_illness_relation = models.CharField("Relation to Patient", max_length=255, default='wip')  # Witness
+    relation = models.CharField("Relation to Patient", max_length=255, default='wip')  # Witness
     patient = models.ForeignKey(InjuryIllnessReportContactPatient, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -289,7 +268,8 @@ class InjuryIllnessReportContactWitness(UrecContact):
 
 # Witness Contact Information Model for Incident Report
 class IncidentReportContactWitness(UrecContact):
-    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE) 
+    report = models.ForeignKey(IncidentReport, on_delete=models.CASCADE)
+    relation = models.CharField("Relation to Patient", max_length=255, default='wip')  # Witness
     patient = models.ForeignKey(IncidentReportContactPatient, on_delete=models.CASCADE) 
 
     def __str__(self):
