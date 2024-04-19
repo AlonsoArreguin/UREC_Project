@@ -1,117 +1,35 @@
-{% extends './base.html' %}
+{% extends './view_report.html' %}
 {% load static %}
+{% load model_field %}
 
-{% block title %}
-    {%for item in var%}
-        Injury/Illness Report {{var}}
-    {%endfor%} 
-{% endblock title %}
+{% block unique_label %}<th>{% model_field_verbose_name from report.activity_causing_injury %}</th>{% endblock unique_label %}
 
-{% block content %}
-    
-    
+{% block unique %}<td>{{ report.activity_causing_injury }}</td>{% endblock unique%}
 
- 
- <div class="container-fluid py-3 min-vh-100 d-flex bg-tb-view">
-    <br/>
-    <div class="col mx-auto">
-        <div class="card card-glassmorph border-0 mb-3">
-            <h2 class="card-header text-center maroon-bg">Injury/Illness Reports</h2>
-          <div class="card-body p-5">
-            <a class="btn btn-secondary mb-4" href="{% url 'view_injury_illness_reports' %}">Return to Injury/Illness Reports</a>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
+{% block specials %}
+
+            <div class="table-responsive print-table" id="tableReportInjuryIllnessTable">
+                <h3>Report Injuries</h3>
+                <table class="table table-striped table-hover table-bordered" >
+                    <thead class="table-grey-2">
                         <tr>
-                            <th>Report ID</th>
-                            <th>Date/Time</th>
-                            <th>Facility</th>
-                            <th>Location in Facility</th>
-                            <th>Activity Causing Injury</th>
-                            <th>Staff NetID</th>
+                            <th>{% model_field_verbose_name from special_model.injury_id %}</th>
+                            <th>{% model_field_verbose_name from special_model.injury_type %}</th>
+                            <th>{% model_field_verbose_name from special_model.injury_description %}</th>
+                            <th>{% model_field_verbose_name from special_model.care_provided %}</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for item in ill_id %}
-                        <tr>
-                            <td>{{ item.report_id }}</td>
-                            <td>{{ item.date_time_submission }}</td>
-                            <td>{{ item.urec_facility }}</td>
-                            <td>{{ item.location_in_facility }}</td>
-                            <td>{{ item.activity_causing_injury }}</td>
-                            <td>{{ item.staff_netid }}</td>
-                        </tr>
+                    <tbody class="table-clear-1">
+                        {% for special in specials %}
+                            <tr>
+                                <td>{{ special.injury_id }}</td>
+                                <td>{{ special.injury_type }}</td>
+                                <td>{{ special.injury_description }}</td>
+                                <td>{{ special.care_provided }}</td>
+                            </tr>
                         {% endfor %}
                     </tbody>
-                    </table>
-
-                    <h2 class="mt-5 mb-3 sub-maroon-bg">Injury Description</h2>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Report ID</th>
-                                <th>Injury Type</th>
-                                <th>Injury Description</th>
-                                <th>Care Provided</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in injury_type %}
-                            <tr>
-                                <td>{{ item.id }}</td>
-                                <td>{{ item.injury_type }}</td>
-                                <td>{{ item.injury_description }}</td>
-                                <td>{{ item.care_provided }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    
-                    <h2 class="mt-5 mb-3 sub-maroon-bg">Contact Info</h2>
-                    <table class="table table-striped overflow-scroll">
-                        <thead>
-                            <tr>
-                                <th>Report ID</th>
-                                <th>First Name</th>
-                                <th>Middle Name</th>
-                                <th>Last Name</th>
-                                <th>Email Address</th>
-                                <th>Personal Phone Number</th>
-                                <th>Home Phone Number</th>
-                                <th>Street Address</th>
-                                <th>City</th>
-                                <th>State</th>
-                                <th>Zip</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in contact_info %}
-                            <tr>
-                                <td>{{ item.id }}</td>
-                                <td>{{ item.first_name }}</td>
-                                <td>{{ item.middle_name }}</td>
-                                <td>{{ item.last_name }}</td>
-                                <td>{{ item.email_address }}</td>
-                                <td>{{ item.personal_phone_number }}</td>
-                                <td>{{ item.home_phone_number }}</td>
-                                <td>{{ item.street_address }}</td>
-                                <td>{{ item.city }}</td>
-                                <td>{{ item.state }}</td>
-                                <td>{{ item.zip }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    
-                    
-                    
-                
+                </table>
             </div>
-          </div>
-        </div>
-    </div>
- </div>
- 
- 
 
- {% endblock content %}
+{% endblock specials %}

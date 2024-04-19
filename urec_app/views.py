@@ -78,8 +78,8 @@ class CreateUrecReport(TemplateView):
 
     ReportContactPatientForm = UrecContactForm
 
-    ReportSpecific = UrecReportSpecific
-    report_specific_formset = urec_report_specific_formset
+    ReportSpecific = None
+    report_specific_formset = None
 
     ReportContactWitness = UrecContact
     report_contact_witness_formset = urec_contact_formset
@@ -144,8 +144,6 @@ class CreateUrecReport(TemplateView):
 
             return redirect(self.report_home_url)
 
-        print(all_good)
-
         context = {
             'report_name': self.report_name,
             'report_form': report_form,
@@ -199,20 +197,11 @@ class CreateIncidentReport(CreateUrecReport):
 
 # Generic View Function for Injury/Illness and Incident Reports
 def view_reports(request, report_model, report_name, view_url):
-    raw_reports = report_model.objects.all()
-    reports = []
-    field_labels = report_model.get_labels(report_model)
-    for raw_report in raw_reports:
-        report = {
-            'id': raw_report.report_id,
-            'values': raw_report.get_values()
-        }
-        reports.append(report)
     context = {
-        'report_name': report_name,
-        'view_url': view_url,
-        'field_labels': field_labels,
-        'reports': reports
+        "report_name": report_name,
+        "view_url": view_url,
+        "report_model": report_model,
+        "reports": report_model.objects.all()
     }
     return render(request, 'urec_app/view_reports.html', context)
 
@@ -232,46 +221,31 @@ def view_incident_reports(request):
 # View Report
 
 
-def view_report(request, report_model, special_model, patient_model, witness_model, report_id, special_name):
-    raw_report = get_object_or_404(report_model, report_id=report_id)
-    raw_patient = patient_model.objects.filter(report=report_id).first()
-
+def view_report(request, report_model, special_model, patient_model, witness_model, report_id, template_name):
     context = {
-        'report_name': str(raw_report),
-        'report_labels': report_model.get_labels(report_model),
-        'report': raw_report.get_values(),
-        'special_name': special_name,
-        'special_labels': special_model.get_labels(special_model),
-        'specials': [],
-        'patient_labels': patient_model.get_labels(patient_model),
-        'patient': raw_patient.get_values(),
-        'witness_labels': witness_model.get_labels(witness_model),
-        'witnesses': [],
+        "report": get_object_or_404(report_model, report_id=report_id),
+        "patient": get_object_or_404(patient_model, report_id=report_id),
+        "special_model": special_model,
+        "specials": special_model.objects.filter(report=report_id),
+        "witness_model": witness_model,
+        "witnesses": witness_model.objects.filter(report=report_id)
     }
 
-    raw_specials = special_model.objects.filter(report=report_id)
-    for raw_special in raw_specials:
-        context['specials'].append(raw_special.get_values())
-
-    raw_witnesses = witness_model.objects.filter(report=report_id)
-    for raw_witness in raw_witnesses:
-        context['witnesses'].append(raw_witness.get_values())
-
-    return render(request, 'urec_app/view_report.html', context)
+    return render(request, template_name, context)
 
 
 # View Single Incident Report by ID
 @login_required
 def view_incident_report(request, report_id):
     return view_report(request, IncidentReport, IncidentReportIncident, IncidentReportContactPatient,
-                       IncidentReportContactWitness, report_id, "Incidents")
+                       IncidentReportContactWitness, report_id, 'urec_app/view_incident.html')
 
 
 # View Single Injury/Illness Report by ID
 @login_required
 def view_injury_illness_report(request, report_id):
     return view_report(request, InjuryIllnessReport, InjuryIllnessReportInjury, InjuryIllnessReportContactPatient,
-                       InjuryIllnessReportContactWitness, report_id, "Injuries")
+                       InjuryIllnessReportContactWitness, report_id, 'urec_app/view_injury_illness.html')
 
 
 # Delete Report TODO: Ask client if these are necessary (should non-admins be allowed to delete reports)
@@ -306,6 +280,7 @@ def delete_incident(request, incident_id):
 def count(request):
     return render(request, 'urec_app/count.html')
 
+
 # Update Count in Facilities
 @login_required
 def count_update(request):
@@ -326,6 +301,7 @@ def count_update(request):
     context = {'formset': formset}
     return render(request, 'urec_app/count_update.html', context)
 
+
 # View All Count History
 @login_required
 # @staff_member_required
@@ -335,7 +311,7 @@ def count_view_history(request):
 
     for location in UrecLocation.objects.all().values():
         most_recent_count = Count.objects.filter(location=location['location_id']).order_by(
-                '-date_time_submission').first()
+            '-date_time_submission').first()
         if most_recent_count:
             recent_counts.append(most_recent_count)
     
@@ -350,7 +326,6 @@ def count_view_history(request):
             if facility_id == count.location.facility.facility_id:
                 facility_total += count.location_count
         facility_totals.append(facility_total)
-        print(facility_id, " ", facility_total)
 
     # zip the facility object and the total together
     facilities_zip = zip(facilities, facility_totals)
@@ -358,6 +333,7 @@ def count_view_history(request):
     context = {'count_item': count_items, 'recent_list': recent_counts,
     'facilities': facilities_zip}
     return render(request, 'urec_app/count_view_history.html', context)
+
 
 # Helper function for count_hourly()
 def convert_to_ampm(hour):
@@ -369,6 +345,7 @@ def convert_to_ampm(hour):
         return f"{hour}:00 AM"
     else:
         return f"{hour - 12}:00 PM"
+
 
 # View Hourly Counts
 @login_required
@@ -385,8 +362,8 @@ def count_hourly(request):
     else:
         selected_date = datetime.today().date()
 
-    today_counts = [count for count in counts 
-    if count.date_time_submission.astimezone(timezone.get_current_timezone()).date() == selected_date]
+    today_counts = [count for count in counts
+                    if count.date_time_submission.astimezone(timezone.get_current_timezone()).date() == selected_date]
 
     hourly_counts = defaultdict(dict)
 
@@ -398,10 +375,10 @@ def count_hourly(request):
 
         # If the location isn't already in the hour or if the current count is more recent
         if (count.location not in hourly_counts[ampm_hour] or
-            local_dt > hourly_counts[ampm_hour][count.location].date_time_submission):
+                local_dt > hourly_counts[ampm_hour][count.location].date_time_submission):
             # Update this count object to most recent count object
             hourly_counts[ampm_hour][count.location] = count
-    
+
     # Sort by the hours first, then by the most recent count within each hour
     sorted_hourly_counts = {
         hour: dict(sorted(locations.items(), key=lambda item: item[1].date_time_submission, reverse=True))
@@ -431,6 +408,7 @@ def delete_count(request, count_id):
 def erp(request):
     return render(request, 'urec_app/erp.html')
 
+
 # Used to detect user OS
 def get_user_specific_directory():
     system = platform.system()
@@ -442,6 +420,7 @@ def get_user_specific_directory():
     else:
         user_specific_dir = os.path.expanduser('~/.UREC')
     return user_specific_dir
+
 
 # Create ERP Page
 @login_required
@@ -455,14 +434,14 @@ def create_erp(request):
         if erp_file.is_valid() and erp_obj.is_valid():
             # extract file information
             uploadfile = request.FILES['file']
-            
+
             # Determine the user-specific directory
             custom_directory = get_user_specific_directory()
             # Create the directory if it doesn't exist
             os.makedirs(custom_directory, exist_ok=True)
             # Construct the file location within the custom directory
             filelocation = os.path.join(custom_directory, uploadfile.name)
-            
+
             # Save uploaded file to custom directory
             with open(filelocation, 'wb+') as destination:
                 for chunk in uploadfile.chunks():
@@ -510,16 +489,15 @@ def delete_erp(request, filename):
 # Download ERP pdf
 @login_required
 def download_erp(request, filename):
-
     # Retrieve the ERP object from the database using the filename
-    erp = get_object_or_404(Erp, filename = filename)
+    erp = get_object_or_404(Erp, filename=filename)
 
-    #Construct the file path within the custom directory
+    # Construct the file path within the custom directory
     custom_directory = get_user_specific_directory()
     file_path = os.path.join(custom_directory, filename)
 
     with open(file_path, 'rb') as f:
-        response = HttpResponse(f.read(),content_type='application/pdf')
+        response = HttpResponse(f.read(), content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
         return response
 
@@ -582,7 +560,7 @@ def my_tasks(request):
 @login_required
 def complete_task(request, taskid):
     task = Task.objects.get(task_id=taskid)
-    
+
     if task.text_input_required and request.method == "POST":
         form = TaskCompletionForm(request.POST)
         if form.is_valid():
@@ -590,7 +568,7 @@ def complete_task(request, taskid):
             task.date_time_completion = timezone.now()
             task.completion_text = form.cleaned_data['completion_text']
             task.save()
-            
+
             if task.recurrence_pattern:  # Check if a recurrence pattern is selected
                 # Create a new recurring task
                 new_task = create_recurring_task(task)
@@ -604,18 +582,18 @@ def complete_task(request, taskid):
         task.task_completion = True
         task.date_time_completion = timezone.now()
         task.save()
-        
+
         if task.recurrence_pattern:  # Check if a recurrence pattern is selected
             # Create a new recurring task
             new_task = create_recurring_task(task)
             return redirect('my_tasks')
         else:
             return redirect('my_tasks')
-    
+
     return redirect('my_tasks')
 
+
 def create_recurring_task(task):
-    
     # Creates new task with same information and new due date
     new_task = Task.objects.create(
         task_name=task.task_name,
@@ -627,9 +605,9 @@ def create_recurring_task(task):
     )
     return new_task
 
+
 def calculate_next_due_date(current_due_date, recurrence_pattern):
-    
-    #Calculates next due date depending on pattern
+    # Calculates next due date depending on pattern
 
     if recurrence_pattern == 'daily':
         return current_due_date + timedelta(days=1)
@@ -642,6 +620,7 @@ def calculate_next_due_date(current_due_date, recurrence_pattern):
     else:
         # Default to returning the same date if recurrence pattern is not recognized
         return current_due_date
+
 
 # Delete Task
 @login_required

@@ -111,12 +111,6 @@ class IncidentReportForm(UrecReportForm):
 # Report Specific Formsets
 
 
-# Generic Report Specific Formset for Generic UREC Report
-urec_report_specific_formset = modelformset_factory(
-    UrecReportSpecific, fields=(), extra=1
-)
-
-
 # Injury Formset for Injury/Illness Report
 injury_illness_report_injury_formset = modelformset_factory(
     InjuryIllnessReportInjury, fields=('injury_type', 'injury_description', 'care_provided'), extra=1,
