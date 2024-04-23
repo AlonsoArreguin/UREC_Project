@@ -31,12 +31,14 @@ CONTACT_WIDGETS = {
             'personal_phone_number': TextInput(attrs={
                 'class' : 'form-control',
                 'style' : 'max-width: 400px;',
-                'placeholder' : 'Personal Phone Number'
+                'placeholder' : 'Personal Phone Number',
+                'maxlength' : '10',
             }),
             'home_phone_number': TextInput(attrs={
                 'class' : 'form-control',
                 'style' : 'max-width: 400px;',
-                'placeholder' : 'Home Phone Number'
+                'placeholder' : 'Home Phone Number',
+                'maxlength' : '10',
             }),
             'street_address': TextInput(attrs={
                 'class' : 'form-control',
@@ -56,7 +58,8 @@ CONTACT_WIDGETS = {
             'zip': NumberInput(attrs={
                 'class' : 'form-control',
                 'style' : 'max-width: 400px;',
-                'placeholder' : 'Zip Code'
+                'placeholder' : 'Zip Code',
+                'maxlength': '5', 
             }),
             'minor_status': TextInput(attrs={
                 'class' : 'form-control',
