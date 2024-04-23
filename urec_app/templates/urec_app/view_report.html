@@ -13,119 +13,176 @@
         <div class="card card-glassmorph border-0 mb-3" >
             <h2 class="card-header text-center maroon-bg" id="reportName">{{ report }}</h2>
           <div class="card-body px-4 py-4">
-            <div class="table-responsive print-table" id="tableReportDetailsTable">
-                <h3>Report Details</h3>
-                <table class="table table-striped table-hover table-bordered">
-                    <thead class="table-grey-2">
+            <div class="table-responsive" >
+                <h3 id="reportDetails">Report Details</h3>
+                <table class="table table-grey-2 table-hover table-bordered" id="tableReportDetailsTable">
+                    
                         <tr>
                             <th>{% model_field_verbose_name from report.report_id %}</th>
-                            <th>{% model_field_verbose_name from report.date_time_submission %}</th>
-                            <th>{% model_field_verbose_name from report.location %}</th>
-                            <th>{% model_field_verbose_name from report.severity %}</th>
-                            <th>{% model_field_verbose_name from report.ems_called %}</th>
-                            <th>{% model_field_verbose_name from report.police_called %}</th>
-                            <th>{% model_field_verbose_name from report.staff_netid %}</th>
-                            {% block unique_label %} {% endblock unique_label %}
+                                <td >{{ report.report_id }}</td>
                         </tr>
-                    </thead>
-                    <tbody class="table-clear-1">
-                            <tr>
-                                <td>{{ report.report_id }}</td>
+                        <tr>
+                            <th>{% model_field_verbose_name from report.date_time_submission %}</th>
                                 <td>{{ report.date_time_submission }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from report.location %}</th>
                                 <td>{{ report.location }}</td>
-                                <td>{{ report.severity }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from report.severity %}</th>
+                                <td>{{ report.severity }}</td> 
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from report.ems_called %}</th>
                                 <td>{{ report.ems_called }}</td>
+                        </tr>
+                        <tr>
+                             <th>{% model_field_verbose_name from report.police_called %}</th>
                                 <td>{{ report.police_called }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from report.staff_netid %}</th>
                                 <td>{{ report.staff_netid }}</td>
+                        </tr>
+                        <tr>
+                            {% block unique_label %} {% endblock unique_label %}
                                 {% block unique %} {% endblock unique%}
-                            </tr>
-                    </tbody>
+                        </tr>
                 </table>
             </div>
 
             {% block specials %}{% endblock specials %}
 
 
-            <div class="table-responsive print-table" id="tablePatientDetails">
-                <h3>Patient Details</h3>
-                <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-2">
+            <div class="table-responsive print-table" >
+                <h3 id="patientDetails">Patient Details</h3>
+                <table class="table table-grey-2 table-hover table-bordered" id="tablePatientDetails">
                         <tr>
                             <th>{% model_field_verbose_name from patient.contact_id %}</th>
-                            <th>{% model_field_verbose_name from patient.first_name %}</th>
-                            <th>{% model_field_verbose_name from patient.middle_name %}</th>
-                            <th>{% model_field_verbose_name from patient.last_name %}</th>
-                            <th>{% model_field_verbose_name from patient.email_address %}</th>
-                            <th>{% model_field_verbose_name from patient.personal_phone_number %}</th>
-                            <th>{% model_field_verbose_name from patient.home_phone_number %}</th>
-                            <th>{% model_field_verbose_name from patient.street_address %}</th>
-                            <th>{% model_field_verbose_name from patient.city %}</th>
-                            <th>{% model_field_verbose_name from patient.state %}</th>
-                            <th>{% model_field_verbose_name from patient.zip %}</th>
-                            <th>{% model_field_verbose_name from patient.minor_status %}</th>
-                            <th>{% model_field_verbose_name from patient.relation %}</th>
+                            <td>{{ patient.contact_id }}</td>
                         </tr>
-                    </thead>
-                    <tbody class="table-clear-1">
-                            <tr>
-                                <td>{{ patient.contact_id }}</td>
-                                <td>{{ patient.first_name }}</td>
-                                <td>{{ patient.middle_name }}</td>
-                                <td>{{ patient.last_name }}</td>
-                                <td>{{ patient.email_address }}</td>
-                                <td>{{ patient.personal_phone_number }}</td>
-                                <td>{{ patient.home_phone_number }}</td>
-                                <td>{{ patient.street_address }}</td>
-                                <td>{{ patient.city }}</td>
-                                <td>{{ patient.state }}</td>
-                                <td>{{ patient.zip }}</td>
-                                <td>{{ patient.minor_status }}</td>
-                                <td>{{ patient.relation }}</td>
-                            </tr>
-                    </tbody>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.first_name %}</th>
+                            <td>{{ patient.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.middle_name %}</th>
+                            <td>{{ patient.middle_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.last_name %}</th>
+                            <td>{{ patient.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.email_address %}</th>
+                            <td>{{ patient.email_address }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.personal_phone_number %}</th>
+                            <td>{{ patient.personal_phone_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.home_phone_number %}</th>
+                            <td>{{ patient.home_phone_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.street_address %}</th>
+                            <td>{{ patient.street_address }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.city %}</th>
+                            <td>{{ patient.city }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.state %}</th>
+                            <td>{{ patient.state }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.zip %}</th>
+                            <td>{{ patient.zip }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.minor_status %}</th>
+                            <td>{{ patient.minor_status }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from patient.relation %}</th>
+                            <td>{{ patient.relation }}</td>
+                        </tr>
+                        
                 </table>
             </div>
 
 
-            <div class="table-responsive print-table" id="tableReportWitnesses">
-                <h3>Report Witnesses</h3>
-                <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-2">
+            <div class="table-responsive print-table" >
+                <h3 id="reportWitness">Report Witnesses</h3>
+                <table class="table table-grey-2 table-hover table-bordered" id="tableReportWitnesses">
+                    
+                        {% for witness in witnesses %}
                         <tr>
                             <th>{% model_field_verbose_name from witness_model.contact_id %}</th>
-                            <th>{% model_field_verbose_name from witness_model.first_name %}</th>
-                            <th>{% model_field_verbose_name from witness_model.middle_name %}</th>
-                            <th>{% model_field_verbose_name from witness_model.last_name %}</th>
-                            <th>{% model_field_verbose_name from witness_model.email_address %}</th>
-                            <th>{% model_field_verbose_name from witness_model.personal_phone_number %}</th>
-                            <th>{% model_field_verbose_name from witness_model.home_phone_number %}</th>
-                            <th>{% model_field_verbose_name from witness_model.street_address %}</th>
-                            <th>{% model_field_verbose_name from witness_model.city %}</th>
-                            <th>{% model_field_verbose_name from witness_model.state %}</th>
-                            <th>{% model_field_verbose_name from witness_model.zip %}</th>
-                            <th>{% model_field_verbose_name from witness_model.minor_status %}</th>
-                            <th>{% model_field_verbose_name from witness_model.relation %}</th>
+                            <td>{{ witness.contact_id }}</td>
                         </tr>
-                    </thead>
-                    <tbody class="table-clear-1">
-                        {% for witness in witnesses %}
-                            <tr>
-                                <td>{{ witness.contact_id }}</td>
-                                <td>{{ witness.first_name }}</td>
-                                <td>{{ witness.middle_name }}</td>
-                                <td>{{ witness.last_name }}</td>
-                                <td>{{ witness.email_address }}</td>
-                                <td>{{ witness.personal_phone_number }}</td>
-                                <td>{{ witness.home_phone_number }}</td>
-                                <td>{{ witness.street_address }}</td>
-                                <td>{{ witness.city }}</td>
-                                <td>{{ witness.state }}</td>
-                                <td>{{ witness.zip }}</td>
-                                <td>{{ witness.minor_status }}</td>
-                                <td>{{ witness.relation }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.first_name %}</th>
+                            <td>{{ witness.first_name }}</td>
+
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.middle_name %}</th>
+                            <td>{{ witness.middle_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.last_name %}</th>
+                            <td>{{ witness.last_name }}</td>
+           
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.email_address %}</th>
+                            <td>{{ witness.email_address }}</td>
+       
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.personal_phone_number %}</th>
+                            <td>{{ witness.personal_phone_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.home_phone_number %}</th>
+                            <td>{{ witness.home_phone_number }}</td>
+   
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.street_address %}</th>
+                            <td>{{ witness.street_address }}</td>
+      
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.city %}</th>
+                            <td>{{ witness.city }}</td>
+                
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.state %}</th>
+                            <td>{{ witness.state }}</td>
+               
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.zip %}</th>
+                            <td>{{ witness.zip }}</td>
+                 
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.minor_status %}</th>
+                            <td>{{ witness.minor_status }}</td>
+        
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from witness_model.relation %}</th>
+                            <td>{{ witness.relation }}</td>
+            
+                        </tr>
+                    {% endfor %}
                 </table>
                 
             </div>
@@ -135,21 +192,78 @@
             <script>
                 window.jsPDF = window.jspdf.jsPDF;
                 function downloadTablesAsPDF() {
-                    const doc = new jsPDF('l', 'in', 'letter');
+                    const doc = new jsPDF('p', 'pt', 'letter');
+                    const defaultColor = '#000000';
+                    const mainTitleColor = '#ffffff';
+                    const lightGreyColor = '#75787b';
 
-                    const tables = document.querySelectorAll('table');
+
                     const reportName = document.getElementById('reportName').innerHTML;
+                    const reportDetails = document.getElementById('reportDetails').innerHTML;
+                    const reportType = document.getElementById('reportType').innerHTML;
+                    const patientDetails = document.getElementById('patientDetails').innerHTML;
+                    const reportWitness = document.getElementById('reportWitness').innerHTML;
 
-                    tables.forEach((table, index) => {
-                        const tableId ="Mississippi State University - UREC - " + reportName;
-                        doc.text(10, 10, tableId);
-                        doc.autoTable({
-                            html: table,
-                            styles: {
-                                fillColor: [94, 23, 38]
-                            }
-                        });
+                    doc.setFillColor(94,23,38);
+                    doc.rect(0,0,700,25,'F');
+                    doc.setTextColor(mainTitleColor);
+                    const tableId ="MSU - UREC - " + reportName;
+                    doc.text( tableId,10, 20,);
+
+                    doc.setFillColor(lightGreyColor);
+                    doc.rect(0,45,150,20,'F');
+                    doc.text(reportDetails, 10,60)
+                    doc.autoTable({
+                        html: "#tableReportDetailsTable",
+                        margin: { right:5, left: 5 },
+                        styles: {
+                            fontSize: 10,
+                            cellPadding: 4,
+                        },
+                        startY: 70,
                     });
+
+                    doc.setFillColor(lightGreyColor);
+                    doc.rect(0, doc.previousAutoTable.finalY + 20 ,150,20,'F');
+                    doc.text(reportType, 10, doc.previousAutoTable.finalY + 35)
+                    doc.autoTable({
+                        html: "#tableReportInjuryIllnessTable",
+                        margin: { right:5, left: 5 },
+                        styles: {
+                            fontSize: 10,
+                           
+                            cellPadding: 4,
+                        },
+                        startY: doc.previousAutoTable.finalY + 50,
+                    });
+
+                    doc.setFillColor(lightGreyColor);
+                    doc.rect(0, doc.previousAutoTable.finalY + 25 ,150,20,'F');
+                    doc.text(patientDetails, 10, doc.previousAutoTable.finalY + 40)
+                    doc.autoTable({
+                        html: "#tablePatientDetails",
+                        margin: { right:5, left: 5 },
+                        styles: {
+                            fontSize: 10,
+                            cellPadding: 4,
+                        },
+                        startY: doc.previousAutoTable.finalY + 50,
+                    });
+
+                    doc.addPage();
+                    doc.setFillColor(lightGreyColor);
+                    doc.rect(0, 15, 150, 20,'F');
+                    doc.text(reportWitness, 10, 30)
+                    doc.autoTable({
+                        html: "#tableReportWitnesses",
+                        margin: { right:5, left: 5 },
+                        styles: {
+                            fontSize: 10,
+                            cellPadding: 4,
+                        },
+                        startY: 40,
+                    });
+
 
                     doc.save(`MSU - ${reportName}.pdf`);
                 }
