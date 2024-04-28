@@ -12,7 +12,7 @@
     <div class="col mx-auto overflow-hidden">
         <div class="card card-glassmorph border-0 mb-3">
             <h2 class="card-header text-center maroon-bg">View {{ report_name }} Reports</h2>
-          <div class="card-body p-5">
+          <div class="card-body p-sm-4 p-2">
             <div class="table-responsive">
                 <table class="table table-striped table-hover" >
                     <thead class="table-maroon-1">
@@ -49,7 +49,7 @@
                                 {% if report_name == "Incident" %}
                                     <td>{{ report.activity_during_incident }}</td>
                                 {% endif %}
-                                <td><a class="view-report-btn" href="{% url view_url report_id=report.report_id %}">View Report Details</a></td>
+                                <td><a class="view-report-btn" href="{% url view_url report_id=report.report_id %}">Details</a></td>
                             </tr>
                             {% endfor %}
                     </tbody>

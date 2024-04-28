@@ -141,7 +141,17 @@ td {
     border-radius: 8px;
     background-color: var(--clr-primary-2);
     color: var(--clr-white);
-    padding: 4px;
+    padding: 8px;
+}
+
+.delete-report-btn{
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--clr-grey-1);
+    color: var(--clr-white);
+    padding: 8px 15px;
+
 }
 
 .view-report-btn:hover{
