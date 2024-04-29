@@ -237,6 +237,18 @@ class ErpForm(forms.ModelForm):
     class Meta:
         model = Erp
         fields = ["title", "description"]
+        widgets = {
+            "title" : TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'ERP Title',
+            }),
+            "description" : Textarea(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 450px',
+                'placeholder' : 'Describe the ERP...'
+            }),
+        }
 
 
 class ErpUploadForm(forms.ModelForm):
