@@ -204,18 +204,19 @@
                     const patientDetails = document.getElementById('patientDetails').innerHTML;
                     const reportWitness = document.getElementById('reportWitness').innerHTML;
 
+            
+
                     doc.setFillColor(94,23,38);
-                    doc.rect(0,0,700,25,'F');
+                    doc.rect(15,10,575,25,'F');
                     doc.setTextColor(mainTitleColor);
                     const tableId ="MSU - UREC - " + reportName;
-                    doc.text( tableId,10, 20,);
+                    doc.text( tableId,25,28,);
 
                     doc.setFillColor(lightGreyColor);
-                    doc.rect(0,45,150,20,'F');
-                    doc.text(reportDetails, 10,60)
+                    doc.rect(15,45,150,20,'F');
+                    doc.text(reportDetails, 20,60)
                     doc.autoTable({
                         html: "#tableReportDetailsTable",
-                        margin: { right:5, left: 5 },
                         styles: {
                             fontSize: 10,
                             cellPadding: 4,
@@ -224,11 +225,10 @@
                     });
 
                     doc.setFillColor(lightGreyColor);
-                    doc.rect(0, doc.previousAutoTable.finalY + 20 ,150,20,'F');
-                    doc.text(reportType, 10, doc.previousAutoTable.finalY + 35)
+                    doc.rect(15, doc.previousAutoTable.finalY + 20 ,150,20,'F');
+                    doc.text(reportType, 20, doc.previousAutoTable.finalY + 35)
                     doc.autoTable({
                         html: "#tableReportInjuryIllnessTable",
-                        margin: { right:5, left: 5 },
                         styles: {
                             fontSize: 10,
                            
@@ -238,11 +238,10 @@
                     });
 
                     doc.setFillColor(lightGreyColor);
-                    doc.rect(0, doc.previousAutoTable.finalY + 25 ,150,20,'F');
-                    doc.text(patientDetails, 10, doc.previousAutoTable.finalY + 40)
+                    doc.rect(15, doc.previousAutoTable.finalY + 25 ,150,20,'F');
+                    doc.text(patientDetails, 20, doc.previousAutoTable.finalY + 40)
                     doc.autoTable({
                         html: "#tablePatientDetails",
-                        margin: { right:5, left: 5 },
                         styles: {
                             fontSize: 10,
                             cellPadding: 4,
@@ -252,11 +251,10 @@
 
                     doc.addPage();
                     doc.setFillColor(lightGreyColor);
-                    doc.rect(0, 15, 150, 20,'F');
-                    doc.text(reportWitness, 10, 30)
+                    doc.rect(15, 15, 150, 20,'F');
+                    doc.text(reportWitness, 20, 30)
                     doc.autoTable({
                         html: "#tableReportWitnesses",
-                        margin: { right:5, left: 5 },
                         styles: {
                             fontSize: 10,
                             cellPadding: 4,
