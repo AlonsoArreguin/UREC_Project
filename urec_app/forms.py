@@ -215,7 +215,17 @@ class TaskForm(forms.ModelForm):
         fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required", "recurrence_pattern"]
         widgets = {
             "date": AdminDateWidget(),
-            "time": AdminTimeWidget()
+            "time": AdminTimeWidget(),
+            "task_name" : TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'What is the task?',
+            }),
+            "task_description" : Textarea(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 450px',
+                'placeholder' : 'Describe the task...'
+            }),
         }
 
 
