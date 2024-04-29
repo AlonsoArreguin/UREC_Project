@@ -518,7 +518,11 @@ classes below @media function will be used instead of above*/
       }
 
 
-      /* Begin Form CSS*/
+      
+
+}
+
+/* Begin Form CSS*/
       .form-control:focus{
         border: 1px solid var(--clr-primary-1) !important;
         box-shadow: 0 0 8px var(--clr-primary-1) !important;
@@ -528,10 +532,6 @@ classes below @media function will be used instead of above*/
         font-size:large;
         font-weight: 600;
       }
-
-}
-
-
 
 
 
