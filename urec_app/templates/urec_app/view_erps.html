@@ -13,7 +13,7 @@
       <div class="col mx-auto overflow-hidden">
           <div class="card card-glassmorph border-0 mb-3">
               <h2 class="card-header text-center maroon-bg">All ERPs</h2>
-            <div class="card-body p-5">
+            <div class="card-body p-sm-4 p-2">
               <div class="table-responsive">
                   <table class="table table-striped">
                   <tr>
@@ -32,13 +32,13 @@
                         <td>{{ erp.filename }}</td>
                         <td>{{ erp.description }}</td>
                         <td>{{ erp.uploaded_at }}</td>
-                        <td><input class="btn btn-dark" type="submit" value="Download" /></td>
+                        <td><input class="view-report-btn" type="submit" value="Download" /></td>
                       </form>
                     {% if user.is_staff %}
                     <td>
                       <form action="{% url 'delete_erp' filename=erp.filename %}" method="post">
                         {% csrf_token %}
-                        <input class="btn btn-danger" type="submit" value="Delete" />
+                        <input class="delete-report-btn" type="submit" value="Delete" />
                       </form>
                     </td>
                     {% endif %}

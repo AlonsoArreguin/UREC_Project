@@ -31,12 +31,14 @@ CONTACT_WIDGETS = {
             'personal_phone_number': TextInput(attrs={
                 'class' : 'form-control',
                 'style' : 'max-width: 400px;',
-                'placeholder' : 'Personal Phone Number'
+                'placeholder' : 'Personal Phone Number',
+                'maxlength' : '10',
             }),
             'home_phone_number': TextInput(attrs={
                 'class' : 'form-control',
                 'style' : 'max-width: 400px;',
-                'placeholder' : 'Home Phone Number'
+                'placeholder' : 'Home Phone Number',
+                'maxlength' : '10',
             }),
             'street_address': TextInput(attrs={
                 'class' : 'form-control',
@@ -56,7 +58,8 @@ CONTACT_WIDGETS = {
             'zip': NumberInput(attrs={
                 'class' : 'form-control',
                 'style' : 'max-width: 400px;',
-                'placeholder' : 'Zip Code'
+                'placeholder' : 'Zip Code',
+                'maxlength': '5', 
             }),
             'minor_status': TextInput(attrs={
                 'class' : 'form-control',
@@ -212,7 +215,17 @@ class TaskForm(forms.ModelForm):
         fields = ["task_name", "task_description", "staff_netid", "date_time_due", "text_input_required", "recurrence_pattern"]
         widgets = {
             "date": AdminDateWidget(),
-            "time": AdminTimeWidget()
+            "time": AdminTimeWidget(),
+            "task_name" : TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'What is the task?',
+            }),
+            "task_description" : Textarea(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 450px',
+                'placeholder' : 'Describe the task...'
+            }),
         }
 
 
@@ -224,6 +237,18 @@ class ErpForm(forms.ModelForm):
     class Meta:
         model = Erp
         fields = ["title", "description"]
+        widgets = {
+            "title" : TextInput(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 400px;',
+                'placeholder' : 'ERP Title',
+            }),
+            "description" : Textarea(attrs={
+                'class' : 'form-control',
+                'style' : 'max-width: 450px',
+                'placeholder' : 'Describe the ERP...'
+            }),
+        }
 
 
 class ErpUploadForm(forms.ModelForm):

@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <title>{{ subject }}</title>
 </head>
-<body>
-<p>A report has been {% if created %}created that matches{% else %}edited to match{% endif %} your notification settings.</p>
-<p>You can view this report here: <a href="{{ view_url }}">{{ view_url }}</a></p>
-<p>You are receiving this message because you are signed up for the following notifications: {{ reasons }}.</p>
+<body style="font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <header style="background-color: rgb(93, 23, 37); max-width: 1860px; height: 30px; font-size: x-large; color: white; padding: 10px;">Mississippi State UREC Email Notification</header>
+    <p style=" font-size: large;">A report has been {% if created %}created that matches{% else %}edited to match{% endif %} your notification settings.</p>
+    <p style=" font-size: large;">You can view this report here: <a href="{{ view_url }}">{{ view_url }}</a></p>
+    <p style=" font-size: large;">You are receiving this message because you are signed up for the following notifications: 
+        <p style=" font-size: large; color:#ff1a1a;">{{ reasons }}.</p>
+    </p>
 </body>
 </html>

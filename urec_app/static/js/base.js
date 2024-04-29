@@ -47,3 +47,11 @@ $(document).ready( function () {
     });
 } );
 
+// view hourly count (May not be used)
+$(document).ready( function () {
+    $('#fac_pop').DataTable({
+        responsive: true,
+        "scrollX": true,
+    });
+} );
+

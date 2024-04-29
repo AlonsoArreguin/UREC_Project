@@ -16,28 +16,16 @@
             <div class="card-body p-5">
               <form method="POST" enctype="multipart/form-data">
               {% csrf_token %}
-              <div class="row">
-                <div class="col-lg-10 col-11 my-2">
-                  <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Title:</div>
-                  <input type="text" name="title" maxlength="255" required="" id="id_title" data-np-intersection-state="observed">
-                </div>
 
-                <div class="col-lg-10 col-11 my-2">
-                  <div class="me-3 my-2" style="font-size: large; font-weight: bold;">Description:</div>
-                  <textarea class="col-md-5 col-10" name="description" cols="40" rows="10" maxlength="1023" required="" id="id_description" data-np-intersection-state="observed"></textarea>
-                </div>
-
-                <div class="col-lg-10 col-11 my-2">
-                  <div class="me-3 my-2" style="font-size: large; font-weight: bold;">File:</div>
-                  <input type="file" name="file" required="" id="id_file">
-                </div>
+                  {{erp_obj.as_p}}
+                  <br/>
+                  {{erp_file.as_p}}
                 
-              </div>
               <div class="m-1" style="color:red; font-weight: bold; font-size:large;">{{erp_obj.errors}}{{erp_file.errors}}</div>
               <br/><br/>
               
               <!-- {{ erp_obj.as_p }} {{ erp_file.as_p }} -->
-              <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="form-btn-submit">Submit</button>
               </form>
             </div>
         </div>

@@ -8,28 +8,31 @@
 
 {% block specials %}
 
-            <div class="table-responsive print-table" id="tableReportInjuryIllnessTable">
-                <h3>Report Incidents</h3>
-                <table class="table table-striped table-hover table-bordered" >
-                    <thead class="table-grey-2">
-                        <tr>
-                            <th>{% model_field_verbose_name from special_model.incident_id %}</th>
-                            <th>{% model_field_verbose_name from special_model.incident_nature %}</th>
-                            <th>{% model_field_verbose_name from special_model.incident_description %}</th>
-                            <th>{% model_field_verbose_name from special_model.action_taken %}</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-clear-1">
+
+            <div class="table-responsive print-table" >
+                <h3 id="reportType">Report Incidents</h3>
+                <table class="table table-grey-2 table-hover table-bordered" id="tableReportInjuryIllnessTable">
+                    
                         {% for special in specials %}
-                            <tr>
-                                <td>{{ special.incident_id }}</td>
-                                <td>{{ special.incident_nature }}</td>
-                                <td>{{ special.incident_description }}</td>
-                                <td>{{ special.action_taken }}</td>
-                            </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from special_model.incident_id %}</th><td>{{ special.incident_id }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from special_model.incident_nature %}</th>
+                            <td>{{ special.incident_nature }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from special_model.incident_description %}</th>
+                            <td>{{ special.incident_description }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% model_field_verbose_name from special_model.action_taken %}</th>
+                            <td>{{ special.action_taken }}</td>
+                        </tr>
                         {% endfor %}
-                    </tbody>
+                    
                 </table>
             </div>
+
 
 {% endblock specials %}
