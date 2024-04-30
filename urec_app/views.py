@@ -526,13 +526,16 @@ def create_task(request):
     if request.method == "POST":
         task_obj = TaskForm(request.POST)
         if task_obj.is_valid():
-            task_obj.save()
-        return redirect('task')
+            task_instance = task_obj.save(commit=False)
+            task_instance.date_time_completion = timezone.now()  # Set date_time_completion here
+            task_instance.save()
+            return redirect('task')
     else:
         task_obj = TaskForm()
 
     context = {'task_obj': task_obj}
     return render(request, 'urec_app/create_task.html', context)
+
 
 
 # View All Tasks
@@ -601,6 +604,7 @@ def create_recurring_task(task):
         date_time_due=calculate_next_due_date(task.date_time_due, task.recurrence_pattern),
         text_input_required=task.text_input_required,
         staff_netid=task.staff_netid,
+        date_time_completion=task.date_time_completion,
         recurrence_pattern=task.recurrence_pattern
     )
     return new_task
