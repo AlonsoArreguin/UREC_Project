@@ -38,6 +38,7 @@ urlpatterns = [
     path('erp/view_erps', views.view_erps, name='view_erps'),
     path('erp/delete/<str:filename>', views.delete_erp, name='delete_erp'),
     path('erp/download/<str:filename>', views.download_erp, name='download_erp'),
+    path('erp/view/<str:filename>', views.view_erp, name='view_erp'), # recently added by Jeffery
 
     path('form/', views.form, name='form'),
 

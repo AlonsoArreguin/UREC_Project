@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, FileResponse
 import os, platform
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
@@ -508,6 +508,16 @@ def view_erps(request):
     Erps = Erp.objects.all().order_by('filename').values()
     context = {"Erps": Erps}
     return render(request, 'urec_app/view_erps.html', context)
+
+
+# View ERP in-browser without download
+def view_erp(request, filename):
+    erp = get_object_or_404(Erp, filename=filename)
+    custom_directory = get_user_specific_directory()
+    file_path = os.path.join(custom_directory, erp.filename)
+    if not os.path.exists(file_path):
+        return HttpResponseNotFound("File not found")
+    return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
 
 
 # Task Functions
