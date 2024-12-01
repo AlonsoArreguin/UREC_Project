@@ -32,8 +32,16 @@
                         <td>{{ erp.filename }}</td>
                         <td>{{ erp.description }}</td>
                         <td>{{ erp.uploaded_at }}</td>
+
                         <td><input class="view-report-btn" type="submit" value="Download" /></td>
                       </form>
+                       <td>
+                         <form action="{% url 'view_erp' filename=erp.filename %}" method="get">
+                             {% csrf_token %}
+                             <input class="view-report-btn" type="submit" value="View" />
+                         </form>
+                       </td>
+                    
                     {% if user.is_staff %}
                     <td>
                       <form action="{% url 'delete_erp' filename=erp.filename %}" method="post">
